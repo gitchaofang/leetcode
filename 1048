@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int longestStrChain(vector<string>& words) {
+        std::map<int,std::vector<std::string>>m;
+        std::unordered_map<std::string,int>dp;
+        for(const std::string& str: words){ 
+            m[str.size()].push_back(str);
+            dp[str] = 1;
+        }
+        for(auto it = m.begin(); it != m.end(); ++it){
+            if(it -> first == 1) continue;
+            std::vector<std::string> v = it -> second;
+            for(const std::string& str: v){
+                int n = str.size();
+                for(int j=0;j<n; ++j){
+                    std::string sstr = str;
+                    sstr.erase(sstr.begin()+j);
+                    if(dp.find(sstr) == dp.end()) continue;
+                    dp[str] = std::max(dp[sstr]+1, dp[str]);
+                }
+            }
+        }
+        int res = 0;
+        for(auto it=dp.begin(); it!=dp.end(); ++it) res = std::max(res,it -> second);
+        return res;
+    }
+};
