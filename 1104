@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int level(int ind){
+        int lev = 1;
+        while(ind > pow(2,lev)-1) ++lev;
+        return lev;
+    }
+    vector<int> pathInZigZagTree(int label) {
+        bool flip = false;
+        std::vector<int> res;
+        while(label > 0){
+            int lev = level(label);
+            if(flip == true){
+                int tot = pow(2,lev) - 1;
+                res.insert(res.begin(),std::max(0,int(pow(2,lev-1) - 1)) + (tot - label) + 1);
+                flip = false;
+            }
+            else{ 
+                res.insert(res.begin(),label);
+                flip = true;
+            }
+            label /= 2;
+        }
+        return res;
+    }
+};
