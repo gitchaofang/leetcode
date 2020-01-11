@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int deleteAndEarn(vector<int>& nums) {
+        int mx = 0;
+        for(const int& d: nums) mx = std::max(d,mx);
+        std::vector<std::pair<int,int>> dp(mx+1, {0,0});
+        for(const int& d: nums) dp[d].first += d;
+        for(int i=1; i<=mx; ++i){
+            dp[i] = {dp[i-1].second + dp[i].first,std::max(dp[i-1].first,dp[i-1].second)};
+        }
+        return std::max(dp[mx].first, dp[mx].second);
+    }
+};
