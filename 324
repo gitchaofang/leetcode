@@ -1,0 +1,16 @@
+class Solution {
+public:
+    void wiggleSort(vector<int>& nums) {
+        std::vector<int> v = nums;
+        std::sort(v.begin(),v.end());
+        int n = nums.size();
+        int v_pos = 0;
+        for(int i=0; i<n;){
+            nums[i++] = v[(n-1)/2 - v_pos];
+            if(i < n){
+                nums[i++] = v[n-1 - (v_pos++)];
+            }
+        }
+        return;
+    }
+};
