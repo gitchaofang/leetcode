@@ -1,0 +1,37 @@
+iclass Solution {
+public:
+    bool check(const std::string& str){
+        int cnt = 0;
+        for(const char& c: str){
+            if(c == '(') ++cnt;
+            else if(c == ')' && --cnt < 0) return false;
+        }
+        return cnt == 0;
+    }
+    vector<string> removeInvalidParentheses(string s) {
+        std::unordered_set<std::string> visited;
+        std::queue<std::string> q({s});
+        std::vector<std::string> res;
+        bool sig = false;
+        while(!q.empty() && sig == false){
+            int n = q.size();
+            for(int i=0; i<n; ++i){
+                std::string str = q.front();
+                q.pop();
+                if(check(str)){
+                    res.push_back(str);
+                    sig = true;
+                }
+                if(sig == true) continue;
+                for(int j=0; j<str.size(); ++j){
+                    if(str[j]!='(' && str[j]!=')') continue;
+                    std::string ss = str.substr(0,j) + str.substr(j+1);
+                    if(visited.find(ss) != visited.end()) continue;
+                    q.push(ss);
+                    visited.insert(ss);
+                }
+            }
+        }
+        return res;
+    }
+};
