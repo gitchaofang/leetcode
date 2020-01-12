@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int N, int K) {
+        std::vector<int> res = std::vector<int>(N+1,INT_MAX);
+        std::unordered_map<int,std::vector<std::pair<int,int>>>m;
+        for(const std::vector<int>& v: times) m[v[0]].push_back({v[1],v[2]});
+        res[K] = 0;
+        std::queue<std::pair<int,int>> q({{K,0}});
+        while(!q.empty()){
+            std::pair<int,int> node = q.front();
+            q.pop();
+            for(std::pair<int,int>&p: m[node.first]){
+                int t = p.second + node.second;
+                int des = p.first;  
+                if(t >= res[des]) continue;
+                res[des] = t;
+                q.push({des,t});
+            }
+        }
+        int mx = INT_MIN;
+        for(int i = 1; i<=N; ++i) mx = std::max(mx,res[i]);
+        return mx == INT_MAX ? -1 : mx;
+    }
+};
