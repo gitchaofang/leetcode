@@ -1,0 +1,25 @@
+class MapSum {
+public:
+    /** Initialize your data structure here. */
+    MapSum() {
+        
+    }
+    
+    void insert(string key, int val) {
+        m[key] = val;
+        return;
+    }
+    
+    int sum(string prefix) {
+        int res = 0;
+        for(auto it = m.begin(); it != m.end(); ++it){
+            std::string str = it -> first;
+            if(str.size() < prefix.size()) continue;
+            if(str.substr(0,prefix.size()) > prefix) break;
+            if (str.substr(0,prefix.size()) == prefix) res += it -> second;
+        }
+        return res;
+    }
+private:
+    std::map<std::string,int>m;
+};
