@@ -1,0 +1,11 @@
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        std::unordered_set<int> st;
+        for(const int& d: nums){
+            if(st.find(d)!=st.end()) return true;
+            st.insert(d);
+        }
+        return false;
+    }
+};
