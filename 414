@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int thirdMax(vector<int>& nums) {
+        std::set<int> st;
+        for(const int& d: nums){ 
+            st.insert(d);
+            if(st.size() == 4) st.erase(st.begin());
+        }
+        if(st.size() < 3) return *(st.rbegin());
+        auto it = st.rbegin();
+        std::advance(it,2);
+        return *it;
+    }
+};
