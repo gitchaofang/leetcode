@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool circularArrayLoop(vector<int>& nums) {
+        int n = nums.size();
+        std::unordered_set<int> visited;
+        for(int i=0; i<n; ++i){
+            if(visited.find(i) != visited.end()) continue;
+            std::unordered_set<int> path;
+            int cur = i;
+            while(path.size() <= n){
+                if(nums[cur]*nums[i] < 0) break;
+                visited.insert(cur);
+                path.insert(cur);
+                int next = ((cur + nums[cur] + n)%n + n) %n;
+                if(next == cur) break;
+                if(path.find(next) != path.end()) return true;
+                cur = next;
+            }
+        }
+        return false;
+    }
+};
