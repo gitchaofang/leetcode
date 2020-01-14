@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int dfs(int& res, TreeNode* root){
+        if(!root) return  0;
+        int left = dfs(res,root -> left);
+        int right = dfs(res,root -> right);
+        res += std::abs(right - left);
+        return left + right + root -> val;
+    }
+    int findTilt(TreeNode* root) {
+        int res = 0;
+        dfs(res,root);
+        return res;
+    }
+};
