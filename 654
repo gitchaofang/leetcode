@@ -1,0 +1,22 @@
+class Solution {
+public:
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        if(nums.size() == 0) return nullptr;
+        int mx_pos = 0;
+        int mx = INT_MIN;
+        for(int i=0;i<nums.size();++i){
+            if(nums[i] > mx){
+                mx = nums[i];
+                mx_pos = i;
+            }
+        }
+        TreeNode* root = new TreeNode(nums[mx_pos]);
+        std::vector<int> left(nums.begin(),nums.begin() + mx_pos);
+        nums.erase(nums.begin(),nums.begin()+mx_pos+1);
+        TreeNode* ln = constructMaximumBinaryTree(left);
+        TreeNode* rn = constructMaximumBinaryTree(nums);
+        root -> left = ln;
+        root -> right = rn;
+        return root;
+    }
+};
