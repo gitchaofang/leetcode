@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int sumEvenGrandparent(TreeNode* root) {
+        if(!root) return 0;
+        std::queue<std::pair<TreeNode*,int>> q({{root,0}});
+        int res = 0;
+        while(!q.empty()){
+            TreeNode* node = q.front().first;
+            int pre_sig = q.front().second;
+            int sig = (node -> val + 1)%2;
+            q.pop();
+            if(node -> left){
+                if(pre_sig == 1) res += node -> left -> val;
+                q.push({node -> left,sig});
+            }
+            if(node -> right){
+                if(pre_sig == 1) res += node -> right -> val;
+                q.push({node -> right,sig});
+            }
+        }
+        return res;
+    }
+};
