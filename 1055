@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int shortestWay(string source, string target) {
+        int n = target.size();
+        std::vector<std::pair<int,int>> dp(n+1,{1,-1});
+        for(int i=1; i<=n; ++i){
+            int c = target[i-1];
+            if(dp[i-1].first == -1) return -1;
+            int right = dp[i-1].second + 1;
+            while(right < source.size() && source[right] != c) ++right;
+            if(right != source.size()) dp[i] = {dp[i-1].first,right};
+            else if(source.find(c) == std::string::npos) dp[i] = {-1,-1};
+            else dp[i] = {dp[i-1].first+1,source.find(c)};
+        }
+        return dp[n].first;
+    }
+};
