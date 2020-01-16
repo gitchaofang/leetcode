@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int cal(const string& s){
+        std::map<char,int>m;
+        for(char c: s) ++m[c];
+        return m.begin() -> second;
+    }
+    vector<int> numSmallerByFrequency(vector<string>& queries, vector<string>& words) {
+        std::vector<int> cache(11,0);
+        for(const std::string& s: words){
+            int cnt = cal(s);
+            ++cache[cnt];
+        }
+        int pre = cache[10];
+        cache[10] = 0;
+        for(int i=9; i>=0; --i){
+            int temp_pre = cache[i];
+            cache[i] = cache[i+1] + pre;
+            pre = temp_pre;
+        }
+        
+        std::vector<int> res(queries.size(),0);
+        for(int i=0; i<queries.size(); ++i){
+            int cnt = cal(queries[i]);
+            res[i] = cache[cnt];
+        }
+        return res;
+    }
+};
