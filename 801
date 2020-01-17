@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int minSwap(vector<int>& A, vector<int>& B) {
+        int n = A.size();
+        if(n == 0) return 0;
+        std::pair<int,int>p({0,1});
+        for(int i=1; i<n; ++i){
+            int va = A[i];
+            int vb = B[i];
+            int ns = -1;
+            int s = -1;
+            if(va > A[i-1] && vb > B[i-1]){
+                ns = p.first;
+                s = p.second + 1;
+            }
+            if(va > B[i-1] && vb > A[i-1]){
+                if(ns == -1) ns = p.second;
+                else ns = std::min(ns,p.second);
+                if(s == -1) s = p.first + 1;
+                else s = std::min(s,p.first + 1);
+            }
+            p = {ns,s};
+        }
+        return std::min(p.first,p.second);
+    }
+};
