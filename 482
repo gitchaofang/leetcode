@@ -1,0 +1,17 @@
+class Solution {
+public:
+    string licenseKeyFormatting(string S, int K) {
+        for(int i=0; i<S.size(); ++i){
+            if(S[i] == '-'){ 
+                S.erase(S.begin() + i);
+                --i;
+            }
+            else S[i] = std::toupper(S[i]);
+        }
+        for(int i=S.size()-1; i>=0; i -= K){
+            S.insert(S.begin()+i+1,'-');
+        }
+        S.pop_back();
+        return S;
+    }
+};
