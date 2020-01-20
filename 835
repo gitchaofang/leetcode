@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int largestOverlap(vector<vector<int>>& A, vector<vector<int>>& B) {
+        int n = A.size();
+        std::vector<std::pair<uint32_t,uint32_t>> coord;
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<n; ++j){
+                if(A[i][j] == 1) coord.push_back({i,j});
+            }
+        }
+        int res = 0;
+        for(int i= -n+1; i<n; ++i){
+            for(int j= -n+1; j<n; ++j){
+                int tp = 0;
+                for (const std::pair<uint32_t,uint32_t>& p:coord){
+                    int x = p.first + i;
+                    int y = p.second + j;
+                    if( x<0||x>=n || y<0 || y>=n) continue;
+                    if(B[x][y] == 1) ++tp;
+                }
+                res = std::max(tp,res);
+            }
+        }
+        return res;
+    }
+};
