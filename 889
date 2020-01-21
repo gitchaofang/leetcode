@@ -1,0 +1,21 @@
+class Solution {
+public:
+    TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
+        if(pre.size() == 0) return nullptr;
+        TreeNode* root = new TreeNode(pre[0]);
+        pre.erase(pre.begin());
+        if(pre.size() == 0) return root;
+        post.pop_back();
+        int d = pre[0];
+        int pos = 0;
+        while(post[pos] != d) ++pos;
+        std::vector<int> pre_left(pre.begin(),pre.begin() + pos + 1);
+        std::vector<int> post_left(post.begin(),post.begin() + pos + 1);
+        pre.erase(pre.begin(), pre.begin() + pos + 1);
+        post.erase(post.begin(), post.begin() + pos + 1);
+        root -> left = constructFromPrePost(pre_left, post_left);
+        root -> right = constructFromPrePost(pre, post);
+        return root;
+        
+    }
+};
