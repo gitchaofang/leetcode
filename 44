@@ -1,0 +1,28 @@
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int i=0;
+        int j=0;
+        int istar = -1;
+        int jstar = -1;
+        int n = s.size();
+        int m = p.size();
+        while(i < n){
+            if(j<m && (p[j] == s[i]) || (p[j] == '?')){
+                ++i;
+                ++j;
+            }
+            else if(j<m && p[j] == '*'){
+                istar = i;
+                jstar = j++;
+            }
+            else if(istar >=0){
+                i = ++istar;
+                j = jstar + 1;
+            }
+            else return false;
+        }
+        while(p[j] == '*') ++j;
+        return j == m;
+    }
+};
