@@ -1,0 +1,21 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        int n = t.size();
+        std::unordered_map<char,int>m;
+        for(const char& c: t) ++m[c];
+        int cnt = 0;
+        int left = 0;
+        std::pair<int,int> res({0,s.size() + 1});
+        for(int i=0; i<s.size(); ++i){
+            if(--m[s[i]] >=0) ++cnt;
+            while(cnt == t.size()){
+                if(i - left < res.second - res.first) res = {left,i};
+                if(++m[s[left]] > 0) --cnt;
+                ++left;
+            }
+        }
+        if(res.second - res.first > s.size()) return "";
+        return s.substr(res.first, res.second - res.first + 1);
+    }
+};
