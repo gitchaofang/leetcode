@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int subarraysWithKDistinct(vector<int>& A, int K) {
+        if(K == 0) return 0;
+        std::unordered_map<int,int> m;
+        int res = 0;
+        int left = 0;
+        int pre = 0;
+        for(int i=0; i<A.size(); ++i){
+            int offset = (m.size() == K)?1:0;
+            ++m[A[i]];
+            if(m.size() < K) continue;
+            if(m.size() == K){ 
+                res+=pre;
+                res -= offset;
+                pre -= offset;
+            }
+            else pre = 0;
+            while(m.size() >= K){
+                if(m.size() == K){
+                    ++res;
+                    ++pre;
+                }
+                --m[A[left]];
+                if(m[A[left]] == 0) m.erase(A[left]);
+                ++left;
+            }
+            ++m[A[--left]];
+        }
+        return res;
+    }
+};
