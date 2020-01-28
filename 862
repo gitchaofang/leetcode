@@ -1,0 +1,24 @@
+class cmp{
+    public:
+        bool operator()(std::pair<int,int>& p1, std::pair<int,int>&p2){
+            return p1.second > p2.second;
+        }
+};
+class Solution {
+public:
+    int shortestSubarray(vector<int>& A, int K) {
+        std::priority_queue<std::pair<int,int>,std::vector<std::pair<int,int>>,cmp> pq;    
+        int sum = 0;
+        int res = INT_MAX;
+        for(int i=0; i<A.size(); ++i){
+            sum += A[i];
+            if(sum >= K) res = std::min(res,i+1);
+            while(!pq.empty() && sum - pq.top().second >= K){
+                res = std::min(res, i - pq.top().first);
+                pq.pop();
+            }
+            pq.push({i,sum});
+        }
+        return (res == INT_MAX) ? -1 : res;
+    }
+};
