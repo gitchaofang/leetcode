@@ -1,0 +1,25 @@
+class Solution {
+public:
+    void gameOfLife(vector<vector<int>>& board) {
+        int row = board.size();
+        int col = board[0].size();
+        std::vector<std::pair<int,int>>cache;
+        std::vector<std::pair<int,int>> dire({{0,1},{-1,1},{-1,0},{-1,-1},{0,-1},{1,-1},{1,0},{1,1}});
+        for(int i=0; i<row; ++i){
+            for(int j=0; j<col; ++j){
+                int cnt = 0;
+                for(const std::pair<int,int>& dir: dire){
+                    int x = dir.first + i;
+                    int y = dir.second + j;
+                    if(x<0 || x>=row || y<0 || y>=col || board[x][y] == 0) continue;
+                    ++cnt;
+                }
+                if ((board[i][j] == 1 && (cnt < 2 || cnt >3)) || (board[i][j] == 0 && cnt==3))cache.push_back({i,j}); 
+            }
+        }
+        for(const std::pair<int,int>& p: cache){
+            board[p.first][p.second] ^= 1; 
+        }
+        return;
+    }
+};
