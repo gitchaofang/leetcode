@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        std::unordered_map<int,int>m;
+        std::vector<int> ind(s.size(),s.size());
+        for(int i=0; i<s.size(); ++i){
+            if(m.find(s[i]) != m.end()){ 
+                ind[m[s[i]]] = 0;
+                ind[i] = 0;
+            }
+            m[s[i]] = i;
+        }
+        for(int i=0; i<s.size(); ++i){
+            if(ind[i] == s.size()) return i;
+        }
+        return -1;
+        
+    }
+};
