@@ -1,0 +1,37 @@
+class Solution {
+public:
+    string fractionToDecimal(int numerator, int denominator) {
+        bool sign = true;
+        if((numerator < 0 && denominator > 0) || (numerator > 0 && denominator < 0)) sign = false;
+        long long num = numerator;
+        long long den = denominator;
+        num = abs(num);
+        den = abs(den);
+        std::unordered_map<int,int>pos;
+        std::string res("");
+        res = std::to_string(num/den);
+        if(sign == false) res = '-' + res;
+        num %= den;
+        if(num == 0) return res;
+        res += '.';
+        num *= 10;
+        while(num != 0){
+            if(pos.find(num) != pos.end()){
+                res.insert(res.begin() + pos[num],'(');
+                res += ')';
+                return res;
+            }
+            pos[num] = res.size();
+            if(num < den){
+                res += '0';
+                num *= 10;
+            }
+            else {
+                res += std::to_string(num/den);
+                num %= den;
+                num *= 10;
+            }
+        }
+        return res;
+    }
+};
