@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        std::pair<int,int> row = {0,matrix.size() - 1}; 
+        if(row.first > row.second) return {};
+        std::pair<int,int> col = {0,matrix[0].size() - 1};
+        std::vector<int> res;
+        while(true){
+           for(int i=col.first; i<=col.second; ++i) res.push_back(matrix[row.first][i]);            ++row.first;
+            if(col.first > col.second) break;
+            
+            for(int i=row.first; i<=row.second; ++i) res.push_back(matrix[i][col.second]);
+            --col.second;
+            if(row.first > row.second) break;
+           
+            for(int i=col.second; i>=col.first; --i) res.push_back(matrix[row.second][i]);
+            --row.second;
+            if(col.first > col.second) break; 
+            
+            for(int i=row.second; i>=row.first; --i) res.push_back(matrix[i][col.first]);
+            ++col.first; 
+            if(row.first > row.second) break;
+        }
+        return res;
+    }
+};
