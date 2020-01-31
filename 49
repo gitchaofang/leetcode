@@ -1,0 +1,14 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        std::unordered_map<std::string, std::vector<std::string>>m;
+        for(const std::string& s: strs){
+            std::string ss = s;
+            std::sort(ss.begin(),ss.end());
+            m[ss].push_back(s);
+        }
+        std::vector<std::vector<std::string>> res;
+        for(auto it = m.begin(); it != m.end(); ++it) res.push_back(it -> second);
+        return res;
+    }
+};
