@@ -1,0 +1,16 @@
+class Solution {
+public:
+    bool judgeCircle(string moves) {
+        std::pair<int,int>p({0,0});
+        std::unordered_map<char,std::pair<int,int>> m;
+        m['U'] = {0,-1};
+        m['D'] = {0,1};
+        m['L'] = {-1,0};
+        m['R'] = {1,0};
+        for(const char& c: moves){
+            p.first += m[c].first;
+            p.second += m[c].second;
+        }
+        return (p.first == 0 && p.second == 0);
+    }
+};
