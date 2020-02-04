@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int myAtoi(string str){ 
+        while(!str.empty() && str.front() == ' ') str.erase(str.begin());
+        if(str.empty()) return 0;
+        int sign = 1;
+        if(str.front() == '-') {
+            sign = -1;
+            str.erase(str.begin());
+        }
+        else if(str.front() == '+') str.erase(str.begin());
+        if(str.front() < '0' || str.front() >'9') return 0;
+        
+        double res = 0;
+        while(!str.empty()){
+            if(str.front()<'0' || str.front() > '9') break;
+            res =  res*10 + (str.front() - '0');
+            str.erase(str.begin());
+        }
+        res *= sign;
+        if(res > INT_MAX) return INT_MAX;
+        if(res < INT_MIN) return INT_MIN;
+        return int(res);
+    }
+};
