@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int n = nums.size();
+        int pivit = n-1;
+        int left = 0;
+        if(nums.front() <= nums.back()) return nums.front();
+        else{
+            while(left < pivit){
+                if(nums[left] < nums[pivit]) return nums[pivit+1];
+                int mid = (pivit - left)/2 + left;
+                if(nums[mid+1] < nums[mid]){
+                    pivit = mid;
+                    return nums[mid+1];
+                }
+                if(nums[mid] > nums.back()) left = mid + 1;
+                else pivit = mid - 1;
+            }
+        }
+        return nums[pivit+1];
+    }
+};
