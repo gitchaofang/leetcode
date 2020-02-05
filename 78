@@ -1,0 +1,15 @@
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        std::vector<std::vector<int>> res({{}});
+        for(const int& d: nums){
+            int len = res.size();
+            for(int i=0; i<len; ++i){
+                std::vector<int> v = res[i];
+                v.push_back(d);
+                res.push_back(v);
+            }
+        }
+        return res;
+    }
+};
