@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        std::queue<std::vector<int>> q({std::vector<int>({})});
+        for(int i=0; i<nums.size(); ++i){
+            int d = nums[i];
+            int n = q.size();
+            for(int j=0; j<n; ++j){
+                for(int k=0; k<=i; ++k){
+                    std::vector<int> v = q.front();
+                    v.insert(v.begin() + k, d);
+                    q.push(v);
+                }
+                q.pop();
+            }
+        }
+        
+        std::vector<std::vector<int>> res;
+        while(!q.empty()){
+            res.push_back(q.front());
+            q.pop();
+        }
+        return res;
+    }
+};
