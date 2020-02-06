@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<bool> canMakePaliQueries(string s, vector<vector<int>>& queries) {
+        int n = queries.size();
+        std::vector<bool> res(n);
+        std::vector<int> bit(s.size()+1,0);
+        for(int i=0; i<s.size(); ++i) bit[i+1] = bit[i] ^ (1 << (s[i] - 'a' + 1));
+        for(int i=0; i<n; ++i){
+            int left = queries[i][0] ;
+            int right = queries[i][1];
+            int k = queries[i][2];
+            int bb = bit[right+1] ^ bit[left];
+            int cnt = 0;
+            for(int j=1; j!= 27; ++j){
+                uint32_t pos = 1 << j;
+                cnt += ((pos & bb) !=0);
+            }
+            cnt -= 2*k;
+            if(cnt <= 0 || (cnt == 1 && (right - left)%2 == 0)) res[i] = true;
+            else res[i] = false;
+        }
+        return res;
+    }
+};
