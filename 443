@@ -1,26 +1,16 @@
 class Solution {
 public:
-    std::string help(int d){
-        std::string res = "";
-        while(d != 0){
-            res.insert( res.begin(),'0' + (d%10));
-            d /= 10;
-        }
-        return res;
-    }
     int compress(vector<char>& chars) {
-        for(int i=0;i<chars.size();){
-            int c = chars[i];
+        for(int i=0; i<chars.size(); ++i){
+            char c = chars[i];
             int j = i;
-            while(j<chars.size() && chars[j] == c) ++j;
-            if(j - i == 1) ++i;
-            else{
-                std::string cnt = help(j - i);
-                chars.erase(chars.begin()+i+1,chars.begin()+j);
-                ++i;
-                for(char c: cnt) chars.insert(chars.begin()+i++,c);
-            }
-        }
+            while(j < chars.size() && chars[j] == c) ++j;
+            if(j - i == 1) continue;
+            chars.erase(chars.begin() + i + 1, chars.begin() + j);
+            std::string str = std::to_string(j - i);
+            chars.insert(chars.begin() + i+1,str.begin(),str.end());
+            i+=str.size();
+        }   
         return chars.size();
     }
 };
