@@ -1,15 +1,14 @@
 class Solution {
 public:
     void wiggleSort(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0) return;
         std::vector<int> v = nums;
         std::sort(v.begin(),v.end());
-        int n = nums.size();
-        int v_pos = 0;
-        for(int i=0; i<n;){
-            nums[i++] = v[(n-1)/2 - v_pos];
-            if(i < n){
-                nums[i++] = v[n-1 - (v_pos++)];
-            }
+        int head = (n+1)/2;
+        int tail = n;
+        for(int i=0; i<n; ++i){
+            nums[i] = (i & 1) ? v[--tail] : v[--head];
         }
         return;
     }
