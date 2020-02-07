@@ -4,13 +4,10 @@ public:
         int row = matrix.size();
         int col = matrix[0].size();
         for(int i=0; i<row; ++i){
-            for(int j=i+1; j<col; ++j) std::swap(matrix[i][j],matrix[j][i]);
+            for(int j = i+1; j<col; ++j) std::swap(matrix[i][j],matrix[j][i]);
         }
-        
-        for(int j=0; j<col/2; ++j){
-            for (int i=0; i< row; ++i){
-                std::swap(matrix[i][j], matrix[i][col-1-j]);
-            }
+        for(int i=0; i<row; ++i){
+            for(int j=0; j< col/2; ++j) std::swap(matrix[i][j],matrix[i][col-1-j]);
         }
         return;
     }
