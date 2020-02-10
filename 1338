@@ -1,0 +1,24 @@
+class cmp{
+    public:
+        bool operator()(const std::pair<int,int>& p1, const std::pair<int,int>& p2){
+            return p1.second < p2.second;
+        }
+};
+class Solution {
+public:
+    int minSetSize(vector<int>& arr) {
+        int n=  arr.size();
+        std::unordered_map<int,int> m;
+        for(const int& d: arr) ++m[d];    
+        std::priority_queue<std::pair<int,int>,std::vector<std::pair<int,int>>,cmp> pq;
+        for(auto it = m.begin(); it != m.end(); ++it) pq.push(*it);
+        int res = 0;
+        int cnt = 0;
+        while(cnt < (n+1)/2){
+            ++res;
+            cnt += pq.top().second;
+            pq.pop();
+        }
+        return res;
+    }
+};
