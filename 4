@@ -1,19 +1,21 @@
 class Solution {
 public:
-    int findkth(const std::vector<int>& v1, const std::vector<int>&v2,int i, int j, int k){
-        if(i>=v1.size()) return v2[j+k-1];
-        if(j>=v2.size()) return v1[i+k-1];
-        if(k == 1) return std::min(v1[i],v2[j]);
-        int midv1 = (v1.size() <= i+k/2-1)? INT_MAX:v1[i+k/2-1];
-        int midv2 = (v2.size() <= j+k/2-1)?INT_MAX:v2[j+k/2-1];
-        if(midv1 > midv2) return findkth(v1,v2,i,j+k/2,k - k/2);
-        return findkth(v1,v2,i+k/2,j,k-k/2);
+    int seek(const std::vector<int>& nums1, const std::vector<int>& nums2,int i, int j, int k){
+        int n = nums1.size();
+        int m = nums2.size();
+        if(i >= n) return nums2[j + k - 1];
+        if(j >= m) return nums1[i + k - 1];
+        if(k == 1) return std::min(nums1[i],nums2[j]);
+        int mid1 = (i + k/2  > n)? INT_MAX : nums1[i + k/2 - 1];
+        int mid2 = (j + k/2  > m)? INT_MAX : nums2[j + k/2 -1];
+        if(mid1 < mid2) return seek(nums1,nums2,i + k/2, j, k - k /2);
+        return seek(nums1,nums2,i,j + k/2, k - k/2);
     }
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         int n = nums1.size();
         int m = nums2.size();
-        int d1 = findkth(nums1,nums2,0,0,(m+n+1)/2);
-        int d2 = findkth(nums1,nums2,0,0,(m+n+2)/2);
-        return double(d1 + d2) /2.0;
+        int md1 = seek(nums1,nums2,0,0,(n+m+1)/2);
+        int md2 = seek(nums1,nums2,0,0,(n+m+2)/2);
+        return double(md1 + md2) / 2.0;
     }
 };
