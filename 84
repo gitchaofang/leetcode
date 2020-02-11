@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int res = 0;
+        int n = heights.size();
+        for (int i = 0; i < heights.size(); ++i) {
+            if (i + 1 < n && heights[i] <= heights[i + 1]) continue;
+            int h = heights[i];
+            for (int j = i; j >= 0; --j) {
+                h = min(h, heights[j]);
+                res = max(res, (i-j+1)*h);
+            }
+        }
+        return res;
+    }
+};
