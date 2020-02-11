@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        if(!root) return;
+        std::stack<TreeNode*> q({root});
+        while(q.top() -> left) q.push(q.top() -> left);
+        std::vector<TreeNode*> n;
+        std::vector<int> d;
+        while(!q.empty()){
+            TreeNode* node = q.top();
+            q.pop();
+            d.push_back(node -> val);
+            n.push_back(node);
+            if(node -> right){ 
+                q.push(node -> right);
+                while(q.top() -> left) q.push(q.top() -> left);
+            }
+        }
+        std::sort(d.begin(),d.end());
+        for(int i=0; i< n.size(); ++i) n[i]->val = d[i];
+        return;
+    }
+};
