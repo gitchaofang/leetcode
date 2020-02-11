@@ -1,0 +1,33 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        std::stringstream ss;
+        ss << s;
+        std::vector<std::vector<char>> res;
+        bool sig = true;
+        while(ss){
+            res.push_back(std::vector<char>(numRows,' '));
+            for(int i=0; i<numRows; ++i){
+                char c;
+                ss >> c;
+                if(!ss) break;
+                res.back()[i] = c;
+            }
+            for(int i=numRows-2; i>=1; --i){
+                char c;
+                ss >> c;
+                if(!ss) break;
+                res.push_back(std::vector<char>(numRows,' '));
+                res.back()[i] = c;
+            }
+        }
+        std::string rs("");
+        for(int j=0; j<numRows; ++j){
+            for(int i=0;i<res.size(); ++i){
+                if(res[i][j] == ' ') continue;
+                rs += res[i][j];
+            }    
+        }
+        return rs;
+    }
+};
