@@ -1,0 +1,26 @@
+class Solution {
+public:
+    std::vector<int> dfs(TreeNode* root){
+        if(!root -> left && !root -> right) return {1,root -> val,root->val};
+        int d = root -> val;
+        if(root -> left && root -> right){
+            std::vector<int> left = dfs(root -> left);
+            std::vector<int> right = dfs(root -> right);
+            if(left[0] == 0 || right[0] == 0 || left[2] >= d || right[1] <= d) return {0,0,0};
+            return {1,left[1],right[2]};
+        }
+        if(root -> left){
+            std::vector<int> left = dfs(root -> left);
+            if(left[0] == 0 || left[2] >= d) return {0,0,0};
+            return {1,left[1],d};
+        }
+        std::vector<int> right = dfs(root -> right);
+        if(right[0] == 0 || right[1] <=d ) return {0,0,0};
+        return {1,d,right[2]};
+    }
+    bool isValidBST(TreeNode* root) {
+        if(!root) return true;
+        std::vector<int> v = dfs(root);
+        return v[0] == 1;
+    }
+};
