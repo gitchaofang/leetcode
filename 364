@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int depthSumInverse(vector<NestedInteger>& nestedList) {
+        std::vector<std::vector<int>>v;
+        std::queue<NestedInteger> q;
+        for(const NestedInteger& ni: nestedList) q.push(ni);
+        while(!q.empty()){
+            int n = q.size();
+            std::vector<int>tv;
+            for(int i=0; i<n; ++i){
+                NestedInteger ni = q.front();
+                q.pop();
+                if(ni.isInteger()) tv.push_back(ni.getInteger());
+                for(const NestedInteger& nni: ni.getList()) q.push(nni);
+            }
+            v.push_back(tv);
+        }
+        int res = 0;
+        int n = v.size();
+        for(int i=0; i<n; ++i){
+            for(const int& d: v[i]){
+                res += (n-i) * d;
+            }
+        }
+        return res;
+    }
+};
