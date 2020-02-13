@@ -1,0 +1,19 @@
+class Solution {
+public:
+    TreeNode* dc(const std::vector<int>& pre, int pre_i, int pre_j, const std::vector<int>& in, int in_i, int in_j){
+        int n = pre_j - pre_i + 1;
+        if(n <=0) return nullptr;
+        int left = in_i;
+        int right = in_j;
+        int in_mid = in_i;
+        while(in[in_mid] != pre[pre_i]) ++in_mid;
+        TreeNode* node = new TreeNode(pre[pre_i]);
+        node -> left = dc(pre,pre_i+1,pre_i+in_mid-in_i,in,in_i,in_mid-1);
+        node -> right = dc(pre,pre_i+1+in_mid-in_i,pre_j,in,in_mid+1,in_j);
+        return node;
+        
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return dc(preorder,0,preorder.size() - 1, inorder,0,inorder.size() - 1);
+    }
+};
