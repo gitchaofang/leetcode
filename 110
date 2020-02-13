@@ -1,0 +1,15 @@
+class Solution {
+public:
+    std::pair<bool,int> dc(TreeNode* root){
+        if(!root) return {true,0};
+        std::pair<bool,int> left = dc(root -> left);
+        std::pair<bool,int> right = dc(root -> right);
+        int lev = std::max(left.second,right.second);
+        if(std::abs(left.second - right.second) >1 || !(left.first && right.first)) return {false,lev+1};
+        return {true, lev+1};
+    }
+    bool isBalanced(TreeNode* root) {
+        std::pair<bool,int> p = dc(root);
+        return p.first;
+    }
+};
