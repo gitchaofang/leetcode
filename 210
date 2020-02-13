@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        std::vector<int> in(numCourses,0);
+        std::unordered_map<int,std::vector<int>>m;
+        for(const std::vector<int>& v: prerequisites){
+            ++in[v[0]];
+            m[v[1]].push_back(v[0]);
+        }
+        std::vector<int> res;
+        std::queue<int> q;
+        for(int i=0; i<numCourses; ++i){
+            if(in[i] == 0) q.push(i);
+        }
+        while(!q.empty()){
+            int td = q.front();
+            q.pop();
+            res.push_back(td);
+            for(const int& d: m[td]){
+                --in[d];
+                if(in[d] == 0) q.push(d);
+                
+            }
+        }
+        for(const int& d: in){
+            if(d >0) return {};
+        }
+        return res;
+    }
+};
