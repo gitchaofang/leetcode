@@ -1,0 +1,26 @@
+class Solution {
+public:
+    Node* clone(Node* root, std::unordered_map<Node*,Node*>& m){
+        Node* new_root = new Node(root -> val);
+        std::vector<Node*> v = root -> neighbors;
+        m[root] = new_root;
+        for(Node* n: v){
+            if(m.find(n) != m.end()){ 
+                (new_root -> neighbors).push_back(m[n]);
+                continue;
+            }
+            Node* new_node = clone(n,m);
+            (new_root -> neighbors).push_back(new_node);
+        }
+        return new_root;    
+    }
+    Node* cloneGraph(Node* node) {
+        if(!node) return nullptr;
+        std::unordered_map<Node*,Node*>m;
+        return clone(node,m);
+    }
+};
+
+
+
+
