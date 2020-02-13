@@ -1,0 +1,25 @@
+class Solution {
+public:
+    TreeNode* dc(TreeNode* node){
+        if(!node -> left && !node -> right) return node;
+        if(node -> left && node -> right){
+            TreeNode* right = node -> right;
+            node -> right = node -> left;
+            node -> left = nullptr;
+            TreeNode* tail = dc(node -> right);
+            tail -> right = right;
+            return dc(right);
+        }
+        if(node -> left){
+            node -> right = node -> left;
+            node -> left = nullptr;
+            return dc(node -> right);
+        }
+        return dc(node -> right);
+    }
+    void flatten(TreeNode* root) {
+        if(!root) return;
+        dc(root);
+        return;
+    }
+};
