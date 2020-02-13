@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        std::unordered_map<int,std::vector<int>>m;
+        std::vector<int> in(numCourses,0);
+        for(const std::vector<int>&v: prerequisites){ 
+            ++in[v[0]];
+            m[v[1]].push_back(v[0]);
+        }
+        std::queue<int> q;
+        for(int i=0; i<in.size(); ++i){
+            if(in[i] == 0) q.push(i);
+        }
+        while(!q.empty()){
+            int id = q.front();
+            q.pop();
+            for(const int& d: m[id]){
+                --in[d];
+                if(in[d] == 0) q.push(d);
+            }
+        }
+        for(const int& d: in){
+            if(d != 0) return false;
+        } 
+        return true;
+    }
+};
