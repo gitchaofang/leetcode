@@ -1,22 +1,29 @@
 class Solution {
 public:
-    int dc(const std::vector<int>& arr, int i, int j, int& res){
-        if(i == j) return arr[i];
-        int pos = i;
-        int max = arr[i];
-        for(int k = i; k<=j; ++k){
-            if(arr[k] > max){
-                pos = k;
-                max = arr[k];
-            }
+    int dc(const std::vector<int>& v,int left, int right, int& res){
+        if(left == right) return v[left];
+        int mid = left;
+        for(int i=left; i<=right; ++i){
+            if(v[i] > v[mid]) mid = i;
         }
-        if(pos == i) res += arr[pos] * dc(arr,pos+1,j,res);
-        else if(pos == j) res += arr[pos] * dc(arr,i,pos - 1,res);
-        else res += arr[pos]*(dc(arr,i,pos-1,res) + dc(arr,pos+1,j,res));
-        return arr[pos];
+
+        if(left < mid && mid < right){
+            int lv = dc(v,left,mid-1,res);
+            int rv = dc(v,mid+1,right,res);
+            res += v[mid] * (lv + rv);
+            return v[mid];
+        }
+        if(left < mid){
+            int lv = dc(v,left,mid-1, res);
+            res += v[mid]*lv;
+            return v[mid];
+        }
+        int rv = dc(v,mid+1, right,res);
+        res += v[mid]*rv;
+        return v[mid];
+        
     }
     int mctFromLeafValues(vector<int>& arr) {
-        if (arr.empty()) return 0;
         int res = 0;
         dc(arr,0,arr.size()-1,res);
         return res;
