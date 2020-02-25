@@ -16,7 +16,7 @@ public:
         }
         int res = INT_MAX;
         for(const int& d:st){
-            if(top[d] + bot[d] + both[d] == A.size()) res = std::min(top[d],bot[d]);
+            if(top[d] + bot[d] + both[d] == A.size()) res = std::min(std::min(top[d],bot[d]),res);
         }
         return res == INT_MAX ? -1: res;
     }
