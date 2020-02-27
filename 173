@@ -1,28 +1,30 @@
 class BSTIterator {
 public:
+    void update(std::stack<TreeNode*>& st){
+        while(st.top()->left) st.push(st.top() -> left);
+        return;
+    }
     BSTIterator(TreeNode* root) {
         if(root){
             st.push(root);
-            while(st.top() -> left) st.push(st.top() -> left);
+            update(st);
         }
     }
     
     /** @return the next smallest number */
     int next() {
-        TreeNode* node = st.top();
+        TreeNode* head = st.top();
         st.pop();
-        int d = node -> val;
-        if(!node -> right) return d;
-        st.push(node -> right);
-        while(st.top() -> left) st.push(st.top() -> left);
-        return d;
-        
+        if(!head -> right) return head -> val;
+        st.push(head -> right);
+        update(st);
+        return head -> val;
     }
     
     /** @return whether we have a next smallest number */
     bool hasNext() {
-        return !st.empty();    
+        return !st.empty();   
     }
 private:
-    std::stack<TreeNode*>st;
+    std::stack<TreeNode*> st;
 };
