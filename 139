@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool dfs(std::string s, const std::unordered_set<std::string>&st,std::unordered_set<std::string>& check){
+        if(s == "") return true;
+        for(const std::string& str: st){
+            if (str == s) return true;
+            if(str.size() > s.size() || s.substr(0,str.size()) != str) continue;
+            std::string ss = s.substr(str.size());
+            if(check.find(ss)!=check.end()) continue;
+            bool found = dfs(ss,st,check);
+            if(found == true) return true;
+        }
+        check.insert(s);
+        return false;
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        std::unordered_set<std::string> st(wordDict.begin(),wordDict.end()); 
+        std::unordered_set<std::string> check;
+        bool found = dfs(s,st,check);
+        return found;
+    }
+};
