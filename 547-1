@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M) {
+        std::unordered_map<int,std::vector<int>>m;
+        for(int i=0; i<M.size(); ++i){
+            for(int j=i+1; j<M.size(); ++j){
+                if(M[i][j] == 0) continue;
+                m[i].push_back(j);
+                m[j].push_back(i);
+            }
+        }
+        int res = 0;
+        std::vector<int> check(M.size(),0);
+        for(int i=0; i<M.size(); ++i){
+            if(check[i] == 1) continue;
+            check[i] = 1;
+            ++res;
+            std::queue<int> q({i});
+            while(!q.empty()){
+                int cur = q.front();
+                q.pop();
+                std::vector<int> v = m[cur];
+                for(const int&d :v){
+                    if(check[d] == 1) continue;
+                    check[d] = 1;
+                    q.push(d);
+                }
+            }
+        }
+        return res;
+    }
+};
