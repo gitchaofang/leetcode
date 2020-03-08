@@ -1,18 +1,21 @@
 class Solution {
 public:
     int longestStrChain(vector<string>& words) {
-        std::sort(words.begin(),words.end(),[](const std::string s1, const std::string s2){return s1.size() < s2.size();});
-        std::unordered_map<std::string,int>m;
+        auto cmp = [](const std::string& str1, const std::string& str2){
+            return str1.size() < str2.size();  
+        };
+        std::sort(words.begin(),words.end(),cmp);
+        std::unordered_map<std::string,int> m;
         int res = 0;
         for(const std::string& str: words){
-            m[str] = 1;
+            int cnt = 1;
             for(int i=0; i<str.size(); ++i){
-                std::string s = str;
-                s.erase(s.begin() + i);
-                if(m.find(s) == m.end()) continue;
-                m[str] = std::max(m[str],1+m[s]);
+                std::string ss = str.substr(0,i) + str.substr(i+1);
+                if(m.find(ss) == m.end()) continue;
+                cnt = std::max(cnt,1+m[ss]);
             }
-            res = std::max(res,m[str]);
+            m[str] = cnt;
+            res = std::max(cnt,res);
         }
         return res;
     }
