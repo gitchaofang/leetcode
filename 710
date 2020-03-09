@@ -1,12 +1,13 @@
 class Solution {
 public:
     Solution(int N, vector<int>& blacklist):len(N-blacklist.size()) {
-        int i=len;
+        int i = len;
         std::unordered_set<int> st(blacklist.begin(),blacklist.end());
         for(const int& d: blacklist){
             if(d >= len) continue;
             while(st.find(i)!=st.end()) ++i;
             m[d] = i;
+            ++i;
         }
     }
     
