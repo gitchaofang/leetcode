@@ -8,12 +8,12 @@ public:
             std::unordered_set<int> path;
             int cur = i;
             while(path.size() <= n){
-                if(nums[cur]*nums[i] < 0) break;
+                if(nums[cur]* nums[i] < 0) break;
+                int next = (((cur + nums[cur]) % n) + n)%n;
+                if(cur == next) break;
+                if(path.find(next) != path.end()) return true;
                 visited.insert(cur);
                 path.insert(cur);
-                int next = ((cur + nums[cur] + n)%n + n) %n;
-                if(next == cur) break;
-                if(path.find(next) != path.end()) return true;
                 cur = next;
             }
         }
