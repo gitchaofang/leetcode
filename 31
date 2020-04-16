@@ -1,0 +1,24 @@
+class Solution {
+public:
+    void st(std::vector<int>& v, int head, int tail){
+        while(head < tail) std::swap(v[head++],v[tail--]);
+    }
+    int seek(const std::vector<int>& v, int left, int right, int targ){
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(v[mid] <= targ) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size();
+        int head = n -1;
+        while(head > 0 && nums[head - 1] >= nums[head]) -- head;
+        st(nums,head,n-1);
+        if(head == 0) return;
+        int pos = seek(nums,head,n-1,nums[head - 1]);
+        std::swap(nums[head - 1], nums[pos]);
+        return;
+    }
+};
