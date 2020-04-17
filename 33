@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int piv(const std::vector<int>& v){
+        int n = v.size();
+        int left = 0;
+        int right = n-1;
+        int pivit = 0;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(v[mid] > v[mid + 1]){
+                pivit = mid + 1;
+                return pivit;
+            }
+            if(v[mid] > v[left]) left = mid + 1;
+            else right = right = mid;
+        }
+        return left;
+    }
+    int binary_search(const std::vector<int>&v, int left, int right, int targ){
+        while(left <= right){
+            int mid = left + (right - left) / 2;
+            if(v[mid] == targ) return mid;
+            if(v[mid] < targ) left = mid + 1;
+            else right = mid - 1;
+        }
+        return -1;
+    }
+    int search(vector<int>& nums, int target) {
+        int n = nums.size();
+        if(n == 0) return -1;
+        int head = 0;
+        int tail = n-1;
+        if(nums[0] > nums.back()){
+            int pivit = piv(nums);
+            if(target > nums.back()) tail = pivit - 1;
+            else head = pivit;
+            
+        }
+        int pos = binary_search(nums,head,tail,target);
+        return pos;
+    }
+};
