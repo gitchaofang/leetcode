@@ -13,14 +13,12 @@ public:
     bool check(const std::vector<std::vector<int>>& m, const std::string& str){
         int cur = -1;
         for(int i=0; i<str.size(); ++i){
-            std::cout << i <<' ';
             int c = str[i] - 'a';
             if(m[c].size() == 0) return false;
             int pos = bs(m[c],cur);
             if(pos <= cur) return false;
             cur = pos;
         }
-        std::cout << '\n';
         return true;
     }
     int numMatchingSubseq(string S, vector<string>& words) {
