@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool canConvert(string str1, string str2) {
+        if(str1 == str2) return true;
+        int len = str1.size();
+        std::unordered_map<char,std::unordered_set<int>> m1;
+        std::unordered_map<char,std::unordered_set<int>> m2;
+        for(int i=0; i<len; ++i){
+            m1[str1[i]].insert(i);
+            m2[str2[i]].insert(i);
+        }
+        int color_num = m2.size();
+        if(color_num == 26) return false;
+        for(auto it = m2.begin(); it != m2.end(); ++it){
+            std::unordered_set<int> t;
+            for(const int& i: it -> second){
+                t.insert(m1[str1[i]].begin(), m1[str1[i]].end());
+            }
+            if(t.size() != it -> second.size()) return false;
+        }
+        return true;
+    }
+};
