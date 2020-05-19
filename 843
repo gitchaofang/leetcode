@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int match(const std::string& str, const std::string& targ){
+        int cnt = 0;
+        for(int i=0; i<6; ++i) cnt += (str[i] == targ[i]);
+        return cnt;
+    }
+    void findSecretWord(vector<string>& wordlist, Master& master) {
+        for(int step = 0, cnt = 0; step < 10; ++step){
+            std::string str = wordlist[rand() % wordlist.size()];
+            cnt = master.guess(str);
+            std::vector<std::string> v;
+            for(std::string& s: wordlist){
+                int m = match(str,s);
+                if(m == cnt) v.push_back(s);
+            }
+            wordlist = std::move(v);
+        }      
+    }
+};
