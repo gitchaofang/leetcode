@@ -11,14 +11,14 @@ public:
                 cache.insert(d);  
             }
             else ++pos;
-            while(pos < popped.size() && !st.empty() &&st.top() == popped[pos]){
+            while(!st.empty() && st.top() == popped[pos]){
                 st.pop();
                 cache.erase(popped[pos++]);
             }
         }
   
         for(;pos < popped.size(); ++pos){
-            if(st.empty() || popped[pos] != st.top()) return false;
+            if(popped[pos] != st.top()) return false;
             st.pop();
         }
         return true;
