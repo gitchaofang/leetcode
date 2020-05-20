@@ -1,0 +1,21 @@
+class Solution {
+public:
+    bool isPossible(vector<int>& nums) {
+        std::unordered_map<int,std::multiset<int>>m;
+        for(const int& d: nums){
+            if(m.find(d - 1) == m.end()){
+                m[d].insert(1);
+            }
+            else {
+                m[d].insert((*m[d - 1].begin()) + 1);
+                m[d - 1].erase(m[d - 1].begin());
+                if(m[d - 1].empty()) m.erase(d - 1);
+            }
+        }
+        
+        for(auto it = m.begin(); it != m.end(); ++it){
+            if(*((it -> second).begin()) < 3) return false;
+        }
+        return true;
+    }
+};
