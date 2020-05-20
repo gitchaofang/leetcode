@@ -1,0 +1,21 @@
+class Solution {
+public:
+    bool isPossible(vector<int>& nums) {
+        std::unordered_map<int,std::deque<int>>m;
+        for(const int& d: nums){
+            if(m.find(d - 1) == m.end()){
+                m[d].push_front(1);
+            }
+            else {
+                m[d].push_back(m[d - 1].front() + 1);
+                m[d - 1].pop_front();
+                if(m[d - 1].empty()) m.erase(d - 1);
+            }
+        }
+       
+        for(auto it = m.begin(); it != m.end(); ++it){
+            if((it -> second).front() < 3) return false;
+        }
+        return true;
+    }
+};
