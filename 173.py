@@ -1,6 +1,6 @@
 class BSTIterator(object):
     
-    def update(self,st):
+    def update(self):
         while(self.st[-1].left):
             self.st.append(self.st[-1].left)
         return
@@ -9,14 +9,14 @@ class BSTIterator(object):
         self.st = []
         if (root is not None):
             self.st.append(root) 
-            self.update(self.st)
+            self.update()
         
     def next(self):
         node = self.st[-1]
         self.st.pop()
         if(node.right):
             self.st.append(node.right)
-            self.update(self.st)
+            self.update()
         return node.val
         
 

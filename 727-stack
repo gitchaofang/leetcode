@@ -1,0 +1,38 @@
+class Solution {
+public:
+    string minWindow(string S, string T) {
+        int len = T.size();
+        std::vector<std::stack<std::pair<int,int>>> dp(len);
+        std::unordered_map<char,std::vector<int>> m;
+        for(int i=0; i<T.size(); ++i) m[T[i]].insert(m[T[i]].begin(),i);
+        for(int i=0; i< S.size(); ++i){
+            char c = S[i];
+            if (m.find(c) == m.end()) continue;
+            for(const int& pos: m[c]){
+                int pre = pos - 1;
+                if(pre == -1) dp[0].push({i,i});
+                else if(!dp[pre].empty()){
+                    while(!dp[pre].empty()){ 
+                        dp[pre].top().second = i;
+                        dp[pos].push(dp[pre].top());
+                        dp[pre].pop();
+                    }
+                }
+            }
+        }
+        if(dp.size() == 0 || dp.back().size() == 0) return "";
+        auto cmp = [](const std::pair<int,int>& p1, const std::pair<int,int>& p2){
+            if(p1.second - p1.first == p2.second - p2.first) return p1.first < p2.first;
+            return p1.second - p1.first < p2.second - p2.first;
+        };
+        
+        std::vector<std::pair<int,int>>res;
+        while(!dp.back().empty()){
+            res.push_back(dp.back().top());
+            dp.back().pop();
+        }
+        std::sort(res.begin(), res.end(), cmp);
+       
+        return S.substr(res[0].first, res[0].second - res[0].first + 1);
+    }
+};
