@@ -1,0 +1,21 @@
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int W) {
+        std::map<int,int> m;
+        for(int i=0; i< hand.size(); ++i) ++m[hand[i]];
+        while(!m.empty()){
+            auto it = m.begin();
+            int v = it -> first -1;
+            std::vector<int> er;
+            for(int i=0; i<W; ++i){
+                if(it == m.end() || it -> first != v + 1 || it -> second == 0) return false;
+                v = it -> first;
+                --(it -> second);
+                if(it -> second == 0) er.push_back(it -> first);
+                ++it;
+            }
+            for(const int& d: er) m.erase(d);
+        }
+        return true;
+    }
+};
