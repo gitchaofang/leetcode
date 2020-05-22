@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int max_k(const std::vector<int>& v, const int& base){
+        int k = 0;
+        int sum = 0;
+        for(const int& d: v){
+            sum +=d;
+            if(sum >= base){
+                ++k;
+                sum = 0;
+            }
+        }
+        return k;
+    }
+    int maximizeSweetness(vector<int>& sweetness, int K) {
+        int len = sweetness.size();
+        int low = INT_MAX;
+        int high = 0;        
+        for(const int& d: sweetness){
+            high += d;
+            low = std::min(low,d);
+        }
+        while(low < high){
+            if(low + 1 == high){
+                if(max_k(sweetness,high) >= K+1) return high;
+                return low;
+            }
+            int mid = low + (high - low) / 2;
+            int lev = max_k(sweetness,mid);
+            if(lev >= K+1) low = mid;
+            else high = mid -1;
+        }
+        return low;
+    }
+};
