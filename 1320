@@ -6,25 +6,25 @@ public:
         int y1 = (c1 - 'A') % 6;
         int y2 = (c2 - 'A') % 6;
         return abs(x1 - x2) + abs(y1 - y2);
-    }
+    }   
     int minimumDistance(string word) {
         int len = word.size();
         std::vector<std::vector<int>> dp(len, std::vector<int>(len,0));
         int accum = 0;
         for(int i = 1; i < len; ++i){
-            int m = INT_MAX;
+            dp[i][i] = INT_MAX;
             int extra = dis(word[i],word[i -1]);
             for(int j = 0; j < i -1; ++j){
                 dp[i][j] = dp[i -  1][j] + extra;
-                m = std::min(dp[i - 1][j] + dis(word[j],word[i]),m);
-            }
-            dp[i][i - 1] = std::min(m,accum);
+                dp[i][i] = std::min(dp[i - 1][j] + dis(word[j],word[i]),dp[i][i]);
+            }   
+            dp[i][i - 1] = std::min(dp[i][i],accum);
             accum += extra;   
-        }
-        int res = INT_MAX;
+        }   
+            
         for(int j = 0; j < len - 1; ++j){
-            res = std::min(dp[len - 1][j], res);
-        }
-        return res;
-    }
+            dp[len-1][len-1] = std::min(dp[len - 1][j], dp[len - 1][len - 1]);
+        }   
+        return dp[len - 1][len - 1];
+    }   
 };
