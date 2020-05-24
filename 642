@@ -1,0 +1,102 @@
+class AutocompleteSystem {
+public:
+    AutocompleteSystem(vector<string>& sentences, vector<int>& times):cache(""), head(nullptr) {
+        for(int i=0; i<times.size(); ++i){
+            update(sentences[i],times[i]);
+        }    
+    }
+    vector<string> input(char c) {
+        if(c == '#'){
+            update(cache,1);
+            cache = "";
+            head = nullptr;
+            return {};
+        }    
+        else{
+            cache+=c;
+            if(head == nullptr){
+                if(m.find(c) == m.end()){
+                    trie* node = new trie;
+                    node -> ch = c;
+                    m[c] = node;
+                }
+                head = m[c];
+            }
+            else if((head -> neib).find(c) == (head -> neib).end()){
+                trie* node = new trie;
+                node -> ch = c;
+                (head -> neib)[c] = node;
+                head = node;
+            }
+            else head = (head -> neib)[c];
+            return (head -> out);
+        }
+    }
+    
+    
+    void update(const std::string& str, const int rep){
+        trie* cur = nullptr;
+        store[str] += rep;
+        auto cmp = [this](std::string& str1, std::string& str2){
+            if(store[str1] == store[str2]) return str1 < str2;
+            return store[str1] > store[str2];
+        };
+        if(m.find(str[0]) == m.end()){
+            trie* node = new trie;
+            node -> ch = str[0];
+            m[str[0]] = node;
+            cur = node;
+        }
+        cur = m[str[0]];
+        /*updae out*/
+        if((cur -> out_set).find(str) == (cur -> out_set).end()){  
+            (cur -> out_set).insert(str);  
+            (cur -> out).push_back(str);
+        }
+        std::sort((cur -> out).begin(), (cur -> out).end(),cmp);
+        if((cur -> out).size() > 3){
+            (cur -> out_set).erase((cur -> out).back());
+            (cur -> out).pop_back();
+        }
+        
+        for(int i=1; i<str.size(); ++i){
+            char c = str[i];
+            if((cur -> neib).find(c) == (cur -> neib).end()){
+                trie* node = new trie;
+                node -> ch = c;
+                (cur -> neib)[c] = node;
+                cur = node;
+            }
+            else cur = (cur -> neib)[c];
+            
+            /*update out*/
+            if((cur -> out_set).find(str) == (cur -> out_set).end()){
+                (cur -> out_set).insert(str);
+                (cur -> out).push_back(str);
+            }
+            std::sort((cur -> out).begin(), (cur -> out).end(),cmp);
+            if((cur -> out).size() > 3){
+                (cur -> out_set).erase((cur -> out).back());
+                (cur -> out).pop_back();
+            } 
+        }
+    }
+    
+private:
+    struct trie{
+        char ch;
+        std::unordered_map<char,trie*> neib;
+        std::unordered_set<std::string> out_set;
+        std::vector<std::string> out;
+    };
+    std::unordered_map<char,trie*>m;
+    std::unordered_map<std::string,int>store;
+    std::string cache;
+    trie* head;
+};
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem* obj = new AutocompleteSystem(sentences, times);
+ * vector<string> param_1 = obj->input(c);
+ */
