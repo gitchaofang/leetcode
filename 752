@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) {
+        if(target == "0000") return 0;
+        std::unordered_set<std::string>st(deadends.begin(),deadends.end());
+        if(st.find("0000") != st.end()) return -1;
+        std::queue<std::string>q({"0000"});
+        st.insert("0000");
+        int cnt = 0;
+        while(!q.empty()){
+            ++cnt;
+            for(int i=q.size(); i>0; --i){
+                std::string str = q.front();
+                q.pop();
+                for(int j=0; j<4; ++j){
+                    for(int k = -1; k<=1; k+=2){
+                        std::string s = str;
+                        s[j] = ((str[j] - '0') + k + 10) % 10 + '0';
+                        if(s == target) return cnt;
+                        if(st.find(s) != st.end()) continue;
+                        st.insert(s);
+                        q.push(s);
+                    }    
+                }
+            }
+        }
+        return -1;
+    }
+};
