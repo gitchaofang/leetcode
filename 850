@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int rectangleArea(vector<vector<int>>& rectangles) {
+        std::map<int,std::vector<std::pair<int,int>>>m;
+        std::map<int,int> cntmap;
+        for(const std::vector<int>& v: rectangles){
+            m[v[0]].push_back({v[1],1});
+            m[v[0]].push_back({v[3],-1});
+            m[v[2]].push_back({v[1],-1});
+            m[v[2]].push_back({v[3],1});
+        }
+        long pre = 0;
+        long h = 0;
+        long res = 0;
+        int M = pow(10,9) + 7;
+        for(auto& cur_p: m){
+            res =  (res + (cur_p.first - pre)*h) % M;
+            for(const std::pair<int,int>&p:cur_p.second){
+                cntmap[p.first] += p.second;
+            }
+            int bot = 0;
+            int cnt = 0;
+            h = 0;
+            for(auto& cur_h: cntmap){
+                if(cnt == 0) bot = cur_h.first;
+                cnt += cur_h.second;
+                if(cnt == 0) h += cur_h.first - bot;
+            }
+            pre = cur_p.first;
+        }    
+        return res;
+    }
+};
