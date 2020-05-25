@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool isPossibleDivide(vector<int>& nums, int k) {
+        std::map<int,int>m;
+        for(const int& d: nums) ++m[d];
+        while(!m.empty()){
+            std::stack<int> del;
+            auto it = m.begin();
+            int pre = it -> first - 1;
+            for(int i = 0; i<k; ++i, ++it,++pre){
+                if(it == m.end() || it -> first != pre + 1) return false;
+                --(it -> second);
+                if(it -> second == 0) del.push(it -> first);
+            }    
+            while(!del.empty()){ 
+                m.erase(del.top());
+                del.pop();
+            }
+        }
+        return true;
+    }
+};
