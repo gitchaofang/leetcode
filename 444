@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool sequenceReconstruction(vector<int>& org, vector<vector<int>>& seqs) {
+        if(seqs.empty()) return false;
+        int len = org.size();
+        std::unordered_map<int,int> pos;
+        std::vector<int> check(len,0);
+        for(int i=0; i<org.size(); ++i) pos[org[i]] = i;
+        int cnt = len - 1;
+        bool empty = true;
+        for(const std::vector<int>& v: seqs){
+            for(int i=0; i<v.size(); ++i){
+                empty = false;
+                if(v[i] <= 0 || v[i] >len) return false;
+                if(i == 0) continue;
+                if( pos[v[i - 1]] >= pos[v[i]] ) return false;
+               if(check[pos[v[i]]] == 0 && pos[v[i - 1]] + 1 == pos[v[i]]){
+                   --cnt;
+                   check[pos[v[i]]] = 1;
+               }
+            }
+        }
+        return (cnt == 0 && empty == false);
+    }
+};
