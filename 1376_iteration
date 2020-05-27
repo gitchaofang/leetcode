@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+    std::unordered_map<int,std::stack<int>>m;
+        for(int i=0; i<n; ++i){ 
+            if(manager[i] == -1) continue;
+            m[manager[i]].push(i);
+        }
+        int res = 0;
+        std::stack<int> st({headID});
+        std::stack<int>t({0});
+        while(!st.empty()){
+            int cur = st.top();
+            if(m[cur].empty()){
+                res = std::max(res,t.top()); 
+                st.pop();
+                t.pop();
+            }
+            else{
+                st.push(m[cur].top());
+                t.push(t.top() + informTime[cur]);
+                m[cur].pop();
+            }
+        }
+        return res;
+    }
+};
