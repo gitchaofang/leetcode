@@ -1,0 +1,43 @@
+class Solution {
+public:
+    std::string head(const std::string& str, int& cur){
+        int pre = cur;
+        int end = cur + 1;
+        int cnt = 1;
+        if(str[cur] == '('){
+            while(cnt != 0){
+                if(str[end] == '(') ++cnt;
+                else if(str[end] == ')') --cnt;
+                ++end;
+            }
+        }
+        else{
+            while(end != str.size() && str[end] != ' ') ++end;
+        }
+        cur = end + 1;
+        return str.substr(pre,end - pre);
+    }
+    int eval(std::string str, std::unordered_map<std::string,int> m){
+        if(str[0] == '-' || (str[0] <='9' && str[0] >= '0')) return std::stoi(str);
+        if(str[0] != '(') return m[str];
+        std::string s = str.substr(1,str.size() - 2);
+        int cur = 0;
+        std::string cmd = head(s,cur);
+        
+        if(cmd == "let"){
+            while(true){
+                std::string var = head(s,cur);
+                if(cur > s.size()) return eval(var,m);
+                std::string val = head(s,cur);
+                m[var] = eval(val,m);
+            }
+        }
+        else if(cmd == "add") return eval(head(s,cur),m) + eval(head(s,cur),m);
+        else if(cmd == "mult") return eval(head(s,cur),m) * eval(head(s,cur),m);
+        return 0;
+    }
+    int evaluate(string expression) {
+        std::unordered_map<std::string,int>m;
+        return eval(expression,m);
+    }
+};
