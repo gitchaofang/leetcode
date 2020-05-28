@@ -1,0 +1,48 @@
+class Solution {
+public:
+    bool great(const std::string& str, const std::string& stand){
+        if(str.size() == stand.size()) return str > stand;
+        return str.size() > stand.size();
+    }
+    bool valid(const std::string& str, std::unordered_map<char,char>& cor){
+        for(int i=0; i<=(str.size() - 1) / 2; ++i){
+            if(cor[str[str.size() - i - 1]] != str[i]) return true;
+        }
+        return false;
+    }
+    int confusingNumberII(int N) {
+        std::vector<char> m({'0','1','6','8','9'});
+        unordered_map<char,char> cor({{'0','0'},{'1','1'},{'6','9'},{'8','8'},{'9','6'}});
+        std::queue<std::string>q({"","0","1","6","8","9"});
+        int res = 2;
+        bool end = false;
+        std::string high = std::to_string(N);
+        while(!q.empty() && !end){
+            int len = q.size();
+            for(int i=0; i<len; ++i){
+                std::string str = q.front();
+                q.pop();
+                for(const char& c1: m){
+                    for(const char& c2: m){
+                        std::string s = c1 + str + c2;
+                        if(c1 == '0'){
+                            q.push(s);
+                            continue;
+                        }
+                        if(great(s,high)){
+                            end = true;
+                            break;
+                        }
+                        if(valid(s,cor)){
+                          //  std::cout << s << '\n';
+                            ++res;
+                        }
+                        q.push(s);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+        
+};
