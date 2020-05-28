@@ -1,0 +1,56 @@
+class Solution {
+public:
+    bool check(const std::string& str, std::map<char,char>& m){
+        for(int i=0; i<=(str.size() - 1) / 2; ++i){
+            if(str[str.size() - i - 1] != m[str[i]]) return false;
+        }
+        return true;
+    }
+    bool less(const std::string& str, const std::string& stand){
+        if(str.size() == stand.size()) return str < stand;
+        return str.size() < stand.size();
+    }
+    bool great(const std::string& str, const std::string& stand){
+        if(str.size() == stand.size()) return str >stand;
+        return str.size() > stand.size();
+    }
+    int strobogrammaticInRange(string low, string high) {
+        std::map<char,char>m({{'0','0'},{'1','1'},{'6','9'},{'8','8'},{'9','6'}});
+        std::queue<std::string>q({"","0","1","8"});
+        int res = 0;
+        
+        for(int i=0; i<4; ++i){
+            std::string s = q.front();
+            q.pop();
+            if(s == "") q.push(s);
+            else if(!great(s,high)){
+                if(!less(s,low) && check(s,m)) ++res;
+                q.push(s);
+            }
+            
+        }
+        
+        bool end = false;
+        while(!q.empty() && !end){
+            int len = q.size();
+            for(int i=0; i<len; ++i){
+                std::string str = q.front();
+                q.pop();
+                for(auto it = m.begin(); it != m.end(); ++it){
+                    std::string s = (it -> first) + str + (it -> second);
+                    if(s[0] == '0'){
+                        q.push(s);
+                        continue;
+                    }
+                    if(great(s,high)){ 
+                        end = true;
+                        break;
+                    }
+                    if(!less(s,low))++res;
+                    q.push(s);
+                }
+            }
+        }
+        return res;
+    }
+};
