@@ -1,0 +1,26 @@
+class Solution {
+public:
+    void dfs(int64_t head, int64_t tail, int64_t dig, int& cnt,const std::map<int64_t,int64_t>& m){
+        if(head != tail) ++cnt;
+        for(auto it = m.begin(); it != m.end(); ++it){
+            int64_t new_head = head * 10 + it -> first;
+            if(new_head > targ) return;
+            int64_t new_tail = it -> second * dig + tail;
+            int64_t new_dig = dig * 10; 
+            dfs(new_head,new_tail,new_dig,cnt,m);
+        } 
+        return;
+    }
+    int confusingNumberII(int N) {
+        int cnt = 0;
+        targ = N;
+        std::map<int64_t,int64_t>m({{0,0},{1,1},{6,9},{8,8},{9,6}});
+        dfs(1,1,10,cnt,m);
+        dfs(6,9,10,cnt,m);
+        dfs(8,8,10,cnt,m);
+        dfs(9,6,10,cnt,m);
+        return cnt;
+    }
+private:
+    int64_t targ;
+};
