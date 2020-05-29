@@ -1,0 +1,69 @@
+class Solution {
+public:
+    int fill(std::vector<std::vector<int>>& grid, std::vector<std::vector<int>>& dp,std::queue<std::pair<int,int>>& q){
+        int cnt = -1;
+        int row = grid.size();
+        int col = grid[0].size();
+        std::vector<std::pair<int,int>>dire({{0,-1},{-1,0},{0,1},{1,0}});
+        while(!q.empty()){
+            ++cnt;
+            std::pair<int,int>p = q.front();
+            q.pop();
+            for(const std::pair<int,int>& dir: dire){
+                int x = p.first + dir.first;
+                int y = p.second + dir.second;
+                if(x < 0 || x >= row || y < 0 || y >= col || grid[x][y] != 1 ||dp[x][y] == 1) continue;
+                q.push({x,y});
+                dp[x][y] = 1;
+            }
+        }
+        return cnt;
+    }
+    vector<int> hitBricks(vector<vector<int>>& grid, vector<vector<int>>& hits) {
+        int row = grid.size();
+        int col = grid[0].size();
+        std::vector<std::vector<int>>dp(row,std::vector<int>(col,0));
+        for(const std::vector<int>&p: hits) grid[p[0]][p[1]] = -grid[p[0]][p[1]];
+        std::queue<std::pair<int,int>>q;
+        for(int j=0; j<col; ++j){
+            if(grid[0][j] == 1){ 
+                q.push({0,j});
+                dp[0][j] = 1;
+            }
+        }
+        fill(grid,dp,q);
+        std::vector<int> res;
+        std::vector<std::pair<int,int>>dire({{0,-1},{-1,0},{0,1},{1,0}});
+        for(int i = hits.size() - 1; i >= 0; --i){
+            int x = hits[i][0];
+            int y = hits[i][1];
+            if(grid[x][y] == 0){ 
+                res.insert(res.begin(),0);
+                continue;
+            }
+            
+            grid[x][y] = 1;
+            bool connect = false;
+            if(x != 0){
+                for(const pair<int,int>&dir: dire){
+                    int xx = x + dir.first;
+                    int yy = y + dir.second;
+                    if(xx >= row || yy < 0 || yy >= col) continue;
+                    if(dp[xx][yy] == 1) connect = true;
+                }
+            }
+            else connect = true;
+            if(connect == false){
+                res.insert(res.begin(),0);
+                continue;
+            }
+            
+            dp[x][y] = 1;
+            q.push({x,y});
+            int cnt = fill(grid,dp,q);
+            res.insert(res.begin(),cnt);
+            
+        }
+        return res;
+    }
+};
