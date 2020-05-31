@@ -1,0 +1,48 @@
+class Solution {
+public:
+    std::string ms(const std::vector<std::vector<int>>& v){
+        std::string str("");
+        for(int i = 0; i<v.size(); ++i){
+            for(int j = 0; j<v[i].size(); ++j){
+                if(v[i][j] == 1) str += (std::to_string(i) + '-' + std::to_string(j) + ' ');
+            }
+        }
+        return str;
+    }
+    int minFlips(vector<vector<int>>& mat) {
+        int row = mat.size();
+        int col = mat[0].size();
+        int res = 0;
+        std:queue<std::vector<std::vector<int>>>q({mat});
+        std::unordered_set<std::string> check;
+        std::string s = ms(mat);
+        if(s == "") return 0;
+        check.insert(s);
+        std::vector<std::pair<int,int>> dire({{0,-1},{-1,0},{0,1},{1,0}});
+        while(!q.empty()){
+            ++res;
+            for(int k = q.size(); k != 0; --k){
+                std::vector<std::vector<int>> v = q.front();   
+                q.pop();
+                for(int i=0; i<row; ++i){
+                    for(int j=0; j<col; ++j){
+                        std::vector<std::vector<int>>tv = v;
+                        tv[i][j] = -tv[i][j] + 1;
+                        for(const std::pair<int,int>& dir: dire){
+                            int x = i + dir.first;
+                            int y = j + dir.second;
+                            if(x < 0 || x>=row || y < 0 || y >=col) continue;
+                            tv[x][y] = -tv[x][y] + 1;
+                        }
+                        std::string s = ms(tv);
+                        if(s == "") return res;
+                        if(check.find(s) != check.end()) continue;
+                        check.insert(s);
+                        q.push(tv);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};
