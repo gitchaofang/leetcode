@@ -22,8 +22,8 @@ public:
                 std::unordered_map<int,int>m({{0,1}});
                 for(int i = 0; i < row; ++i){
                     dp[j][k][i] = dp[j-1][k][i] - dp[j-1][j-1][i];
-        //            int tag = dp[j][k][i] - target;
-                    res += (m.find(dp[j][k][i] - target) != m.end() ? m[dp[j][k][i] - target ]: 0);
+                    int tag = dp[j][k][i] - target;
+                    res += m[tag];
                     ++m[dp[j][k][i]];
                 }
             }
