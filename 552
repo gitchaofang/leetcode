@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int checkRecord(int n) {
+        if(n == 1) return 3;
+        std::vector<int> p(n + 1, 0);
+        std::vector<int> a(n + 1, 0);
+        std::vector<int> l(n + 1, 0);
+        std::vector<int> pa(n + 1, 0);
+        std::vector<int> la(n + 1, 0);
+        p[0] = 1;
+        pa[0] = 1;
+        p[1] = 1;
+        a[1] = 1;
+        l[1] = 1;
+        pa[1] = 1;
+        la[1] = 1;
+        int m = pow(10,9) + 7;
+        for(int i = 2; i <= n; ++i){
+            p[i] = ((p[i - 1] + a[i - 1]) % m + l[i - 1]) % m;
+            l[i] = ((p[i - 1] + a[i - 1]) % m + (p[i - 2] + a[i - 2]) % m) % m;
+            a[i] = (pa[i - 1] + la[i - 1]) % m;
+            pa[i] = (pa[i - 1] + la[i - 1]) % m;
+            la[i] = (pa[i - 1] + pa[i - 2]) % m;
+        }
+        return ((p[n] + a[n]) % m + l[n]) % m;
+    }
+};
