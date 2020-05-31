@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int numSubmatrixSumTarget(vector<vector<int>>& matrix, int target) {
+        int row = matrix.size();
+        int col = matrix[0].size();
+        std::vector<std::vector<std::vector<int>>>dp(col + 1,std::vector<std::vector<int>>(col + 1,std::vector<int>(row,0)));
+        int res = 0;
+        
+
+        for(int j = 1; j<= col; ++j){
+            int sum = 0;
+            for(int i = 0; i < row; ++i){
+                sum += matrix[i][j - 1];
+                dp[0][j][i] = dp[0][j - 1][i] + sum;
+            }
+
+        }
+        
+        
+        for(int j = 1; j <= col; ++j){
+            for(int k = j; k <= col; ++k){
+                std::unordered_map<int,int>m({{0,1}});
+                for(int i = 0; i < row; ++i){
+                    dp[j][k][i] = dp[j-1][k][i] - dp[j-1][j-1][i];
+                    int tag = dp[j][k][i] - target;
+                    res += m[tag];
+                    ++m[dp[j][k][i]];
+                }
+            }
+        }
+        return res;
+    }
+};
