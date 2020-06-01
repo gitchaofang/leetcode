@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int numBusesToDestination(vector<vector<int>>& routes, int S, int T) {
+        if(S == T) return 0;
+        std::unordered_map<int,std::vector<int>>s_b;
+        for(int i = 0; i < routes.size(); ++i){
+            std::vector<int>& v = routes[i];
+            for(int j = 0; j< v.size(); ++j)s_b[v[j]].push_back(i);
+        }
+        std::vector<int> b_visited(routes.size(),0);
+        std::unordered_set<int> s_visited({S});
+        std::queue<int> q({S});
+        int res = 0;
+        while(!q.empty()){
+            ++res;
+            for(int i = q.size(); i > 0; --i){
+                int stop = q.front();
+                q.pop();
+                for(const int& b: s_b[stop]){
+                    if(b_visited[b] == 1) continue;
+                    b_visited[b] = 1;
+                    for(const int& s: routes[b]){
+                        if(s == T) return res;
+                        if(s_visited.find(s) != s_visited.end()) continue;
+                        q.push(s);
+                        s_visited.insert(s);
+                    }
+                }
+            }
+        }
+        return -1;
+       
+    }
+};
