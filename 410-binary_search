@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int sep(const std::vector<int>& v, const int& targ){
+        int cnt = 0;
+        int sum = 0;
+        for(const int& d: v){
+            sum += d;
+            if(sum > targ){
+                ++cnt;
+                sum = d;
+            }
+        }
+        return cnt + 1;
+    }
+    int splitArray(vector<int>& nums, int m) {
+        int64_t left = INT_MIN;
+        int64_t right = 0;
+        for(const int64_t& d: nums){
+            left = std::max(d,left);
+            right += d;
+        }
+        if(m == 1) return right;
+        if(m == nums.size()) return left;
+        while(left < right){
+            int mid = (right - left) / 2 + left;
+            int seg = sep(nums,mid);
+            if(seg > m) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+};
