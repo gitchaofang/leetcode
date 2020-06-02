@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int binary_search(const std::vector<int>& v, const int& targ){
+        int left = 0;
+        int right = v.size() - 1;
+        while(left < right){
+            int mid = (right - left) / 2 + left;
+            if(v[mid] < targ) left = mid + 1;
+            else right = mid;
+        }
+        return left;  
+    }
+    int maxEnvelopes(vector<vector<int>>& envelopes){
+        int len = envelopes.size();
+        if(len == 0) return 0;
+        auto cmp = [](const std::vector<int>& v1, const std::vector<int>& v2){
+            if(v1[0] == v2[0]) return v1[1] > v2[1];
+            return v1[0] < v2[0];
+        };
+        std::sort(envelopes.begin(),envelopes.end(),cmp);
+        std::vector<int> res({envelopes[0][1]});
+        for(int i = 1; i < len; ++i){
+            int d = envelopes[i][1];
+            if(d < res.front()) res[0] = d;
+            else if(d > res.back()) res.push_back(d);
+            else{
+                int pos = binary_search(res, d);
+                res[pos] = d;
+            }
+        }
+        return res.size();
+    }
+};
