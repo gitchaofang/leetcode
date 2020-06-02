@@ -1,0 +1,20 @@
+class Solution {
+public:
+    string stoneGameIII(vector<int>& stoneValue) {
+        int n = stoneValue.size();
+        std::vector<int> dp(n + 1,0);
+        std::vector<int> sum(n + 1,0);
+        for(int i = n - 1; i >= 0; --i){
+            int s = 0;
+            dp[i] = INT_MIN;
+            for(int j = i; j < std::min(i + 3, n); ++j){
+                s += stoneValue[j];
+                dp[i] = std::max(dp[i], s + sum[j + 1] - dp[j + 1]);
+            }
+            sum[i] = sum[i + 1] + stoneValue[i];
+        }
+        if(dp[0] > sum[0] - dp[0]) return "Alice";
+        if(dp[0] == sum[0] - dp[0]) return "Tie";
+        return "Bob";
+    }
+};
