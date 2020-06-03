@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        if(buildings.empty()) return {};
+        std::map<int, std::vector<std::pair<int,int>>> m;
+        std::map<int,int> cnt;
+        for(const std::vector<int>& v: buildings){
+            m[v[0]].push_back({v[2],1});
+            m[v[1]].push_back({v[2],-1});
+        }
+        std::vector<std::vector<int>> res;
+        int hight = 0;
+        int base = 0;
+        for(auto it = m.begin(); it != m.end(); ++it){
+            int h = 0;
+            for(const std::pair<int,int>& p: it -> second) cnt[p.first] += p.second;
+            for (auto it = cnt.rbegin(); it != cnt.rend(); ++it){
+                if(it -> second == 0) continue;
+                h = it -> first;
+                break;
+            }
+            if(hight != h){
+                res.push_back({base,hight});
+                hight = h;
+                base = it -> first;
+            }
+        }
+        res.push_back({m.rbegin() -> first, 0});
+        res.erase(res.begin());
+        return res;
+    }
+};
