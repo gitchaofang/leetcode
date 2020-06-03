@@ -11,20 +11,20 @@ public:
         return left;
     }
     vector<int> countSmaller(vector<int>& nums) {
-        std::vector<int> res;
+        std::vector<int> res(nums.size());
         std::vector<int> dp;
         for(int i = nums.size() - 1; i >= 0; --i){
             if(dp.empty()){ 
-                res.push_back(0);
+                res[i] = 0;
                 dp.push_back(nums[i]);
             }
             else if(nums[i] > dp.back()){
-                res.insert(res.begin(),dp.size());
+                res[i] = dp.size();
                 dp.push_back(nums[i]);
             }
             else{
                 int pos = binary_search(dp,nums[i]);
-                res.insert(res.begin(),pos);
+                res[i] = pos;
                 dp.insert(dp.begin() + pos, nums[i]);
             }
         }
