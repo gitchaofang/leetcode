@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int binary_search(const std::vector<int>& v, const int& targ){
+        int left = 0;
+        int right = v.size() - 1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(v[mid] < targ) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+    vector<int> countSmaller(vector<int>& nums) {
+        std::vector<int> res;
+        std::vector<int> dp;
+        for(int i = nums.size() - 1; i >= 0; --i){
+            if(dp.empty()){ 
+                res.push_back(0);
+                dp.push_back(nums[i]);
+            }
+            else if(nums[i] > dp.back()){
+                res.insert(res.begin(),dp.size());
+                dp.push_back(nums[i]);
+            }
+            else{
+                int pos = binary_search(dp,nums[i]);
+                res.insert(res.begin(),pos);
+                dp.insert(dp.begin() + pos, nums[i]);
+            }
+        }
+        return res;
+    }
+};
