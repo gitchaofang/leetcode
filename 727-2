@@ -1,0 +1,20 @@
+class Solution {
+public:
+    string minWindow(string S, string T) {
+        int sn = S.size();
+        int tn = T.size();
+        std::unordered_map<char,std::vector<int>>m;
+        for(int i=0; i<tn; ++i) m[T[i]].insert(m[T[i]].begin(),i);
+        std::vector<int> dp(tn,-1);
+        std::string res("");
+        for(int i = 0; i < sn; ++i){
+            if(m.find(S[i]) == m.end()) continue;
+            for(const int& d: m[S[i]]){
+                if(d == 0) dp[d] = i;
+                else if(i != 0) dp[d] = dp[d - 1];   
+                if(d == tn - 1 && dp[d] != -1 && (res == "" || res.size() > i - dp[d] + 1)) res = S.substr(dp[d], i - dp[d] + 1);
+            }
+        }
+        return res;
+    }
+};
