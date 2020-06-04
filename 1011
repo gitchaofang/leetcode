@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int div(const std::vector<int>& v, const int& targ){
+        int res = 0;
+        int sum = 0;
+        for(const int& d: v){
+            sum += d;
+            if(sum > targ){
+                ++res;
+                sum = d;
+            }
+        }
+        return res;
+    }
+    int shipWithinDays(vector<int>& weights, int D) {
+        int right = 0;
+        int left = INT_MIN;
+        for(const int& d: weights){
+            right += d;
+            left = std::max(left,d);
+        }
+        while(left < right){
+            int mid = left + (right - left) / 2; 
+            if(div(weights,mid) < D) right = mid;
+            else left = mid  + 1;
+        }
+        return left;
+    }
+};
