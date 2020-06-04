@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int dis(const char& c1, const char& c2){
+        if(c1 == c2) return 0;
+        int x1 = (c1 - 'A') / 6;
+        int y1 = (c1 - 'A') % 6;
+        int x2 = (c2 - 'A') / 6;
+        int y2 = (c2 - 'A') % 6;
+        return abs(x1 - x2) + abs(y1 - y2);
+    }
+   
+    int minimumDistance(string word) {
+        int n = word.size();
+        std::vector<int> dp(n, 0);
+        int mn = INT_MAX;
+        for(int i=1; i<n; ++i){
+            int d = dis(word[i - 1], word[i]);
+            dp[i] = dp[i - 1] + d;
+            int mn = dp[i - 1];
+            for(int j = i - 2; j >= 0; --j){
+                mn = std::min(dp[j] + dis(word[j],word[i]), mn);
+                dp[j] = dp[j] + d;       
+            }
+            dp[i - 1] = mn;
+        }
+        mn = INT_MAX;
+        for(const int& d: dp) mn = std::min(d,mn);
+        return mn;
+    }
+};
