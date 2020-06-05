@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int dfs(std::vector<int>& v, const int& n){
+        auto it  = std::min_element(v.begin(),v.end());
+        if(*it == n) return 0;
+        int left = it - v.begin();
+        int h = *it;
+        int right = left;
+        int res = INT_MAX;
+        while(right < v.size() && v[right] == v[left] && (right - left  + 1 + h) <= n  ) ++right;
+        for(int i = --right; i >= left; --i){
+            for(int j = i; j >= left; --j) v[j] += (i - left + 1);
+            int d = dfs(v,n);
+            res = std::min(res, d);
+            for(int j = i; j >= left; --j) v[j] -= (i - left + 1);
+        }
+        return res + 1;
+    }
+    int tilingRectangle(int n, int m) {
+        if(m > n) return tilingRectangle(m,n);
+        std::vector<int> h(m,0);
+        return dfs(h,n);
+    }
+};
