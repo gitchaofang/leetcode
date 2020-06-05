@@ -1,0 +1,54 @@
+class Solution {
+public:
+    int minFlips(vector<vector<int>>& mat) {
+        int m = mat.size();
+        int n = mat[0].size();
+        std::unordered_set<std::string> visited;
+        std::vector<std::pair<int,int>> dire({{0,-1},{-1,0},{0,1},{1,0}});
+        std::string str(m*n,'0');
+        std::vector<int>v(m*n,0);
+        for(int i = 0; i < m; ++i){
+            for(int j = 0; j < n; ++j){ 
+                str[i * n  + j] = '0' + mat[i][j];
+                v[i * n + j] = mat[i][j];
+            }
+        }
+        
+        std::queue<std::vector<int>> q({std::move(v)});
+        std::queue<std::string>sq({str});    
+        visited.insert(str);
+        int res = 0;
+        std::string stand(m*n,'0');
+        if(str == stand) return 0;
+        while(!q.empty()){
+            ++res;
+            for(int i = q.size(); i > 0; --i){
+                std::vector<int> tv = q.front();
+                std::string s = sq.front();
+                q.pop();
+                sq.pop();
+                for(int j = 0; j < m; ++j){
+                    for(int k = 0; k < n; ++k){
+                        v = tv;
+                        str = s;
+                        v[j * n + k] = 1 - v[j * n + k];
+                        str[j * n + k] = '0' + v[j * n + k];
+                        for(const std::pair<int,int>& dir: dire){
+                            int x = j + dir.first;
+                            int y = k + dir.second;
+                            if(x < 0 || x >= m || y < 0 || y >= n) continue;
+                            v[x *n + y] = 1 - v[x * n + y];
+                            str[x * n + y] = '0'+ v[x * n + y];
+                        }
+                        if(visited.find(str) != visited.end()) continue;
+                        if(str == stand) return res;
+                        visited.insert(str);
+                        q.push(v);
+                        sq.push(str);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};
