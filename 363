@@ -1,23 +1,22 @@
 class Solution {
 public:
     int maxSumSubmatrix(vector<vector<int>>& matrix, int k) {
-        if(matrix.empty() || matrix[0].empty()) return 0;
         int row = matrix.size();
         int col = matrix[0].size();
+        for(int j = 1; j < col; ++j){
+            for(int i = 0; i < row; ++i) matrix[i][j] += matrix[i][j - 1];
+        }       
         int res = INT_MIN;
-        for(int j=0; j<col; ++j){
-            std::vector<int> sum(row,0);
-            for(int l = j; l<col; ++l){
-                for(int i=0; i<row; ++i){
-                    sum[i] += matrix[i][l];
-                }
-                std::set<int>st({0});
-                int cursum = 0;
-                for(const int& d: sum){
-                    cursum += d; 
-                    auto it = st.lower_bound(cursum - k);
-                    if(it != st.end()) res = std::max(res,cursum - *it);
-                    st.insert(cursum);
+        std::set<int> st;
+        for(int j = 0; j < col; ++j){
+            for(int l = 0; l <= j; ++l){
+                st = {0};
+                int sum = 0;
+                for(int i = 0; i < row; ++i){
+                    sum += (l == 0) ? matrix[i][j] : matrix[i][j] - matrix[i][l - 1];
+                    auto it = st.lower_bound(sum - k);
+                    if(it != st.end()) res = std::max(res,sum - *it);
+                    st.insert(sum);
                 }
             }
         }
