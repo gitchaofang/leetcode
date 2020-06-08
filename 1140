@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int dfs(const std::vector<int>& v, const int& cur, int m, int s){
+        if(cur >= v.size()) return 0;
+        int res = INT_MIN;
+        int sum = 0;
+        int d = 0;
+        int new_m = 0;
+        std::string str("");
+        for(int i = cur; i < std::min(int(v.size()),cur + 2 * m); ++i){
+            sum += v[i];
+            s -= v[i];
+            new_m = std::max(m, i - cur + 1);
+            str = std::to_string(i) + '-' +std::to_string(new_m);
+            if(mp.find(str) != mp.end()) d = mp[str];
+            else d = dfs(v, i + 1, new_m,s);
+            res = std::max(res, s - d + sum);
+        }
+        str = std::to_string(cur) + '-' + std::to_string(res);
+        mp[str] = res;
+        return res;
+    }
+    int stoneGameII(vector<int>& piles) {
+        int s = std::accumulate(piles.begin(),piles.end(),0);
+        return dfs(piles,0,1,s);
+        
+    }
+private:
+    std::unordered_map<std::string,int> mp;
+};
