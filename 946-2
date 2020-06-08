@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+        std::unordered_set<int> store;
+        std::stack<int> st;
+        int push_pos = 0;
+        int pop_pos = 0;
+        while(pop_pos!= popped.size()){
+            if(push_pos == pushed.size() && st.top() != popped[pop_pos]) return false;
+            if(st.empty() || (st.top() != popped[pop_pos] && store.find(popped[pop_pos]) == store.end())){ 
+                st.push(pushed[push_pos++]);
+                store.insert(st.top());
+            }
+            else if(st.top() == popped[pop_pos]){
+                store.erase(st.top());
+                st.pop();
+                ++pop_pos;
+            }
+            else return false;
+        }
+        return true;
+    }
+};
