@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool isPossible(vector<int>& nums) {
+        std::unordered_map<int,int> freq;
+        std::unordered_map<int,int> need;
+        for(const int&d : nums) ++freq[d];
+        for(const int& d: nums){
+            if(freq[d] == 0) continue;
+            if(need[d] > 0){
+                ++need[d + 1];
+                --need[d];
+            }
+            else if(freq[d + 1] > 0 && freq[d + 2] > 0){
+                --freq[d + 1];
+                --freq[d + 2];
+                ++need[d + 3];
+            }
+            else return false;
+            --freq[d];
+        }
+        return true;
+    }
+};
