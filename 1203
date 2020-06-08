@@ -1,0 +1,69 @@
+class Solution {
+public:
+    vector<int> sortItems(int n, int m, vector<int>& group, vector<vector<int>>& beforeItems) {
+        std::unordered_map<int,std::vector<int>> ele;
+        std::unordered_map<int,std::unordered_set<int>>connect;
+        for(int i = 0; i < n; ++i){
+            if(group[i] == -1){
+                ele[m].push_back(i);
+                group[i] = m++;
+            }
+            else ele[group[i]].push_back(i);
+        }
+        
+        std::vector<std::unordered_map<int,std::unordered_set<int>>>inner_connect(m);
+        std::vector<int> in(m,0);
+        for(int i = 0; i < n; ++i){
+            for(const int& d: beforeItems[i]){ 
+                if(group[d] == group[i]) inner_connect[group[d]][d].insert(i);
+                /*between group*/
+                if(connect[group[d]].find(group[i]) != connect[group[d]].end() || group[d] == group[i]) continue;
+                connect[group[d]].insert(group[i]);
+                ++in[group[i]];
+                
+            }
+        }
+
+        std::queue<int>q;
+        for(int i = 0; i < m; ++i){
+            if(in[i] == 0) q.push(i); 
+        }
+        
+        
+        std::vector<int> order;
+        while(!q.empty()){
+            int cur = q.front();
+            q.pop();
+            order.push_back(cur);
+            for(const int& d: connect[cur]){
+                --in[d];
+                if(in[d] == 0) q.push(d);
+            }
+        }
+        if(order.size() < m) return {};
+        std::vector<int> res;
+        for(const int& d: order){
+            std::unordered_map<int,int>in;
+            for(auto it = inner_connect[d].begin(); it != inner_connect[d].end(); ++it){
+                for(const int& dd: it -> second) ++in[dd];
+            }
+            std::queue<int> q;
+            for(const int& dd: ele[d]){
+                if(in.find(dd) == in.end()) q.push(dd);
+            }
+            while(!q.empty()){
+                int cur = q.front();
+                q.pop();
+                res.push_back(cur);
+                for(const int& dd: inner_connect[d][cur]){
+                    --in[dd];
+                    if(in[dd] == 0) q.push(dd);
+                }
+            }
+            for(const std::pair<int,int>&p : in){
+                if(p.second != 0) return {};
+            }
+        }
+        return res;
+    }
+};
