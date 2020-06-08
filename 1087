@@ -1,0 +1,37 @@
+class Solution {
+public:
+    std::vector<std::string> sweep(const std::string& s, int cur){
+        int n = s.size();
+        if(cur >= n) return {};
+        std::set<std::string>head;
+        int pre = cur;
+        if(s[cur] != '{'){
+            while(cur < n && s[cur] != '{') ++cur;
+            head.insert(s.substr(pre,cur - pre));
+        }
+        else{
+            ++cur;
+            while(cur < n && s[cur] != '}'){
+                if(s[cur] != ',') head.insert(s.substr(cur,1)); 
+                ++cur;
+            }
+            ++cur;
+        }
+        std::vector<std::string> tail = sweep(s,cur);
+        if(tail.size() == 0){ 
+            std::vector<std::string> res(head.begin(),head.end());
+            return res;
+        }
+        std::vector<std::string> res(head.size() * tail.size());
+        pre = 0;
+        for(const std::string& h : head){
+            for(const std::string& t: tail){
+                res[pre++] = h + t;    
+            }
+        }
+        return res;
+    }
+    vector<string> expand(string S) {
+        return sweep(S,0);   
+    }
+};
