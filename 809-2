@@ -1,0 +1,36 @@
+class Solution {
+public:
+    void seek(const std::string& str, int& cur, const char& c){
+        while(cur < str.size() && str[cur] == c) ++cur;
+    }
+    int expressiveWords(string S, vector<string>& words) {
+        std::vector<std::pair<int,int>>stand;
+        for(int i= 0; i < S.size(); ++i){
+            int j = i;
+            seek(S,j,S[i]);
+            stand.push_back({S[i],j - i});
+            i = j - 1;
+        }
+        int res = 0;
+        for(const std::string& s: words){
+            int pos = 0;
+            bool sucess = true;
+            for(int i = 0; i < s.size(); ++i){
+                if(s[i] != stand[pos].first || pos >= stand.size()) {
+                    sucess = false;
+                    break;
+                }
+                int j = i;
+                seek(s,j,s[i]);
+                if(j - i > stand[pos].second || (j - i != stand[pos].second && stand[pos].second < 3)){ 
+                    sucess = false;
+                    break;
+                }
+                ++pos;
+                i = j - 1;
+            }
+            if(sucess == true && pos == stand.size()) ++res;
+        }
+        return res;
+    }
+};
