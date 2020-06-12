@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int maxSumTwoNoOverlap(vector<int>& A, int L, int M) {
+        int n = A.size();
+        /*first: L, second, M*/
+        std::vector<std::pair<int,int>>dp(n + 1,{0,0});
+        std::vector<int>sum(n + 1,0);
+        sum[1] = A[0];
+        int res = 0;
+        for(int i = 2; i <= n; ++i) sum[i] = sum[i - 1] + A[i - 1];
+        for(int i  =  1; i <= n; ++i){
+            if(i < std::min(L,M)) continue;
+            if(i >= L){
+                dp[i].first = std::max(dp[i - 1].first, sum[i] - sum[i - L]);
+                if(i - L >= M) res = std::max(res, sum[i] - sum[i - L] + dp[i - L].second);
+            }
+            if(i >= M){
+                dp[i].second = std::max(dp[i - 1].second, sum[i] - sum[i - M]);
+                if(i - M >= L) res = std::max(res, sum[i] - sum[i - M] + dp[i - M].first);
+            }
+        }
+        return res; 
+    }       
+};
