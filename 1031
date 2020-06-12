@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int dfs(const std::vector<int>& v, int cur, const int& ind){
+        int n = v.size();
+        int len = sub_len[ind];
+        if(cur + len > n) return 0;
+        int res = 0;
+        int sum = std::accumulate(v.begin() + cur, v.begin() + cur + len , 0);
+        sum -= v[cur + len - 1];
+        int d = 0;
+        for(int i = cur + len - 1; i < n; ++i){
+            sum += v[i];
+            if(ind == 1) res = std::max(res,sum);
+            else{
+                d = sum;
+                d += dfs(v,i + 1,ind + 1);
+                res = std::max(res,d);
+            }
+            sum -= v[i - len + 1];
+        }
+        return res;
+    }
+    int maxSumTwoNoOverlap(vector<int>& A, int L, int M) {
+        sub_len.resize(2);
+        sub_len[0] = L;
+        sub_len[1] = M;
+        int res = dfs(A,0,0);
+        std::cout << res;
+        sub_len[0] = M;
+        sub_len[1] = L;
+        res = std::max(res,dfs(A,0,0));
+        return res;
+    }
+private:
+    std::vector<int>sub_len;
+};
