@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int countSquares(vector<vector<int>>& matrix) {
+        int row = matrix.size();
+        int col = matrix[0].size();
+        for(int j = 1; j < col; ++j){
+            for(int i = 0; i < row; ++i) matrix[i][j] += matrix[i][j - 1];
+        }
+        int res = 0;
+        int sum = 0;
+        int l = 0;
+        std::queue<int>q;
+        for(int i = 0; i < col; ++i){
+            for(int j = i; j < col; ++j){
+                sum = 0;
+                q = {};
+                l = j - i + 1;
+                int area = std::pow(j - i + 1, 2);
+                for(int k = 0; k < row; ++k){
+                    sum += (i == 0) ? matrix[k][j] : matrix[k][j] - matrix[k][i - 1];
+                    q.push(sum);
+                    if(q.size() == l) res += (sum == area);
+                    else if(q.size() > l){
+                        res += (sum - q.front() == area);
+                        q.pop();
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
