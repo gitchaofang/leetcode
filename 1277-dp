@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int countSquares(vector<vector<int>>& matrix) {
+        int row = matrix.size();
+        int col = matrix[0].size();
+        std::vector<std::vector<int>>dp(row,std::vector<int>(col,0));
+        int res = 0;
+        for(int i = row - 1; i >= 0; --i){
+            for(int j = col - 1; j >= 0; --j){
+                int right = (j + 1 == col ? 0 : dp[i][j + 1]);
+                int bot = (i + 1 == row ? 0 : dp[i + 1][j]);
+                int diag = (i + 1 < row && j + 1 < col ? dp[i + 1][j + 1] : 0);
+                dp[i][j] = matrix[i][j] * (std::min(right, std::min(diag,bot)) + 1);
+                res += dp[i][j];
+            }
+        }
+        return res;
+    }
+};
