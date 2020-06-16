@@ -1,0 +1,23 @@
+class Solution {
+public:
+    string encode(string s) {
+        int n = s.size();
+        std::vector<std::vector<std::string>> dp(n,std::vector<std::string>(n,""));
+        for(int l = 1; l <= n; ++l){
+            for(int i = 0; i + l - 1 < n; ++i){
+                int j = i + l - 1;
+                dp[i][j] = s.substr(i,l);
+                for(int k = i; k < j; ++k){
+                    if(dp[i][k].size() + dp[k + 1][j].size() < dp[i][j].size()) dp[i][j] = dp[i][k] + dp[k + 1][j];   
+                }
+                std::string replace = "";
+                std::string ts = s.substr(i,l);
+                auto pos = (ts + ts).find(ts,1);
+                if(pos >= ts.size()) replace = ts;
+                else replace = std::to_string(ts.size() / pos) + '[' + dp[i][i + pos + -1] + ']';
+                if(replace.size() < dp[i][j].size()) dp[i][j] = replace;
+            }
+        }
+        return dp[0][n - 1];
+    }
+};
