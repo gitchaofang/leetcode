@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+        int n = nums.size();
+        std::multiset<double>st;
+        for(int i = 0; i < k; ++i) st.insert(nums[i]);
+        std::vector<double> res;
+        auto it = st.begin();
+        std::advance(it,(k - 1)/2);
+        double sum = *it;
+        if(k % 2 == 0){
+            ++it;
+            sum += *it;
+            res.push_back(sum / 2.0);
+        }
+        else res.push_back(sum);
+        for(int i = k; i < n; ++i){
+            st.erase(st.find(nums[i - k]));
+            st.insert(nums[i]);
+            it = st.begin();
+            std::advance(it,(k - 1) / 2);
+            sum = *it;
+            if(k % 2 == 0){
+                ++it;
+                sum += *it;
+                res.push_back(sum / 2.0);
+            }
+            else res.push_back(sum);
+        }
+        return res;
+    }
+};
