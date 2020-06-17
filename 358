@@ -1,0 +1,38 @@
+class cmp{
+    public:
+        bool operator()(const std::pair<char,int>& p1, const std::pair<char,int>& p2){
+            if(p1.second == p2.second) return p1.first > p2.first;
+            return p1.second < p2.second;           
+        }
+};
+class Solution {
+public:
+    string rearrangeString(string s, int k) {
+        if(k == 0) return s;
+        std::unordered_map<char,int>m;
+        for(const char& c: s) ++m[c];
+        std::priority_queue<std::pair<char,int>,           std::vector<std::pair<char,int>>,cmp> pq(m.begin(),m.end());
+        std::stack<std::pair<char,int>> st;
+        std::string res("");
+        while(pq.size() >= k){
+            for(int s = 0; s < k; ++s){
+                std::pair<char,int> p = pq.top();
+                pq.pop();
+                --p.second;
+                res += p.first;
+                if(p.second > 0) st.push(p);
+            }
+            while(!st.empty()){
+                pq.push(st.top());
+                st.pop();
+            }
+        }
+        while(!pq.empty()){
+            const std::pair<char,int>p = pq.top();
+            pq.pop();
+            if(p.second > 1) return "";
+            res += p.first;
+        }
+        return res;
+    }
+};
