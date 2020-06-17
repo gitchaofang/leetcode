@@ -1,0 +1,37 @@
+class StreamChecker {
+public:
+    StreamChecker(vector<string>& words): s("") {
+        trie.resize(1);
+        for(const std::string& str: words){
+            int pos = 0;
+            for(int i = str.size() - 1; i >= 0; --i){
+                const char& c = str[i];
+                if(trie[pos].find(c) == trie[pos].end()){
+                    trie[pos].insert({c,trie.size()});
+                    pos = trie.size();
+                    trie.push_back({});
+                }
+                else pos = trie[pos][c];
+            }
+            st.insert(pos);
+        }
+    }
+    
+    
+    bool query(char letter) {
+        s += letter;
+        if(trie[0].find(letter) != trie[0].end()){
+            int pos = 0;
+            for(int i = s.size() - 1; i >= 0; --i){
+                if(trie[pos].find(s[i]) == trie[pos].end()) return false;
+                pos = trie[pos][s[i]];
+                if(st.find(pos) != st.end()) return true;
+            }
+        }
+        return false;
+    }
+private:
+    std::vector<std::unordered_map<char,int>>trie;
+    std::string s;
+    std::unordered_set<int>st;
+};
