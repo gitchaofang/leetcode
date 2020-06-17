@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int minimumSemesters(int N, vector<vector<int>>& relations) {
+        std::unordered_map<int,std::vector<int>>m;
+        std::vector<int> in(N + 1,0);
+        for(const std::vector<int>& v: relations){
+            m[v[0]].push_back(v[1]);
+            ++in[v[1]];
+        }
+        std::queue<int>q;
+        for(int i = 0; i <= N; ++i){
+            if(in[i] == 0) q.push(i);
+        }
+        int res = 0;
+        while(!q.empty()){
+            ++res;
+            for(int s = q.size(); s > 0; --s){
+                int cur = q.front();
+                q.pop();
+                for(const int& nc: m[cur]){
+                    --in[nc];
+                    if(in[nc] == 0) q.push(nc);
+                }
+            }
+        }
+        for(const int& d: in){
+            if(d != 0) return -1;
+        }
+        return res;
+        
+    }
+};
