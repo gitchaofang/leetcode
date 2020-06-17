@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int64_t cal(const std::string& s, int left, int right){
+        if(left == s.size()) return 0;
+        std::stack<int> st;
+        for(int i = left; i <= right; ++i){
+            int j = i;
+            int64_t d = 0;
+            if(s[i] == '('){
+                int cnt = 1;
+                ++j;
+                while(cnt != 0){
+                    if(s[j] == '(') ++cnt;
+                    else if(s[j] == ')') --cnt;
+                    ++j;
+                }
+                d = cal(s, i + 1, j - 2);
+            }
+            else{
+                while(j <= right && s[j] <= '9' && s[j] >= '0'){
+                    d = (s[j] - '0') + d * 10;
+                    ++j;
+                }
+            }
+            if(i == left) st.push(d);
+            else{
+                if(s[i - 1] == '*') st.top() *= d;
+                else if(s[i - 1] == '/') st.top() /= d;
+                else if(s[i - 1] == '-') st.push(-d);
+                else st.push(d);
+            }
+            i = j;
+        }
+        int64_t res = 0;
+        while(!st.empty()){
+            res += st.top();
+            st.pop();
+        }
+        return res;
+    }
+    int calculate(string s) {
+        for(int i = 0; i < s.size(); ++i){
+            if(s[i] == ' '){
+                s.erase(s.begin() + i);
+                --i;
+            }
+        }
+        return cal(s,0,s.size() - 1);
+    }
+};
