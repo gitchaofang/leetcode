@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int cherryPickup(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        std::vector<std::vector<int>>dp(col,std::vector<int>(col,-1));
+        std::vector<int>dire({-1,0,1});
+        dp[0][col - 1] = grid[0][0] + grid[0][col - 1];
+        for(int i = 1; i < row; ++i){
+            std::vector<std::vector<int>>tv(col,std::vector<int>(col,-1));
+            for(int j = 0; j < col; ++j){
+                for(int k = 0; k < col; ++k){
+                    for(const int& d: dire){
+                        for(const int& dd: dire){
+                            int dj = j + d;
+                            int dk = k + dd;
+                            if(dj < 0 || dj >= col || dk < 0 || dk >= col || dp[dj][dk] == -1) continue; 
+                            tv[j][k] = std::max(tv[j][k],dp[dj][dk]);
+                        }
+                    }
+                    if(tv[j][k] >= 0) tv[j][k] += (grid[i][k] + (j == k ? 0 : grid[i][j]));
+                } 
+            }
+            dp = tv;
+        }
+        int res = 0;
+        for(int i = 0; i < col; ++i){
+            for(int j = 0; j < col; ++j) res = std::max(dp[i][j], res);
+        }
+        return res;
+    }
+};
