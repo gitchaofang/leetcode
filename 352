@@ -1,0 +1,51 @@
+class SummaryRanges {
+public:
+    /** Initialize your data structure here. */
+    SummaryRanges() {
+        
+    }
+    
+    void addNum(int val) {
+        if(v.empty()) v.push_back({val,val});  
+        else{
+            int pos = binary_search(val);
+            /*right*/
+            if(pos == v.size()) v.push_back({val,val});
+            else{
+                if(v[pos][0] == val + 1) v[pos][0] = val;
+                else v.insert(v.begin() + pos, {val,val});
+            }
+            /*left*/
+            if(pos == 0) return;
+            if(v[pos - 1][1] >= v[pos][0] - 1){
+                v[pos - 1][1] = std::max(v[pos][1], v[pos - 1][1]);
+                v.erase(v.begin() + pos);
+            }
+        }
+        return;
+    }
+    
+    vector<vector<int>> getIntervals() {
+        return v;       
+    }
+    int binary_search(const int& d){
+        int left = 0;
+        int right = v.size() - 1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(v[mid][0] <= d) left = mid + 1;
+            else right = mid;
+        }
+        if(v[left][0] <= d) return v.size();
+        return left;
+    }
+private:
+    std::vector<std::vector<int>> v;
+};
+
+/**
+ * Your SummaryRanges object will be instantiated and called as such:
+ * SummaryRanges* obj = new SummaryRanges();
+ * obj->addNum(val);
+ * vector<vector<int>> param_2 = obj->getIntervals();
+ */
