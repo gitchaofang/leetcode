@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int minMalwareSpread(vector<vector<int>>& graph, vector<int>& initial) {
+        int n = graph.size();
+        std::pair<int,int>res{-1,-1};
+        std::unordered_set<int> inf(initial.begin(),initial.end());
+        std::vector<int>visited(n,0);
+        for(int i = 0; i < n; ++i){
+            if(visited[i] == 1) continue;
+            int cnt = 0;
+            std::queue<int>q({i});
+            std::set<int>ini;
+            visited[i] = 1;
+            while(!q.empty()){
+                cnt += q.size();
+                for(int s = q.size(); s > 0; --s){
+                    int cur = q.front();
+                    q.pop();
+                    if(inf.find(cur) != inf.end()) ini.insert(cur);
+                    for(int next = 0; next < n; ++next){
+                        if(graph[cur][next] == 0 || visited[next] == 1) continue;
+                        visited[next] = 1;
+                        q.push(next);
+                    }
+                }
+            }
+            if(ini.size() == 0) continue;
+            int cancel = (ini.size() == 1) ? cnt : 0;
+            if(res.first < cancel || (res.first == cancel && *ini.begin() < res.second)) {
+                res.first = cancel;
+                res.second = *ini.begin();  
+            }
+        }
+        return res.second;
+    }
+};
