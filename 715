@@ -1,0 +1,62 @@
+class RangeModule {
+public:
+    RangeModule() {
+        
+    }
+    
+    void addRange(int left, int right) {
+        std::vector<std::pair<int,int>>res;
+        int cur = 0;
+        for(int i = 0; i < v.size(); ++i){
+            if(v[i].second < left){
+                ++cur;
+                res.push_back(v[i]);
+            }
+            else if(v[i].first > right) res.push_back(v[i]);
+            else{
+                left = std::min(v[i].first,left);
+                right = std::max(v[i].second,right);
+            }
+        }
+        res.insert(res.begin() + cur, {left, right});
+        v = res;
+        return;
+    }
+    
+    bool queryRange(int left, int right) {
+        for(const std::pair<int,int>&p : v){
+            if(p.first <= left && p.second >= right) return true;
+        }    
+        return false;
+    }
+    
+    void removeRange(int left, int right) {
+        std::vector<std::pair<int,int>>tv;
+        std::vector<std::pair<int,int>> iv;
+        int cur = 0;
+        for(int i = 0; i < v.size(); ++i){
+            if(v[i].second < left){
+                tv.push_back(v[i]);
+                ++cur;
+            }
+            else if(v[i].first >= right) tv.push_back(v[i]);
+            else{
+                if(v[i].first < left) iv.push_back({v[i].first, left});
+                if(v[i].second > right) iv.push_back({right,v[i].second});
+            }
+        }
+        tv.insert(tv.begin() + cur, iv.begin(),iv.end());
+        v = tv;
+        return;
+    }
+private:
+    std::vector<std::pair<int,int>>v;
+};
+
+/**
+ * Your RangeModule object will be instantiated and called as such:
+ * RangeModule* obj = new RangeModule();
+ * obj->addRange(left,right);
+ * bool param_2 = obj->queryRange(left,right);
+ * obj->removeRange(left,right);
+ */
