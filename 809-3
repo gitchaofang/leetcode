@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int expressiveWords(string S, vector<string>& words) {
+        int res = 0;
+        std::map<int,int>m;
+        for(int i = 0; i < S.size(); ++i){
+            char c = S[i];
+            int j = i;
+            while(i < S.size() && S[j] == S[i]){ 
+                ++m[i];
+                ++j;
+            }
+            i = j - 1;
+        }
+        for(const std::string& str: words){
+            auto it = m.begin();
+            bool valid = true;
+            for(int i = 0; i < str.size(); ++i){
+                if(it == m.end() || str[i] != S[it -> first]){
+                    valid = false;
+                    break;
+                }
+                char c = str[i];
+                int cnt = it -> second;
+                int j = i;
+                while(i < str.size() && str[j] == c) ++j;
+                if((j - i > cnt) || (j - i < cnt && cnt < 3 )){
+                    valid = false;
+                    break;
+                }
+                i = j - 1;
+                ++it;
+            }
+            if(valid == true && it == m.end()) ++res;
+        }
+        return res;
+    }
+};
