@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int back(const int64_t& num1, const int64_t& num2, int pw){
+        int cnt = 0;
+        if(num1 != num2) ++cnt;
+        int64_t new_num1 = 0;
+        int64_t new_num2 = 0;
+        for(const std::pair<int,int>& p: dig){
+            new_num1 = num1 * 10 + p.first;
+            if(new_num1 > top) return cnt;
+            new_num2 = std::pow(10,pw) * p.second + num2;
+            cnt += back(new_num1, new_num2,pw + 1);
+        }
+        return cnt;
+    }
+    int confusingNumberII(int N) {
+        dig = {{0,0},{1,1},{6,9},{8,8},{9,6}};
+        top = N;
+        int res = back(1,1,1);
+        res += back(6,9,1);
+        res += back(8,8,1);
+        res += back(9,6,1);
+        return res;
+    }
+private:
+    std::vector<std::pair<int,int>>dig;
+    int top;
+};
