@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool eg(const std::string& str1, const std::string & str2){
+        if(str1.size() < str2.size()) return false;
+        return (str1.size() > str2.size() || str1 >= str2);
+    }
+    
+    int strobogrammaticInRange(string low, string high) {
+        std::vector<std::pair<std::string,std::string>> dig({{"0","0"},{"1","1"},{"6","9"},{"8","8"},{"9","6"}});
+        int res = (low == "0") ? 1 : 0; 
+        std::queue<std::string>q({"","0"});
+        for(int i = 1; i < dig.size(); ++i){
+            if(eg(dig[i].first,high) && dig[i].first != high) break;
+            if(dig[i].first == dig[i].second){ 
+                q.push(dig[i].first);
+                if(eg(dig[i].first,low)) ++res;
+            }
+        }
+        while(!q.empty()){
+            std::string str = q.front();
+            q.pop();
+            for(const std::pair<std::string,std::string>& p: dig){
+                std::string new_str = p.first + str + p.second;
+                if(eg(new_str,high) && new_str != high) break;
+                q.push(new_str);
+                if(new_str[0] != '0' && eg(new_str,low)) ++res;
+            }
+        }
+        return res;
+    }
+};
