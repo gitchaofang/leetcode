@@ -1,0 +1,74 @@
+class cmp{
+    public:
+        bool operator()(const std::pair<std::string,int>& p1, const std::pair<std::string,int>& p2){
+            if(p1.second == p2.second) return p1.first > p2.first;
+            return p1.second < p2.second;
+        }
+};
+class AutocompleteSystem {
+public:
+    AutocompleteSystem(vector<string>& sentences, vector<int>& times): str(""){
+        trie.resize(1);
+        store.resize(1);
+        for(int i = 0; i < times.size(); ++i) update(sentences[i],times[i]);
+    }
+    
+    void update(const std::string& s, const int t){
+        int cur = 0;
+        for(const char& c: s){
+            if(trie[cur].find(c) == trie[cur].end()){
+                trie[cur][c] = trie.size();
+                cur = trie.size();
+                trie.resize(trie.size() + 1);
+                store.resize(store.size() + 1);
+                store.back()[s] = t;
+            }
+            else{
+                cur = trie[cur][c];
+                store[cur][s] += t;
+            }
+        }
+        return;
+    }
+    vector<string> input(char c) {
+        if(c == '#'){ 
+            update(str,1);
+            str = "";
+            return {};
+        }
+        else{
+            str += c;
+            int pos = 0;
+            bool found = true;
+            for(int i = 0; i < str.size(); ++i){
+                if(trie[pos].find(str[i]) == trie[pos].end()){
+                    found = false;
+                    break;
+                }
+                pos = trie[pos][str[i]];
+            }
+            if(found == false) return {};
+            std::priority_queue<std::pair<std::string,int>,std::vector<std::pair<std::string,int>>,cmp> pq;
+            for(const std::pair<std::string,int>& p: store[pos]) pq.push(p);
+            std::vector<std::string> res;
+            for(int i = 0; i < 3; ++i){
+                if(!pq.empty()){
+                    res.push_back(pq.top().first);
+                    pq.pop();
+                }
+            }
+            return res;
+        }
+        return {};
+    }
+private:
+    std::vector<std::unordered_map<char,int>> trie;
+    std::vector<std::unordered_map<std::string,int>>store;
+    std::string str;
+};
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem* obj = new AutocompleteSystem(sentences, times);
+ * vector<string> param_1 = obj->input(c);
+ */
