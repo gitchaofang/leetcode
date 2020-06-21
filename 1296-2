@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool isPossibleDivide(vector<int>& nums, int k) {
+        std::sort(nums.begin(),nums.end());
+        std::unordered_map<int,std::priority_queue<int>> m;
+        for (const int& d: nums){
+            if(m.find(d) == m.end()) m[d + 1].push(1);
+            else{
+                m[d + 1].push(m[d].top() + 1);
+                m[d].pop();
+                if(m[d].empty()) m.erase(d);
+                if(m[d + 1].top() == k){ 
+                    m[d + 1].pop();
+                    if(m[d + 1].empty()) m.erase(d + 1);
+                }
+            }
+        }
+        return m.empty();
+    }
+};
