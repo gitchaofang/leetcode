@@ -1,0 +1,25 @@
+class cmp{
+    public:
+        bool operator()(const int& d1, const int& d2){
+            return d1 > d2;
+        }
+};
+class Solution {
+public:
+    bool isPossible(vector<int>& nums) {
+        std::unordered_map<int,std::priority_queue<int, std::vector<int>,cmp>> m;
+        for(const int& d: nums){
+            if(m.find(d) == m.end()) m[d + 1].push(1);
+            else{
+                int cnt = m[d].top();
+                m[d].pop();
+                if(m[d].empty())m.erase(d);
+                m[d + 1].push(cnt + 1);
+            }
+        }
+        for(auto it = m.begin(); it != m.end(); ++it){ 
+            if((it -> second).top() < 3) return false;
+        }
+        return true;
+    }
+};
