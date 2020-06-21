@@ -1,0 +1,21 @@
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int W) {
+        std::sort(hand.begin(),hand.end());
+        std::unordered_map<int,std::priority_queue<int>>m;
+        for(const int& d : hand){
+            if(m.find(d) == m.end()) m[d + 1].push(1);
+            else{
+                int cnt = m[d].top();
+                m[d].pop();
+                if(m[d].empty()) m.erase(d);
+                m[d + 1].push(cnt + 1);
+            }
+            if(m[d + 1].top() == W){ 
+                m[d + 1].pop();
+                if(m[d + 1].empty()) m.erase(d + 1);
+            }
+        }
+        return m.empty();
+    }
+};
