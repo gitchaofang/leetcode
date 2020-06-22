@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int longestStrChain(vector<string>& words) {
+        std::unordered_map<int,std::vector<std::string>>m;
+        for(std::string& str: words) m[str.size()].push_back(str);
+        std::queue<std::string>q;
+        std::sort(words.begin(),words.end(), [](const std::string& str1, const std::string& str2){
+            return str1.size() < str2.size();
+        });
+        int res = 0;
+        std::unordered_set<std::string> visited;
+        for(int i = 0; i < words.size(); ++i){
+            if(visited.find(words[i]) != visited.end()) continue;
+            int cnt = 0;
+            q.push(words[i]);
+            visited.insert(words[i]);
+            while(!q.empty()){
+                ++cnt;
+                for(int s = q.size(); s > 0; --s){
+                   std::string str = q.front();
+                    q.pop();
+                    if(m.find(str.size() + 1) == m.end()) continue;
+                    for(const std::string& s: m[str.size() + 1]){
+                        if(visited.find(s) != visited.end()) continue;
+                        bool sucess = false;
+                        for(int i = 0; i < s.size(); ++i){
+                            std::string ts = s;
+                            ts.erase(ts.begin() + i);
+                            if(ts == str) {
+                                sucess = true;
+                                break;
+                            }
+                        }
+                        if(sucess == true){ 
+                            q.push(s);
+                            visited.insert(s);
+                        }
+                    }
+                }
+            }
+            res = std::max(res,cnt);
+        }
+        return res;
+    }
+};
