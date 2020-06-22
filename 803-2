@@ -1,0 +1,67 @@
+class Solution {
+public:
+    int cluster(std::vector<std::vector<int>>& grid, std::queue<std::pair<int,int>>& q, const std::vector<std::pair<int,int>>& dire){
+        int res = 0;
+        int row = grid.size();
+        int col = grid[0].size();
+        while(!q.empty()){
+            res += q.size();
+            for(int s = q.size(); s > 0; --s){
+                std::pair<int,int> cur = q.front();
+                q.pop();
+                for(const std::pair<int,int>& dir: dire){
+                    int x = dir.first + cur.first;
+                    int y = dir.second + cur.second;
+                    if(x < 0 || x >= row || y < 0 || y >= col || grid[x][y] != 1) continue;
+                    grid[x][y] = 2;
+                    q.push({x,y});
+                }
+            }
+        }
+        return res;
+    }
+    vector<int> hitBricks(vector<vector<int>>& grid, vector<vector<int>>& hits) {
+        int row = grid.size();
+        int col = grid[0].size();
+        for(const std::vector<int>&v : hits) grid[v[0]][v[1]] *= -1;
+        std::queue<std::pair<int,int>>q;
+        for(int j = 0; j < col; ++j){
+            if(grid[0][j] == 1){ 
+                q.push({0,j});
+                grid[0][j] = 2;
+            }
+        }
+                        
+        std::vector<std::pair<int,int>>dire({{0,-1},{-1,0},{0,1},{1,0}});
+        cluster(grid,q,dire);
+        std::vector<int> res; 
+        for(int i = hits.size() - 1; i >=0 ;--i){
+            std::vector<int> hit = hits[i];
+            grid[hit[0]][hit[1]] *= -1;
+            if(grid[hit[0]][hit[1]] == 0){ 
+                res.insert(res.begin(),0);
+                continue;
+            }
+            bool connect = false;
+            if(hit[0] == 0) connect = true;
+            else{
+                for(const std::pair<int,int>& dir: dire){
+                    int x = hit[0] + dir.first;
+                    int y = hit[1] + dir.second;
+                    if(x < 0 || x >= row || y < 0 || y >= col || grid[x][y] != 2) continue;
+                    connect = true;
+                    break;
+                }
+            }
+            if(connect == false){
+                res.insert(res.begin(),0);
+                continue;
+            }
+            q.push({hit[0],hit[1]});
+            grid[hit[0]][hit[1]] = 2;
+            int d = cluster(grid,q,dire);
+            res.insert(res.begin(),d - 1);
+        }
+        return res;
+    }
+};
