@@ -1,0 +1,19 @@
+class MovingAverage {
+public:
+    /** Initialize your data structure here. */
+    MovingAverage(int size): ws(size), sum(0) {    
+    }
+    
+    double next(int val) {
+        sum += val;
+        q.push(val);
+        if(q.size() <= ws) return sum / double(q.size());
+        sum -= q.front();
+        q.pop();
+        return sum / ws;
+    }
+private:
+    std::queue<double> q;
+    double ws;
+    double sum;
+};
