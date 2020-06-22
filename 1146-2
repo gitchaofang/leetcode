@@ -1,0 +1,33 @@
+class SnapshotArray {
+public:
+    SnapshotArray(int length): sp(0), v(std::vector<int>(length,0)) {
+        snp.resize(length);
+        for(int i = 0; i<length; ++i) update.insert(i);
+    }
+    
+    void set(int index, int val) {
+        v[index] = val;
+        update.insert(index);
+        return;
+    }
+    
+    int snap() {
+        for(const int&d : update) snp[d][sp] = v[d];
+        update.clear();
+        ++sp;
+        return sp - 1;
+    }
+    
+    int get(int index, int snap_id) {
+        std::map<int,int>& m = snp[index];
+        auto it = m.lower_bound(snap_id);
+        if(it == m.end()) return m.rbegin() -> second;
+        if(it -> first == snap_id) return it -> second;
+        return std::prev(it) -> second;
+    }
+private:
+    std::vector<std::map<int,int>> snp;
+    std::vector<int> v;
+    std::unordered_set<int> update;
+    int sp;
+};
