@@ -1,0 +1,17 @@
+class Solution {
+public:
+    string findReplaceString(string S, vector<int>& indexes, vector<string>& sources, vector<string>& targets) {
+        std::map<int, std::pair<std::string,std::string>>m;
+        for(int i = 0; i < indexes.size(); ++i) m[indexes[i]] = {sources[i],targets[i]};
+        int offset = 0;
+        for(auto it = m.begin(); it != m.end(); ++it){
+            int pos = it -> first + offset;
+            std::string str = S.substr(it -> first + offset, it->second.first.size());
+            if(str != it->second.first) continue;
+            S.erase(pos,it -> second.first.size());
+            S.insert(pos, it -> second.second);
+            offset += (it -> second.second.size() - it -> second.first.size());
+        }
+        return S;
+    }
+};
