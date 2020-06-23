@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int maxAbsValExpr(vector<int>& arr1, vector<int>& arr2) {
+        int res = INT_MIN;
+        for(const int& p: {-1,1}){
+            for(const int& q: {-1,1}){
+                int mx = INT_MIN;
+                int mn = INT_MAX;
+                for(int i = 0; i < arr1.size(); ++i){
+                    int d = arr1[i] + p * arr2[i] + q*i;
+                    mx = std::max(mx,d);
+                    mn = std::min(mn,d);
+                }
+                res = std::max(res, mx - mn);
+            }
+        }
+        return res;
+    }
+};
