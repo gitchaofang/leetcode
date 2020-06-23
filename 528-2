@@ -1,0 +1,24 @@
+class Solution {
+public:
+    Solution(vector<int>& w) {
+        nw.resize(w.size());
+        nw[0] = w[0] - 1;
+        for(int i = 1; i < w.size(); ++i) nw[i] = nw[i - 1] + w[i];
+        
+    }
+    
+    int pickIndex() {
+        int d = rand()% (nw.back() + 1);
+        int left = 0;
+        int right = nw.size() - 1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(nw[mid] < d) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+private:
+    std::vector<int>nw;
+    
+};
