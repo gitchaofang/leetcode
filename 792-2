@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int numMatchingSubseq(string S, vector<string>& words) {
+        int res = 0;
+        int cur = 0;
+        for(const std::string& str:words){
+            if(str.size() > S.size()) continue;
+            cur = 0;
+            bool found = true;
+            for(int i = 0; i < str.size(); ++i){
+                if(S.find(str[i],cur) == std::string::npos){
+                    found = false;
+                    break;
+                }
+                else cur = S.find(str[i],cur) + 1;
+            }
+            if(found == true) ++res;
+        }
+        return res;
+    }
+};
