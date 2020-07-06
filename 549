@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int dfs(TreeNode* node,std::unordered_map<TreeNode*,int>& rec, std::unordered_map<TreeNode*,std::vector<TreeNode*>>& m){
+        if(rec.find(node) != rec.end()) return rec[node];  
+        int res = 0;
+        for(TreeNode*  n: m[node]) res = std::max(dfs(n,rec,m), res);
+        rec[node] = res + 1;
+        return rec[node];
+    }
+    int longestConsecutive(TreeNode* root) {
+        if(!root) return 0;
+        std::unordered_map<TreeNode*,std::vector<TreeNode*>> m;
+        std::queue<TreeNode*>q({root});
+        while(!q.empty()){
+            TreeNode* node = q.front();
+            q.pop();
+            int nv = node -> val;
+            if(node -> left){
+                int vl = node -> left -> val;
+                if(nv + 1 == vl) m[node].push_back(node -> left);
+                else if(vl + 1 == nv) m[node -> left].push_back(node);
+                q.push(node -> left);
+            }
+            if(node -> right){
+                int rl = node -> right -> val;
+                if(nv + 1 == rl) m[node].push_back(node -> right);
+                else if(rl + 1 == nv) m[node -> right].push_back(node);
+                q.push(node -> right);
+            }
+        }
+        int res = 0;
+        std::unordered_map<TreeNode*,int> rec;
+        q.push(root);
+        while(!q.empty()){
+            for(int s = q.size(); s > 0; --s){
+                TreeNode* node = q.front();
+                q.pop();
+                res = std::max(res,dfs(node,rec,m));
+                if(node -> left) q.push(node -> left);
+                if(node -> right) q.push(node -> right);
+            }
+        }
+        return res;
+    }
+};
