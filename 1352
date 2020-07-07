@@ -1,0 +1,19 @@
+class ProductOfNumbers {
+public:
+    ProductOfNumbers(){
+        prod.push_back(1);
+    }
+    
+    void add(int num) {
+        if(num == 0) prod = {1};
+        else prod.push_back(prod.back() * num);
+        return;
+    }
+    
+    int getProduct(int k) {
+        if(k >= prod.size()) return 0;
+        return prod.back() / prod[prod.size() - k - 1];
+    }
+private:
+    std::vector<int> prod;
+};
