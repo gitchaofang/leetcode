@@ -1,0 +1,27 @@
+class ProductOfNumbers {
+public:
+    ProductOfNumbers(): cur(0){
+        prod.push_back(1);
+    }
+    
+    void add(int num) {
+        if(num == 0){ 
+            prod[0] = 1;
+            cur = 0;
+        }
+        else{
+            if(cur == prod.size() - 1) prod.push_back(prod.back() * num);
+            else prod[cur + 1] = prod[cur] * num;
+            ++cur;
+        }
+        return;
+    }
+    
+    int getProduct(int k) {
+        if(k >= cur + 1) return 0;
+        return prod[cur] / prod[cur - k];
+    }
+private:
+    std::vector<int> prod;
+    int cur;
+};
