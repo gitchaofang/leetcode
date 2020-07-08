@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int wordsTyping(vector<string>& sentence, int rows, int cols) {
+        int pos = 0;
+        int res = 0;
+        int index = 0;
+        while(rows > 0){
+            pos += sentence[index].size();;
+            if(pos > cols){
+                pos = 0;
+                --rows;
+            } 
+            else{
+                ++index;
+                if(index == sentence.size()) ++res;
+                index %= sentence.size();
+                ++pos;
+                if(pos >= cols){
+                    pos = 0;
+                    --rows;
+                }
+            }
+        }
+        return res;
+    }
+};
