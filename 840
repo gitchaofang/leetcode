@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int numMagicSquaresInside(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        std::vector<std::vector<int>> col_sum(row + 1, std::vector<int>(col + 1,0));
+        std::vector<std::vector<int>> row_sum(row + 1, std::vector<int>(col + 1,0));
+        for(int i = 1; i <= row; ++i){
+            for(int j = 1; j <= col; ++j){
+                col_sum[i][j] = col_sum[i][j - 1] + grid[i - 1][j - 1];
+                row_sum[i][j] = row_sum[i - 1][j] + grid[i - 1][j - 1];
+            }
+        }
+        
+        
+        int res = 0;
+        for(int i = 1; i <= row; ++i){
+            for(int j = 1; j <= col; ++j){
+                if(i - 2 <= 0 || j - 2 <= 0) continue;
+                std::unordered_set<int> visited;
+                bool valid = true;
+                int diag = 0;
+                int anti_diag = 0;
+                for(int k = i; k >= i - 2; --k){
+                    if(col_sum[k][j] - col_sum[k][j - 3] != 15 || row_sum[i][j - (i - k)] - row_sum[i - 3][j - (i - k)] != 15){
+                        valid = false;
+                        break;
+                    }
+                    diag += grid[k - 1][j - 1 - (i - k)];
+                    anti_diag += grid[k - 1][j - 3 + i - k];
+                    for(int l = j; l >= j - 2; --l){
+                        if(visited.find(grid[k - 1][l - 1]) != visited.end() || grid[k - 1][l - 1] > 9 || grid[k - 1][l - 1] < 1){
+                            k = 0;
+                            valid = false;
+                            break;
+                        }
+                        visited.insert(grid[k - 1][l - 1]);
+                    }
+                }
+                if(valid == true && diag == 15 && anti_diag == 15) ++res;
+            }
+        }
+        return res;
+    }
+};
