@@ -1,0 +1,23 @@
+struct Tree{
+    Tree(ImmutableListNode* n): node(n), next(nullptr){}
+    ImmutableListNode* node;
+    Tree* next;
+};
+
+class Solution {
+public:
+    void printLinkedListInReverse(ImmutableListNode* head) {
+        Tree* pre = nullptr;
+        while(head){
+            Tree* new_head = new Tree(head);
+            new_head -> next = pre;
+            pre = new_head;
+            head = head -> getNext();
+        }
+        while(pre){
+            pre -> node -> printValue();
+            pre = pre -> next;
+        }
+        return;
+    }
+};
