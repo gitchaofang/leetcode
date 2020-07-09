@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int longestRepeatingSubstring(string S) {
+        std::string str("");
+        std::unordered_set<std::string> st;
+        for(int l = S.size(); l >= 2; --l){
+            st.clear();
+            for(int i = 0; i + l <= S.size(); ++i){
+                str = S.substr(i,l);
+                if(st.find(str) != st.end()) return l;
+                st.insert(str);
+            }
+        }  
+        return 0;
+    }
+};
