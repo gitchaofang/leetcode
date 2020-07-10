@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int row = matrix.size();
+        if(row == 0) return 0;
+        int col = matrix[0].size();
+        std::vector<std::vector<int>> s(row + 1 ,std::vector<int>(col + 1, 0));
+        for(int j = 1; j <= col; ++j){
+            for(int i = 1; i <= row; ++i) s[i][j] = s[i][j - 1] + (matrix[i - 1][j - 1] - '0');
+        }
+        int res = 0;
+        for(int i = 1; i <= col; ++i){
+            for(int j = i; j <= col; ++j){
+                int l = j - i + 1;
+                int base = 0;
+                for(int k = 1; k <= row; ++k){
+                    if(s[k][j] - s[k][i - 1] == l) continue;
+                    res = std::max(res, l * (k - base - 1));
+                    base = k;
+                }
+                res = std::max(res,l * (row - base));
+            }
+        }
+        return res;
+    }
+};
