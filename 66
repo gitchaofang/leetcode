@@ -1,0 +1,13 @@
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        int extra = 1;
+        for(int i = digits.size() - 1; i >=0; --i){
+            int d = digits[i] + extra;
+            digits[i] = d % 10;
+            extra = d / 10;
+        }
+        if(extra != 0) digits.insert(digits.begin(),extra);
+        return digits;
+    }
+};
