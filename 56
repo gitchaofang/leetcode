@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        std::sort(intervals.begin(),intervals.end());
+        std::vector<int> p({INT_MIN,INT_MIN});
+        std::vector<std::vector<int>> res;
+        for(const std::vector<int>& v: intervals){
+            if(v[0] > p[1]){ 
+                res.push_back(p);
+                p = v;
+            }
+            else p[1] = std::max(v[1],p[1]);
+        }
+        res.push_back(p);
+        res.erase(res.begin());
+        return res;
+    }
+};
