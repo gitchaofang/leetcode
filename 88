@@ -1,0 +1,14 @@
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int pos = m + n - 1;
+        int pm = m - 1;
+        int pn = n - 1;
+        while(pm >=0 && pn >= 0){
+            if(nums1[pm] > nums2[pn]) nums1[pos--] = nums1[pm--];
+            else nums1[pos--] = nums2[pn--];
+        }
+        if(pn >= 0) std::copy(nums2.begin(),nums2.begin() + pn + 1, nums1.begin());
+        return;
+    }
+};
