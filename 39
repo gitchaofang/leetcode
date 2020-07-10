@@ -1,0 +1,24 @@
+class Solution {
+public:
+    std::vector<std::vector<int>> dfs(const std::vector<int>& dig, int targ, int pos){
+        std::vector<std::vector<int>>res;
+        for(int i = pos; i < dig.size(); ++i){
+            if(dig[i] == targ) res.push_back({dig[i]});
+            else if(dig[i] > targ) return res;
+            else{
+                std::vector<std::vector<int>> v = dfs(dig,targ - dig[i],i);
+                if(v.empty()) continue;
+                for(std::vector<int>& tv: v){
+                    tv.push_back(dig[i]);
+                    res.push_back(tv);
+                }
+            }
+        }
+        return res;
+        
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        std::sort(candidates.begin(), candidates.end());
+        return dfs(candidates,target,0);
+    }
+};
