@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int least_sum = 0;
+        int sum = 0;
+        int res = INT_MIN;
+        for(const int& d: nums){
+            sum += d;
+            res = std::max(res, sum - least_sum);
+            least_sum = std::min(least_sum,sum);
+        }
+        return res;
+        
+    }
+};
