@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int res = 0;
+        int cnt = 0;
+        for(const int&d: nums){
+            if(cnt == 0){
+                res = d;
+                cnt = 1;
+            }
+            else cnt += (res == d) ? 1 : -1;
+        }
+        return res;
+    }
+};
