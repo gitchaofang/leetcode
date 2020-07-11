@@ -1,0 +1,12 @@
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        if(strs.empty()) return "";
+        std::string pre(strs[0]);
+        for(const std::string& str: strs){
+            while(!pre.empty() && str.substr(0,pre.size()) != pre) pre.pop_back();
+            if(pre.empty()) return "";
+        }
+        return pre;
+    }
+};
