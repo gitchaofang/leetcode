@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int binary_search(const std::vector<int>& v, int left, int right, int targ){
+        while(left <= right){
+            int mid = (right - left) / 2 + left;
+            if(v[mid] == targ) return mid;
+            if(v[mid] < targ) ++left;
+            else --right;
+        }
+        return -1;
+    }
+    int search(vector<int>& nums, int target) {
+        if(nums.size() == 0) return -1;
+        int left = 0;
+        int right = nums.size() - 1;
+        if(nums[0] < nums.back()){
+            int pos = binary_search(nums, 0, nums.size() - 1, target);
+            return (pos == -1) ? -1 : pos;
+        }
+        while(left < right){
+            int mid = (right - left) / 2 + left;
+            if(nums[mid] > nums[mid + 1]){
+                right = mid;
+                break;
+            }
+            if(nums[mid] > nums.back()) left = mid + 1;
+            else right = mid - 1;
+        }
+        if(target < nums[0]){
+            left = right + 1;
+            right = nums.size() - 1;
+        }
+        else left = 0;
+        int pos = binary_search(nums,left,right,target);
+        return (pos == -1) ? -1 : pos;
+        
+    }
+};
