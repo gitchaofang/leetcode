@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        if(digits.empty()) return {};
+        std::unordered_map<char, std::vector<char>>m({{'2',{'a','b','c'}},{'3',{'d','e','f'}},{'4',{'g','h','i'}},{'5',{'j','k','l'}},{'6',{'m','n','o'}},{'7',{'p','q','r','s'}},{'8',{'t','u','v'}},{'9',{'w','x','y','z'}}});
+        std::queue<std::string> q({""});
+        for(const char& c: digits){
+            const std::vector<char>& v = m[c];
+            for(int s = q.size(); s > 0; --s){
+                std::string str = q.front();
+                str += " ";
+                q.pop();
+                for(const char& s: v){
+                    str.back() = s;
+                    q.push(str);
+                }
+            }
+        }
+        std::vector<std::string> res;
+        while(!q.empty()){
+            res.push_back(q.front());
+            q.pop();
+        }
+        return res;
+    }
+};
