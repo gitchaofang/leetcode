@@ -1,0 +1,28 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        std::vector<std::string> v;
+        int pos = 0;
+        while(pos < s.size()){
+            std::string str(numRows,' ');
+            for(int i = 0; i < numRows; ++i){
+                if(pos >= s.size()) break;
+                str[i] = s[pos++];
+            }
+            v.push_back(str);
+            for(int i = 0; i < numRows - 2; ++i){
+                if(pos >= s.size()) break;
+                str = std::string(numRows,' ');
+                str[numRows - 2 - i] = s[pos++];
+                v.push_back(str);
+            }
+        }
+        std::string res("");
+        for(int j = 0; j < numRows; ++j){
+            for(int i = 0; i < v.size(); ++i){
+                if(v[i][j] != ' ') res.push_back(v[i][j]);
+            }
+        }
+        return res;
+    }
+};
