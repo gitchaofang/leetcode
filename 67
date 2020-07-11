@@ -1,0 +1,24 @@
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        if(a.size() < b.size()) std::swap(a,b);
+        int n = a.size();
+        int m = b.size();
+        int extra = 0;
+        for(int i = 0; i < m; ++i){
+            int pos_a = n - 1 - i;
+            int pos_b = m - 1 - i;
+            int d = (b[pos_b] - '0') + (a[pos_a] - '0') + extra;
+            a[pos_a] = '0' + d % 2;
+            extra = d / 2;
+        }
+        for(int i = n - m - 1; i >= 0; --i){
+            if(extra == 0) return a;
+            int d = (a[i] - '0') + extra;
+            a[i] = '0' + d % 2;
+            extra = d / 2;
+        }
+        if(extra != 0)  a.insert(a.begin(), '0' + extra);
+        return a;
+    }
+};
