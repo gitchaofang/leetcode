@@ -1,0 +1,26 @@
+class Solution {
+public:
+    std::vector<std::string> dfs(const int& left, const int& right){
+        std::vector<std::string> res;
+        if(left > 0){
+            std::vector<std::string> v = dfs(left - 1, right);
+            for(std::string& str: v){ 
+                str.insert(str.begin(),'(');
+                res.push_back(str);
+            }
+        }
+        if(left < right){
+            std::vector<std::string> v = dfs(left, right - 1);
+            if(v.empty()) res.push_back(")");
+            for(std::string& str : v){ 
+                str.insert(str.begin(),')');
+                res.push_back(str);
+            }
+        }
+        
+        return res;
+    }
+    vector<string> generateParenthesis(int n) {
+        return dfs(n,n);    
+    }
+};
