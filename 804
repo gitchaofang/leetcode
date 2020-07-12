@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int uniqueMorseRepresentations(vector<string>& words) {
+        std::vector<std::string> morse({".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."});
+        std::unordered_set<std::string>st;
+        for(const std::string& str:words){
+            std::string ms("");
+            for(const char& c: str) ms += morse[c - 'a'];
+            st.insert(ms);
+        }
+        return st.size();
+    }
+};
