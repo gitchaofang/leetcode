@@ -1,0 +1,43 @@
+class Solution {
+public:
+    std::string sum(std::string str1,  std::string str2){
+        if(str1.size() < str2.size()) std::swap(str1,str2);
+        int extra = 0;
+        for(int i = 0; i < str2.size(); ++i){
+            int pos_1 = str1.size() - 1 - i;
+            int pos_2 = str2.size() - 1 - i;
+            int d = (str1[pos_1] - '0') + (str2[pos_2] - '0') + extra;
+            str1[pos_1] = '0' + d % 10;
+            extra = d / 10;
+        }
+        for(int i = str1.size() - str2.size() - 1; i >=0; --i){
+            if(extra == 0) return str1;
+            int d = (str1[i] - '0') + extra;
+            str1[i] = '0' + d % 10;
+            extra = d / 10;
+        }
+        if (extra != 0) str1.insert(str1.begin(), '0' + extra);
+        return str1;
+    }
+    string multiply(string num1, string num2) {
+        std::string res = "0";
+        if(num2.size() > num1.size()) std::swap(num1,num2);
+        std::string zeros("");
+        for(int i = num2.size() - 1; i >= 0; --i){
+            if(i != num2.size() - 1) zeros += '0';
+            int c = num2[i] - '0';
+            if(c == 0) continue;
+            int extra = 0;
+            std::string ts = "";
+            for(int j = num1.size() - 1; j >= 0; --j){
+                int d = (num1[j] - '0') * c + extra;
+                ts.insert(ts.begin(), '0' + d % 10);
+                extra = d / 10;
+            }
+            if(extra != 0) ts.insert(ts.begin(),'0' + extra);
+            ts += zeros;
+            res = sum(res,ts);
+        }
+        return res;
+    }
+};
