@@ -1,0 +1,24 @@
+class Solution {
+public:
+    string addStrings(string num1, string num2) {
+        int extra = 0;
+        if(num1.size() < num2.size()) std::swap(num1,num2);
+        for(int i = 0; i < num2.size(); ++i){
+            int pos_1 = num1.size() - 1 - i;
+            int pos_2 = num2.size() - 1 - i;
+            int d = (num1[pos_1] - '0') + (num2[pos_2] - '0') + extra;
+            num1[pos_1] = '0' + d % 10;
+            extra = d / 10;
+        }
+
+        for(int i = num1.size() - num2.size() - 1; i >= 0; --i){
+            if(extra == 0) return num1;
+            int d = (num1[i] - '0') + extra;
+            num1[i] = '0' + d % 10;
+            extra = d / 10;
+        }
+        if(extra != 0) num1.insert(num1.begin(), extra + '0');
+        return num1;
+    }
+};
+
