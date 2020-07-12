@@ -1,0 +1,13 @@
+class Solution {
+public:
+    string defangIPaddr(string address) {
+        int pos = 0;
+        while(address.find('.', pos) != std::string::npos){
+            pos = address.find('.',pos);
+            address.insert(address.begin() + pos,'[');
+            address.insert(address.begin() + pos + 2, ']');
+            pos += 2;
+        }
+        return address;
+    }
+};
