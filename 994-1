@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        int min = 0;
+        std::vector<std::pair<int,int>>dire({{0,1},{1,0},{0,-1},{-1,0}});
+        while(true){
+            std::vector<std::pair<int,int>> v;
+            for(int i = 0; i < row; ++i){
+                for(int j = 0; j < col; ++j){
+                    if(grid[i][j] != 1) continue;
+                    bool rot = false;
+                    for(const pair<int,int>& dir: dire){
+                        int x = dir.first + i;
+                        int y = dir.second + j;
+                        if(x < 0 || x >= row || y < 0 || y >= col || grid[x][y] != 2) continue;
+                        rot = true;
+                        break;
+                    }
+                    if(rot == true) v.push_back({i,j});
+                }
+            }
+            if(v.empty()) break;
+            ++min;
+            for(const std::pair<int,int>&p: v) grid[p.first][p.second] = 2;
+        }
+        for(int i = 0; i < row; ++i){
+            for(int j = 0; j < col; ++j){
+                if(grid[i][j] == 1) return -1;
+            }
+        }
+        return min;
+    }
+};
