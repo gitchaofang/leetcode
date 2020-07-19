@@ -1,0 +1,40 @@
+class Trie {
+public:
+    /** Initialize your data structure here. */
+    Trie() {
+        v.resize(1);   
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        st.insert(word);
+        int pos = 0;
+        for(const char& c: word){
+            if(v[pos].find(c) == v[pos].end()){
+                v[pos].insert({c,v.size()});
+                pos = v.size();
+                v.resize(v.size() + 1);
+            }
+            else pos = v[pos][c];
+        }
+        return;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        return st.find(word) != st.end();
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        int pos = 0;
+        for(const char& c: prefix){
+            if(v[pos].find(c) == v[pos].end()) return false;
+            pos = v[pos][c];
+        }
+        return true;    
+    }
+private:
+    std::vector<std::unordered_map<char,int>> v;
+    std::unordered_set<std::string> st;
+};
