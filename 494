@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int dfs(const std::vector<int>& v, const int& pos, const int& targ){
+        if(pos == v.size()) return (targ == 0)? 1: 0;
+        std::string str = std::to_string(pos) + ' ' + std::to_string(targ);
+        if(m.find(str) != m.end()) return m[str];
+        int res = 0;
+        res += dfs(v, pos + 1, targ - v[pos]);
+        res += dfs(v, pos + 1, targ + v[pos]);
+        m[str] = res; 
+        return res;
+    }
+    int findTargetSumWays(vector<int>& nums, int S) {
+        if(S > 1000) return 0;
+        return dfs(nums,0,S);
+    }
+private:
+    std::unordered_map<std::string,int> m;
+};
