@@ -1,0 +1,34 @@
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if(!head || !head -> next) return head;
+        ListNode* right = head;
+        ListNode* left = head -> next;
+        while(left && left -> next){
+            right = right -> next;
+            left = left -> next;
+            left = left -> next;
+        }
+        ListNode* pre = right -> next;
+        right -> next = nullptr;
+        left = sortList(head);
+        right = sortList(pre);
+        ListNode* root = new ListNode(0);
+        pre = root;
+        while(left && right){
+            if(left -> val > right -> val){
+                pre -> next = right;
+                pre = pre -> next;
+                right = right -> next;
+            }
+            else{
+                pre -> next = left ;
+                pre = pre -> next;
+                left = left -> next;
+            }
+        }
+        if(right) pre -> next = right;
+        else pre -> next = left;
+        return root -> next;
+    }
+};
