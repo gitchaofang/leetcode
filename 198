@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        std::vector<std::pair<int,int>> dp(nums.size() + 1,{0,0});
+        int res = 0;
+        for(int i = 1; i <= nums.size(); ++i){
+            dp[i].first = dp[i - 1].second + nums[i - 1];
+            dp[i].second = std::max(dp[i - 1].first, dp[i - 1].second);
+            res = std::max(dp[i].first,dp[i].second);
+        }
+        return res;
+    }
+};
