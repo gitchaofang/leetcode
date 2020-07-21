@@ -1,0 +1,33 @@
+class Solution {
+public:
+    bool pali(const std::string& s){
+        if(s.size() == 1) return true;
+        for(int i = 0; i < s.size() / 2; ++i){
+            if(s[i] != s[s.size() - 1 - i]) return false;
+        }
+        return true;
+    }
+    vector<vector<string>> partition(string s) {
+        if(s == "") return {};
+        if(m.find(s) != m.end()) return m[s];
+        std::vector<std::vector<std::string>> res;
+        std::string str("");
+        for(int i = 0; i < s.size(); ++i){
+            str += s[i];
+            if(!pali(str)) continue;
+            if(i == s.size() - 1) res.push_back({str});
+            else{
+                std::vector<std::vector<std::string>> v = partition(s.substr(i + 1));
+                if(v.empty()) continue;
+                for(std::vector<std::string>& tv: v){ 
+                    tv.insert(tv.begin(), str);
+                    res.push_back(tv);
+                }
+            }
+        }
+        m[s] = res;
+        return res;
+    }
+private:
+    std::unordered_map<std::string,std::vector<std::vector<std::string>>> m;
+};
