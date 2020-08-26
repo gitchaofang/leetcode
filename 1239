@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool check(const std::string& str){
+        std::unordered_set<char>st;
+        for(const char& c: str){
+            if(st.find(c) != st.end()) return false;
+            st.insert(c);
+        }
+        return true;
+    }
+    int maxLength(vector<string>& arr) {
+        std::vector<std::unordered_set<char>>v;
+        for(const std::string& str:arr){
+            if(!check(str)) continue;
+            for(int j = 0; j < v.size(); ++j){
+                std::unordered_set<char> s = v[j];
+                bool sucess = true;
+                for(const char& c: str){
+                    if(s.find(c) != s.end()){
+                        sucess = false;
+                        break;
+                    }
+                    s.insert(c);
+                }
+                if(sucess == true) v.push_back(s);
+                
+            }
+            v.push_back(std::unordered_set<char>(str.begin(),str.end()));
+        }
+        size_t res = 0;
+        for(const std::unordered_set<char>& s: v) res = std::max(res,s.size());
+        return res;
+    }
+};
