@@ -1,0 +1,42 @@
+class Solution {
+public:
+    vector<int> boundaryOfBinaryTree(TreeNode* root) {
+        if(!root) return {};
+        std::vector<int> res({root -> val});
+        TreeNode* node = root -> left;
+        std::vector<int> left;
+        while(node){
+            if(node -> left || node -> right) left.push_back(node -> val);
+            if(node -> left) node = node -> left;
+            else if(node -> right) node = node -> right;
+            else node = nullptr;
+        }
+        node = root -> right;
+        std::vector<int> right;
+        while(node){
+            if(node -> left || node -> right) right.insert(right.begin(),node -> val);
+            if(node -> right) node = node -> right;
+            else if(node -> left) node = node -> left;
+            else node = nullptr;
+        }
+        //bottom
+        std::vector<int> bot;
+        std::stack<TreeNode*> st;
+        if(root -> right) st.push(root -> right);
+        if(root -> left) st.push(root -> left);
+        while(!st.empty()){
+            TreeNode* node = st.top();
+            st.pop();
+            if(!node -> left && !node -> right) bot.push_back(node -> val);
+            else{
+                if(node -> right) st.push(node -> right);
+                if(node -> left) st.push(node -> left);
+            }
+        }
+        
+        res.insert(res.end(),left.begin(), left.end());
+        res.insert(res.end(),bot.begin(), bot.end());
+        res.insert(res.end(),right.begin(), right.end());
+        return res;
+    }
+};
