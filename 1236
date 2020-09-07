@@ -1,0 +1,23 @@
+bool check(const std::string& str1, const std::string& host){
+    return str1.substr(7,str1.find('/',7) - 7) == host;
+}
+class Solution {
+public:
+    vector<string> crawl(string startUrl, HtmlParser htmlParser) {
+        std::unordered_set<std::string> visited ({startUrl});
+        std::queue<std::string> q({startUrl});
+        std::vector<std::string> res;
+        std::string host = startUrl.substr(7, startUrl.find('/',7) - 7);
+        while(!q.empty()){
+            std::string url = q.front();
+            q.pop();
+            res.push_back(url);
+            for(const std::string& str: htmlParser.getUrls(url)){
+                if(visited.find(str) != visited.end() || !check(str,host)) continue;
+                q.push(str);
+                visited.insert(str);
+            }
+        }
+        return res;
+    }
+};
