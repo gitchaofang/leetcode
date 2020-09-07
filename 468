@@ -1,0 +1,49 @@
+std::vector<std::string> sep(const std::string& v, const char& c){
+    std::vector<std::string> res;
+    int cur = 0;
+    while(cur < v.size()){
+        if(v.find(c,cur) == std::string::npos){
+            res.push_back(v.substr(cur));
+            cur = v.size();
+        }
+        else{
+            int p = v.find(c,cur);
+            res.push_back(v.substr(cur,p - cur));
+            if(p == v.size() - 1 || v[p + 1] == c) return {" "};
+            cur = p + 1;
+        }
+    }
+    return res;
+}
+
+class Solution {
+public:
+    string validIPAddress(string IP) {
+        if(IP == "") return "Neither";
+        if(IP.find('.') != std::string::npos){
+            std::vector<std::string> v = sep(IP,'.');
+            if(v.size() != 4) return "Neither";
+            for(const std::string& str: v){
+                if(str[0] =='0' && str.size() > 1) return "Neither";
+                int d = 0;
+                for(const char& c: str){
+                    d = d*10 + (c - '0');
+                    if(c < '0' || c > '9' || d > 255) return "Neither";
+                }
+            }
+            return "IPv4";
+        }
+        else{
+            std::vector<std::string> v = sep(IP,':');
+            for(const std::string& str: v){
+                if(v.size() != 8) return "Neither"; 
+                if(str.size() > 4) return "Neither";
+                for(const char& c: str){
+                    if((c < '0' || c > '9') && (c < 'a' || c > 'f') && (c < 'A' || c > 'F')) return "Neither";
+                }
+            }
+            return "IPv6";
+        }
+        return "Neither";
+    }
+};
