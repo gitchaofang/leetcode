@@ -1,0 +1,57 @@
+class MaxStack {
+public:
+    /** initialize your data structure here. */
+    MaxStack() {
+        
+    }
+    
+    void push(int x) {
+        st.push(x);
+        mx.insert(x);
+    }
+    
+    int pop() {
+        int d = st.top();
+        mx.erase(mx.find(d));
+        st.pop();
+        return d;
+    }
+    
+    int top() {
+        return st.top();
+    }
+    
+    int peekMax() {
+        return *(mx.rbegin());
+    }
+    
+    int popMax() {
+        int d = *(mx.rbegin());
+        mx.erase(mx.find(d));
+        std::stack<int> ts;
+        while(st.top() != d){
+            ts.push(st.top());
+            st.pop();
+        }
+        st.pop();
+        while(!ts.empty()){
+            st.push(ts.top());
+            ts.pop();
+        }
+        return d;
+        
+    }
+private:
+    std::stack<int> st;
+    std::multiset<int> mx;
+};
+
+/**
+ * Your MaxStack object will be instantiated and called as such:
+ * MaxStack* obj = new MaxStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->peekMax();
+ * int param_5 = obj->popMax();
+ */
