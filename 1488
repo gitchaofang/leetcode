@@ -1,0 +1,42 @@
+class Solution {
+public:
+    vector<int> avoidFlood(vector<int>& rains) {
+        int n = rains.size();
+        std::vector<int> ans(n,-1);
+        std::unordered_map<int,int> cap;
+        std::set<int> st;
+        std::set<int>oc;
+        for(int i = 0; i < n; ++i){
+            int pos = rains[i];
+            if(pos != 0){
+                oc.insert(rains[i]);
+                if(cap.find(pos) != cap.end()){
+                    if(st.empty()) return {};
+                    auto it = st.lower_bound(cap[pos]);
+                    if(it == st.end()) return {};
+                    ans[*it] = pos;
+                    st.erase(it);
+                }
+                cap[pos] = i + 1;
+            }
+            else st.insert(i);
+        }
+        
+        int stuff = 1;
+        if(*oc.begin() == 1){
+            auto it = oc.begin();
+            auto itt = oc.begin();
+            ++itt;
+            while(itt != oc.end() && *it + 1 == *itt){
+                ++it;
+                ++itt;
+            }
+            stuff = *it + 1;
+        }
+        
+        for(int i = 0; i < n; ++i){
+            if(ans[i] == -1 && rains[i] == 0) ans[i] = stuff;
+        }
+        return ans;
+    }
+};
