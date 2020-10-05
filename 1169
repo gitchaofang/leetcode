@@ -1,0 +1,54 @@
+class Solution {
+public:
+    std::vector<std::string> sep(const std::string& trans){
+        std::vector<std::string> res;
+        int pos = 0;
+        while(trans.find(',',pos) != std::string::npos){
+            res.push_back(trans.substr(pos,trans.find(',',pos) - pos));
+            pos = trans.find(',',pos) + 1;
+        }
+        res.push_back(trans.substr(pos));
+        return res;
+    }
+    vector<string> invalidTransactions(vector<string>& transactions) {
+        std::vector<std::vector<std::string>> list;
+        std::vector<std::string> res;
+        for(int i = 0; i < transactions.size(); ++i){
+            std::vector<std::string> v = sep(transactions[i]);
+            list.push_back(v);
+        }    
+        auto cmp = [](const std::vector<std::string>& str1, const std::vector<std::string>& str2){
+            return str1[0] == str2[0] ? std::stoi(str1[1]) < std::stoi(str2[1]): str1[0] < str2[0];
+        };
+        std::sort(list.begin(),list.end(),cmp);
+        int base = 0;
+        int j = 0;
+        for(int i = 0; i < list.size(); ++i){
+            if(std::stoi(list[i][2]) > 1000){ 
+                res.push_back(list[i][0]+','+list[i][1]+','+list[i][2]+','+list[i][3]);
+                continue;
+            }
+            base = std::stoi(list[i][1]);
+            j = i - 1;
+            bool found = false;
+            while(j >= 0 && list[j][0] == list[i][0] && std::stoi(list[j][1]) >= base - 60){
+                if(list[j][3] != list[i][3]){
+                    res.push_back(list[i][0]+','+list[i][1]+','+list[i][2]+','+list[i][3]);
+                    found = true;
+                    break;
+                }
+                --j;
+            }
+            if(found == true) continue;
+            j = i + 1;
+            while(j < list.size()  && list[j][0] == list[i][0] && std::stoi(list[j][1])  <= base + 60){
+                if(list[j][3] != list[i][3]) {
+                    res.push_back(list[i][0]+','+list[i][1]+','+list[i][2]+','+list[i][3]);
+                    break;
+                }
+                ++j;
+            }
+        }
+        return res;
+    }
+};
