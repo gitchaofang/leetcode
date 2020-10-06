@@ -1,0 +1,47 @@
+class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        int row = board.size();
+        if(row == 0) return;
+        int col = board[0].size();
+        std::vector<std::pair<int,int>> dire({{-1,0},{0,-1},{1,0},{0,1}});
+        for(int i = 1; i < row - 1; ++i){
+            for(int j = 1; j < col - 1; ++j){
+                if(board[i][j] != 'O') continue;
+                bool failure = false;
+                std::queue<std::pair<int,int>>q({{i,j}});
+                board[i][j] = 'V';
+                std::unordered_set<std::string> st({std::to_string(i) + ',' + std::to_string(j)});
+                while(!q.empty()){
+                    std::pair<int,int> p = q.front();
+                    q.pop();
+                    for(const std::pair<int,int>& dir: dire){
+                        int x = p.first  + dir.first;
+                        int y = p.second + dir.second;
+                        std::string tag = std::to_string(x) + ',' + std::to_string(y);
+                        if(x < 0 || x >= row || y < 0 || y >= col || board[x][y] != 'O' || st.find(tag) != st.end()) continue;
+                        if(x == 0 || x == row - 1 || y == 0 || y == col - 1){
+                            failure = true;
+                        }
+                        board[x][y] = 'V';
+                        q.push({x,y});
+                        st.insert(tag);
+                    }
+                }
+                if(failure == true) continue;
+                for(const std::string& s: st){
+                    int x = std::stoi(s.substr(0,s.find(',')));
+                    int y = std::stoi(s.substr(s.find(',') + 1));
+                    board[x][y] = 'X';
+                }
+            }
+        }
+        
+        for(int i = 0; i < row; ++i){
+            for(int j = 0; j < col; ++j){
+                if(board[i][j] == 'V') board[i][j] = 'O';
+            }
+        }
+        return;
+    }
+};
