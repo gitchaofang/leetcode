@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int maxArea(int h, int w, vector<int>& horizontalCuts, vector<int>& verticalCuts) {
+        std::sort(horizontalCuts.begin(),horizontalCuts.end());
+        std::sort(verticalCuts.begin(),verticalCuts.end());
+        int l = 0;
+        int m  = 0;
+        int mod = std::pow(10,9) + 7;
+        for(int i = 0; i < horizontalCuts.size(); ++i){
+            if(i == 0) l = std::max(horizontalCuts[i],l);
+            else l = std::max(horizontalCuts[i] - horizontalCuts[i - 1], l);
+        }
+        l = std::max(h - horizontalCuts.back(), l);
+        for(int i = 0; i < verticalCuts.size(); ++i){
+            if(i == 0) m = std::max(verticalCuts[i], m);
+            else m = std::max(verticalCuts[i] - verticalCuts[i - 1], m);
+        }
+        m = std::max(w - verticalCuts.back(), m);
+        int64_t res = ((int64_t)(l % mod) * (int64_t)(m % mod)) % mod;
+        return res;
+        
+    }
+};
