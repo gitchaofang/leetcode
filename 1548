@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> mostSimilar(int n, vector<vector<int>>& roads, vector<string>& names, vector<string>& targetPath) {
+        std::unordered_set<std::string> st(names.begin(), names.end());
+        std::vector<std::vector<int>> connect(n);
+        for(const std::vector<int>& v: roads){ 
+            connect[v[0]].push_back(v[1]);
+            connect[v[1]].push_back(v[0]);
+        }
+        std::vector<std::vector<std::pair<int,int>>> dp(targetPath.size() + 1, std::vector<std::pair<int,int>>(n,{0,-1}));
+        for(int i = targetPath.size() - 1; i >= 0; --i){
+            for(int j = 0; j < n; ++j){
+                for(const int& d: connect[j]){
+                    if(dp[i][j].first < dp[i + 1][d].first){
+                        dp[i][j].first = dp[i + 1][d].first;
+                        dp[i][j].second = d;
+                    }   
+                }
+                if(st.find(targetPath[i]) != st.end() && targetPath[i] == names[j]) ++dp[i][j].first;
+            }
+        }
+        
+        
+        
+        int head = 0;
+        for(int i = 0; i < n; ++i){
+            if(dp[0][head].first < dp[0][i].first) head = i; 
+        }
+        std::vector<int> res;
+        for(int i = 0; i < targetPath.size(); ++i){
+            if(head < 0) break;
+            res.push_back(head);
+            head = dp[i][head].second;
+
+        }
+        if(res.size() < targetPath.size()){
+            for(int i = targetPath.size() - res.size(); i > 0; --i){
+                res.push_back(connect[res.back()][0]);
+            }
+        }
+        return res;
+    }
+};
