@@ -1,0 +1,33 @@
+class Solution {
+public:
+    void move_x(std::string& res, std::pair<int,int>& cur, std::pair<int,int>& pos){
+        if(pos.first < cur.first) res.insert(res.end(), cur.first - pos.first,'U');
+        else res.insert(res.end(), pos.first - cur.first,'D');
+        return;
+    }
+    void move_y(std::string& res, std::pair<int,int>& cur, std::pair<int,int>& pos){
+        if(pos.second < cur.second) res.insert(res.end(), cur.second - pos.second,'L');
+        else res.insert(res.end(), pos.second - cur.second,'R');
+        return;
+    }
+    string alphabetBoardPath(string target) {
+        std::string res;
+        std::pair<int,int>cur({0,0});
+        for(const char& c: target){
+            std::pair<int,int> pos({(c - 'a') / 5, (c - 'a') % 5});
+            if(cur.first == 5){
+                move_x(res,cur,pos);
+                move_y(res,cur,pos);
+                res.push_back('!');
+                cur = pos;
+            }
+            else {
+                move_y(res,cur,pos);
+                move_x(res,cur,pos);
+                res.push_back('!');
+                cur = pos; 
+            }
+        }
+        return res;
+    }
+};
