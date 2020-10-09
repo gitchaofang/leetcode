@@ -1,0 +1,31 @@
+class Solution {
+public:
+    std::string abb(const std::string& str, const int pre){
+        if(str.size() <= pre + 2) return str;
+        return str.substr(0,pre) + std::to_string(str.size() - pre - 1) + str.back();
+    }
+    vector<string> wordsAbbreviation(vector<string>& dict) {
+        int pre = 1;
+        std::vector<std::string> res(dict.size());
+        std::unordered_set<int> index;
+        int pushed = 0;
+        for(int i = 0; i < dict.size(); ++i) index.insert(i);
+        while(pushed != dict.size()){
+            std::unordered_map<std::string,int>m;
+            for(const int& id: index){
+                std::string str = abb(dict[id],pre);
+                if(m.find(str) != m.end()) m[str] = -1;
+                else m[str] = id;
+            }
+            for(auto it = m.begin(); it != m.end(); ++it){
+                if(it -> second != -1){
+                    res[it -> second] = (it -> first);
+                    index.erase(it -> second);
+                    ++pushed;
+                }
+            }
+            ++pre;
+        }
+        return res;
+    }
+};
