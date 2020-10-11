@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int countComponents(int n, vector<vector<int>>& edges) {
+        int cnt = 0;
+        std::vector<std::vector<int>> nb(n);
+        for(const std::vector<int>& v: edges){
+            nb[v[0]].push_back(v[1]);
+            nb[v[1]].push_back(v[0]);
+        }
+        std::unordered_set<int> visited;
+        for(int i = 0; i < n; ++i){
+            if(visited.find(i) != visited.end()) continue;
+            ++cnt;
+            std::queue<int> q({i});
+            visited.insert(i);
+            while(!q.empty()){
+                int pos = q.front();
+                q.pop();
+                for(const int &d: nb[pos]){
+                    if(visited.find(d) != visited.end()) continue;
+                    q.push(d);
+                    visited.insert(d);
+                }
+            }
+        }
+        return cnt;
+    }
+};
