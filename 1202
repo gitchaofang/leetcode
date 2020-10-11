@@ -1,0 +1,37 @@
+class Solution {
+public:
+    string smallestStringWithSwaps(string s, vector<vector<int>>& pairs) {
+        int n = s.size();
+        std::vector<std::vector<int>> connect(n);
+        for(const std::vector<int>&p : pairs){
+            connect[p[0]].push_back(p[1]);
+            connect[p[1]].push_back(p[0]);
+        }
+        std::unordered_set<int> visited;
+        for(int i = 0; i < n; ++i){
+            if(visited.find(i) != visited.end()) continue;
+            visited.insert(i);
+            std::set<int> g({i});
+            std::queue<int> q({i});
+            std::vector<char> pat({s[i]});
+            while(!q.empty()){
+                int cur = q.front();
+                q.pop();
+                for(const int& d: connect[cur]){
+                    if (visited.find(d) != visited.end()) continue;
+                    q.push(d);
+                    pat.push_back(s[d]);
+                    visited.insert(d);
+                    g.insert(d);
+                }
+            }
+            std::sort(pat.begin(), pat.end());
+            int j = 0;
+            for(auto it = g.begin(); it != g.end(); ++it){
+                s[*it] = pat[j];
+                ++j;
+            }
+        }
+        return s;
+    }
+};
