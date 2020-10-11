@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int toproot(const std::vector<int>& root, const int& pos){
+        return (root[pos] == pos) ? pos : toproot(root,root[pos]);
+    }
+    vector<int> numIslands2(int m, int n, vector<vector<int>>& positions) {
+        std::vector<int> root(n*m, -1);
+        std::vector<std::pair<int,int>>dire({{0,-1},{-1,0},{0,1},{1,0}});
+        std::vector<int> res;
+        int cnt = 0;
+        for(const std::vector<int>& v: positions){
+            int pos = v[0]*n + v[1];
+            if(root[pos] != -1){ 
+                res.push_back(cnt);
+                continue;
+            }
+            root[pos] = pos;
+            ++cnt;
+            int p = toproot(root, pos);
+            for(const std::pair<int,int>& dir: dire){
+                int x = v[0] + dir.first;
+                int y = v[1] + dir.second;
+                int cur_pos = x * n + y;
+                if(x < 0 || x >= m || y < 0 || y >= n || root[cur_pos] == -1) continue;
+                int q = toproot(root,cur_pos);
+                if(p != q){
+                    root[q] = p;
+                    --cnt;
+                }
+            }
+            res.push_back(cnt);
+        }
+        return res;
+    }
+};
