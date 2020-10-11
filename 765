@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int minSwapsCouples(vector<int>& row) {
+        int n = row.size();
+        std::vector<int> ps(n);
+        for(int i = 0; i < n; ++i) ps[row[i]] = i;
+        std::unordered_set<int> visited;
+        int res = 0;
+        for(int i = 0; i < n; ++i){
+            int cnt = 0;
+            int pos = i;
+            while(visited.find(pos) == visited.end()){
+                visited.insert(pos);
+                ++cnt;
+                int col = row[pos];
+                if(pos % 2 == 0){ 
+                    col = row[pos + 1];
+                    visited.insert(pos + 1);
+                }
+                else{ 
+                    col = row[pos - 1];
+                    visited.insert(pos - 1);
+                }
+                if(col % 2 == 0) pos = ps[col + 1];
+                else pos = ps[col - 1];
+            }
+            res += (cnt == 0) ? 0 : cnt - 1;
+        }
+        return res;
+    }
+};
