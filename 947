@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        std::unordered_map<int,std::vector<int>> row;
+        std::unordered_map<int,std::vector<int>> col;
+        for(int i = 0; i < stones.size(); ++i){
+            row[stones[i][0]].push_back(i);
+            col[stones[i][1]].push_back(i);
+        }
+        std::unordered_set<int> visited;
+        int res = 0;
+        for(int i = 0; i < stones.size(); ++i){
+            if(visited.find(i) != visited.end()) continue;
+            int cnt = 0;
+            std::queue<int> q({i});
+            visited.insert(i);
+            while(!q.empty()){
+                int cur = q.front();
+                q.pop();
+                for(const int& nb: row[stones[cur][0]]){
+                    if(visited.find(nb) != visited.end()) continue;
+                    q.push(nb);
+                    visited.insert(nb);
+                    ++cnt;
+                }
+                for(const int& nb: col[stones[cur][1]]){
+                    if(visited.find(nb) != visited.end()) continue;
+                    q.push(nb);
+                    visited.insert(nb);
+                    ++cnt;
+                }
+            }
+            res += cnt;
+        }
+        return res;
+    }
+};
