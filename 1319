@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int getroot(const std::vector<int>& root, const int& d){
+        return (root[d] == d) ? d : getroot(root, root[d]);;
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        if(connections.size() < n - 1) return -1;
+        std::vector<int> root(n, -1);   
+        std::vector<std::vector<int>> nb(n);
+        for(const std::vector<int>& v: connections){
+            if(v[0] < v[1]) nb[v[0]].push_back(v[1]);
+            else nb[v[1]].push_back(v[0]);
+        }
+        for(int i = 0; i < n; ++i){
+            if(root[i] == -1) root[i] = i;
+            int rc = getroot(root,i);
+            for(const int& d: nb[i]){
+                if(root[d] == -1) root[d] = i;
+                else{
+                    int rt = getroot(root,d);
+                    if(rt != rc) root[rt] = rc;
+                }
+            }
+        }
+        int cnt = 0;
+        for(int i = 0; i < root.size(); ++i){
+            if(root[i] == i) ++cnt;
+        }
+        return cnt - 1;
+    }
+};
