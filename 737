@@ -1,0 +1,42 @@
+class Solution {
+public:
+    std::string getroot(std::unordered_map<std::string,std::string>& root, const std::string& str){
+        return (root[str] == str) ? str : getroot(root,root[str]);
+    }
+    void to_root(std::unordered_map<std::string,std::string>& root, std::vector<std::string>& v){
+        for(std::string & str: v){
+            if(root.find(str) == root.end()) continue;
+            str = getroot(root,str);
+        }
+        return;
+    }
+    bool areSentencesSimilarTwo(vector<string>& words1, vector<string>& words2, vector<vector<string>>& pairs) {
+        std::unordered_map<std::string,std::vector<std::string>> sim;
+        for(const std::vector<std::string>& v: pairs){
+            sim[v[0]].push_back(v[1]);
+            sim[v[1]].push_back(v[0]);
+        }
+        std::unordered_map<std::string,std::string> root;
+        for(const std::pair<std::string,std::vector<std::string>>& v: sim) root[v.first] = v.first;
+        for(const std::pair<std::string,std::string> & p: root){
+            std::string str = p.first;
+            std::string str_rt = getroot(root,str);
+            for(const std::string& s: sim[str]){
+                std::string srt = getroot(root, s);
+                if(srt != str_rt) root[srt] = str_rt;
+            }
+        }
+        
+        to_root(root,words1);
+        std::unordered_map<std::string,int> cnt;
+        for(const std::string& str: words1) ++cnt[str];
+        to_root(root,words2);
+        for(const std::string& str: words2){
+            if(cnt[str] == 0) return false;
+            --cnt[str];
+            if(cnt[str] == 0) cnt.erase(str);
+        }
+        
+        return cnt.size() == 0;
+    }
+};
