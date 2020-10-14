@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int getroot(const std::vector<int>& root, const int& d){
+        return (root[d] == d) ? d : getroot(root,root[d]);
+    }
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int n = edges.size();
+        std::vector<int> root(n + 1);
+        for(int i = 1; i <= n; ++i) root[i] = i;
+        for(const std::vector<int>& v: edges){
+            int q = getroot(root,v[0]);
+            int p = getroot(root,v[1]);
+            if(q == p) return v;
+            root[p] = q;
+        }
+        return {};
+    }
+};
