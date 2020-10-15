@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int getroot(const std::vector<int>& root, const int& d){
+        return (root[d] == d) ? d : getroot(root,root[d]);
+    }
+    int earliestAcq(vector<vector<int>>& logs, int N) {
+        auto cmp = [](const std::vector<int>& v1, const std::vector<int>& v2){
+            return v1[0] < v2[0];
+        };     
+        std::sort(logs.begin(),logs.end(),cmp);
+        std::vector<int> root(N);
+        for(int i = 0; i < N; ++i) root[i] = i;
+        int cnt = 0;
+        for(const std::vector<int>& v: logs){
+            int q = getroot(root,v[1]);
+            int p = getroot(root,v[2]);
+            if(p != q){
+                ++cnt;
+                root[p] = q;
+            }
+            if(cnt == N - 1) return v[0];
+        }
+        return -1;
+    }
+};
