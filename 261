@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int getroot(const std::vector<int>& root, const int& d){
+        return (root[d] == d) ? d : getroot(root,root[d]);
+    }
+    bool validTree(int n, vector<vector<int>>& edges) {
+        if(edges.size() != n - 1) return false;
+        std::vector<int> root(n);
+        for(int i = 0; i < n; ++i) root[i] = i;
+        for(const std::vector<int>& v : edges){
+            int p = getroot(root, v[0]);
+            int q = getroot(root, v[1]);
+            if(p == q) return false;
+            root[p] = q;
+        }
+        return true;
+    }
+};
