@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int getroot(const std::vector<int>& root, const int& d){
+        return (root[d] == d) ? d : getroot(root,root[d]);
+    }
+    int swimInWater(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        std::vector<int> root(row * col);
+        for(int i = 0; i < row * col; ++i) root[i] = i;
+        std::vector<std::pair<int,int>> dire({{0,-1},{-1,0},{0,1},{1,0}});
+        int t = 0;
+        while(true){
+            for(int i = 0; i < row; ++i){
+                for(int j = 0; j < col; ++j){
+                    if(grid[i][j] > t) continue;
+                    int q = getroot(root, i * col + j);
+                    for(const std::pair<int,int>& dir: dire){
+                        int x = i + dir.first;
+                        int y = j + dir.second;
+                        if(x < 0 || x >= row || y < 0 || y >= col || grid[x][y] > t) continue;
+                        int p = getroot(root, x * col + y );
+                        if(p != q) root[p] = q;
+                    }
+                }
+            }
+            if(getroot(root,0) == getroot(root,row * col - 1)) return t;
+            ++t;
+        }
+        return -1;
+    }
+};
