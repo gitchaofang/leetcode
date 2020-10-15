@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int getroot(const std::vector<int>& root, const int& d){
+        return (root[d] == d) ? d : getroot(root,root[d]);
+    }
+    int largestComponentSize(vector<int>& A) {
+        int mx = 0;
+        for(const int& d: A) mx = std::max(d,mx);
+        std::vector<int> root(mx + 1);
+        for(int i = 1; i <= mx; ++i) root[i] = i;
+        for(const int& num: A){
+            for(int d = std::sqrt(num); d >= 2; -- d){
+                int nr = getroot(root,num);
+                if(num % d == 0){
+                    int p = getroot(root,d);
+                    int q = getroot(root,num / d);
+                    root[p] = nr;
+                    root[q] = nr;
+                }    
+            }
+        }
+        std::vector<int>m(mx + 1, 0);
+        int res = 0;
+        for(const int& d: A){
+            res = std::max(++m[getroot(root,d)], res);
+        }
+        return res;
+    }
+};
