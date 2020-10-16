@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int minCost(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        std::vector<int> cost(row*col,INT_MAX);
+        cost[0] = 0;
+        std::vector<std::pair<int,int>> dire({{0,1},{0,-1},{1,0},{-1,0}});
+        std::queue<int>q({0});
+        while(!q.empty()){
+            int cur = q.front();
+            q.pop();
+            int cur_ct = cost[cur];
+            for(int i = 0; i < dire.size(); ++i){
+                const std::pair<int,int>& dir = dire[i];
+                int x = cur / col + dir.first;
+                int y = cur % col + dir.second;
+                if(x < 0 || x >= row || y < 0 || y >= col) continue;
+                int ct = cur_ct;
+                if(i +  1 != grid[cur/col][cur%col]) ++ct;
+                if(x == row - 1 && col == col - 1)cost[x * col + y] = std::min(ct,cost[x * col + y]);
+                
+                else if(ct < cost[x * col + y]){
+                    cost[x * col + y] = ct;
+                    q.push(x * col + y);
+                }
+            }
+        }
+        return cost[row * col - 1];
+    }
+};
