@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int shortestPath(vector<vector<int>>& grid, int k) {
+        int row = grid.size();
+        int col = grid[0].size();
+        if(row == 1 && col == 1) return 0;
+        std::vector<int> obs(row * col, -1);
+        std::queue<int>q({0});
+        obs[0] = 0;
+        int cnt = 0;
+        std::vector<std::pair<int,int>> dire({{0,-1},{-1,0},{0,1},{1,0}});
+        while(!q.empty()){
+            ++cnt;
+            for(int step = q.size(); step > 0; --step){
+                int cur = q.front();
+                q.pop();
+                int ob = obs[cur];
+                for(const std::pair<int,int>& dir: dire){
+                    int x = cur / col + dir.first;
+                    int y = cur % col + dir.second;
+                    if(x < 0 || x >= row || y < 0 || y >= col) continue;
+                    if(x == row - 1 && y == col - 1) return cnt;
+                    int cob = ob;
+                    if(grid[x][y] == 1) ++cob;
+                    if(cob > k) continue;
+                    if(obs[x * col + y] == -1 || cob < obs[x * col + y]){
+                        q.push(x * col + y);
+                        obs[x * col + y] = cob;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};
