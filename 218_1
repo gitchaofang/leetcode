@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        std::map<int,std::vector<std::pair<int,int>>> m;
+        for(const std::vector<int>& v: buildings){
+            m[v[0]].push_back({v[2],-1});
+            m[v[1]].push_back({v[2],1});
+        }
+        std::map<int,int> mcnt;
+        std::vector<std::vector<int>> res;
+        for(auto it = m.begin(); it != m.end(); ++it){
+            for(const std::pair<int,int>& p: it -> second){ 
+                mcnt[p.first] += p.second;
+                if(mcnt[p.first] == 0) mcnt.erase(p.first);
+            }
+            if(mcnt.empty()) res.push_back({it -> first,0});
+            else if(res.empty() || mcnt.rbegin() -> first != res.back()[1]) res.push_back({it -> first, mcnt.rbegin() -> first});
+        }
+        return res;
+    }
+};
