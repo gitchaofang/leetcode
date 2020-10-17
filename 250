@@ -1,0 +1,40 @@
+class Solution {
+public:
+    bool dfs(TreeNode* root, int& res){
+        if(!root -> left && !root -> right){
+            ++res;
+            return true;
+        }
+        if(root -> left && root -> right){
+            bool lf = dfs(root -> left, res);
+            bool rt = dfs(root -> right, res);
+            if(lf && rt && root -> val == root -> left -> val && root -> val == root -> right -> val){
+                ++res;
+                return true;
+            }
+            return false;
+        }
+        if(root -> left){
+            if(dfs(root -> left, res) && root -> val == root -> left -> val){
+                ++res;
+                return true;
+            }
+            return false;
+        }
+        if(root -> right){
+            if(dfs(root -> right, res) && root -> val == root -> right -> val){
+                ++res;
+                return true;
+            }
+        }
+        return false;
+        
+    } 
+    int countUnivalSubtrees(TreeNode* root) {
+        if(!root) return 0;
+        int res = 0;
+        dfs(root, res);
+        return res;
+    }
+
+};
