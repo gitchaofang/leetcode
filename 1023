@@ -1,0 +1,53 @@
+class Solution {
+public:
+    std::vector<int> st(std::vector<std::unordered_set<int>>& connect){
+        int n = connect.size();
+        std::vector<int> in(n,0);
+        std::vector<int> res;
+        for(int i = 0; i< n; ++i){
+            for(const int& d: connect[i]) ++in[d];
+        }
+        std::queue<int> q;
+        for(int i = 0; i < n; ++i){
+            if(in[i] == 0) q.push(i);
+        }
+        while(!q.empty()){
+            int d = q.front();
+            q.pop();
+            res.push_back(d);
+            for(const int& nb : connect[d]){
+                --in[nb];
+                if(in[nb] == 0) q.push(nb);
+            }
+        }
+        for(const int& d: in){
+            if(d != 0) return {};
+        }
+        return res;
+    }
+    vector<int> sortItems(int n, int m, vector<int>& group, vector<vector<int>>& beforeItems) {
+        for(int i = 0; i < n; ++i){
+            if(group[i] == -1) group[i] = m++;
+        }   
+        std::vector<std::unordered_set<int>> group_connect(m);
+        std::vector<std::unordered_set<int>> item_connect(n);
+        for(int i = 0; i < beforeItems.size(); ++i){
+            for(const int& d: beforeItems[i]){
+                item_connect[d].insert(i);
+                if(group[i] != group[d]) group_connect[group[d]].insert(group[i]);
+            }
+        }
+        
+        std::vector<int> group_order = st(group_connect);
+        if(group_order.empty()) return {};
+        std::vector<int> item_order = st(item_connect);
+        if(item_order.empty()) return {};
+        std::unordered_map<int,std::vector<int>>mp;
+        for(const int& d: item_order) mp[group[d]].push_back(d);
+        std::vector<int> res;
+        for(const int& d: group_order){
+            res.insert(res.end(),mp[d].begin(),mp[d].end());
+        }
+        return res;
+    }
+};
