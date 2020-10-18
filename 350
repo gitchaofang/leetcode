@@ -1,0 +1,12 @@
+lass Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        std::unordered_map<int,int> m;
+        for(const int& d: nums1) ++m[d];
+        std::vector<int> res;
+        for(const int& d: nums2){
+            if(m[d]-- > 0) res.push_back(d);
+        }
+        return res;
+    }
+};
