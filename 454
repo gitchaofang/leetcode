@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D) {
+        std::unordered_map<int,int>m;
+        for(const int& d: A){
+            for(const int& dd: B) ++m[d + dd];
+        }
+        int res = 0;
+        for(const int& d: C){
+            for(const int & c: D){
+                int s = d + c;
+                res += m[-s];
+            }
+        }
+        return res;
+    }
+};
