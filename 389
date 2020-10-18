@@ -1,0 +1,12 @@
+class Solution {
+public:
+    char findTheDifference(string s, string t) {
+        std::unordered_map<char,int>m;
+        for(const char& c: t) ++m[c];
+        for(const char& c: s) --m[c];
+        for(auto it = m.begin(); it != m.end(); ++it){
+            if(it -> second != 0) return it -> first;
+        }
+        return 'o';
+    }
+};
