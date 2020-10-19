@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int dfs(std::vector<std::vector<int>>& grid, const int& i, const int& j,int n){
+        if(grid[i][j] == 2) return n == 0;
+        --n;
+        grid[i][j] = -1;
+        int res = 0;
+        for(const std::pair<int,int>& dir: dire){
+            int x = i + dir.first;
+            int y = j + dir.second;
+            if(x < 0 || x >= row || y < 0 || y >= col || grid[x][y] == -1) continue;
+            res += dfs(grid,x,y,n); 
+        }
+        grid[i][j] = 0;
+        return res;
+    }
+    int uniquePathsIII(vector<vector<int>>& grid) {
+        row = grid.size();
+        col = grid[0].size();
+        dire = {{0,-1},{-1,0},{0,1},{1,0}};
+        int n = 1;
+        int sx = 0;
+        int sy = 0;
+        for(int i = 0; i < row; ++i){
+            for(int j = 0; j < col; ++j){
+                if(grid[i][j] == 0) ++n;
+                else if(grid[i][j] == 1){
+                    sx = i;
+                    sy = j;
+                }
+            }
+        }
+        
+        return dfs(grid,sx,sy,n);
+    }
+private:
+    int row;
+    int col;
+    std::vector<std::pair<int,int>> dire;
+};
