@@ -1,0 +1,31 @@
+class Solution {
+public:
+    std::vector<std::pair<char,int>> construct(const std::string& s){
+        std::vector<std::pair<char,int>> v;
+        for(int i = 0; i < s.size(); ++i){
+            int j = i;
+            while(j < s.size() && s[j] == s[i]) ++j;
+            v.push_back({s[i],j-i});
+            i = j - 1;
+        }
+        return v;
+    }
+    int expressiveWords(string S, vector<string>& words) {
+        std::vector<std::pair<char,int>> sd = construct(S);
+        int res = 0;
+        int n = sd.size();
+        for(const std::string& s: words){
+            std::vector<std::pair<char,int>> v = construct(s);
+            if(v.size() != n) continue;
+            bool sucess = true;
+            for(int i = 0; i < n; ++i){
+                if(v[i].first != sd[i].first || (v[i].second != sd[i].second && (v[i].second > sd[i].second || sd[i].second < 3))){
+                    sucess = false;
+                    break;
+                }
+            }
+            if(sucess == true) ++res;
+        }
+        return res;
+    }
+};
