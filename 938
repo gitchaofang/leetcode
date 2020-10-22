@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int dfs(TreeNode* root, const int& L, const int& R){
+        if(!root) return 0;
+        int d = root -> val;
+        int res = 0;
+        if(L<=d && R >= d) res += dfs(root -> left,L,R) + dfs(root -> right,L,R) + d;
+        if(L > d) res += dfs(root -> right,L,R);
+        else if(d > R) res += dfs(root -> left, L,R);
+        return res;
+    }
+    int rangeSumBST(TreeNode* root, int L, int R) {
+        return dfs(root,L,R);
+    }
+};
