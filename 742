@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int findClosestLeaf(TreeNode* root, int k) {
+        std::unordered_map<int,std::unordered_set<int>> nb;
+        std::queue<TreeNode*> q({root});
+        std::unordered_set<int> leaf_v;
+        while(!q.empty()){
+            TreeNode* node = q.front();
+            q.pop();
+            if(!node -> left && !node -> right) leaf_v.insert(node -> val);
+            if(node -> left){
+                nb[node -> val].insert(node -> left -> val);
+                nb[node -> left -> val].insert(node -> val);
+                q.push(node -> left);
+            }
+            if(node -> right){
+                nb[node -> val].insert(node -> right -> val);
+                nb[node -> right -> val].insert(node -> val);
+                q.push(node -> right);
+            }
+        }
+    
+        std::queue<int> iq({k});
+        while(!iq.empty()){
+            for(int i = iq.size(); i > 0; --i){
+                int cur = iq.front();
+                iq.pop();
+                if(leaf_v.find(cur) != leaf_v.end()) return cur;
+                for(const int& next: nb[cur]){
+                    iq.push(next);
+                    nb[next].erase(cur);
+                }
+            }
+        }
+        return -1;
+    }
+};
