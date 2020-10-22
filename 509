@@ -1,0 +1,11 @@
+class Solution {
+public:
+    int fib(int N) {
+        if(N == 0) return 0;
+        if(N == 1) return 1;
+        std::vector<int> fb(N + 1, 0);
+        fb[1] = 1;
+        for(int i = 2; i <= N; ++i) fb[i] = fb[i - 2] + fb[i - 1];
+        return fb.back();
+    }
+};
