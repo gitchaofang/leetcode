@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int dfs(TreeNode* root, const int& sum, int& accu){
+        if(!root) return 0;
+        accu += root -> val;
+        int res = 0;
+        int targ = accu - sum;
+        res += m[targ];
+        ++m[accu];
+        res += dfs(root -> left, sum, accu);
+        res += dfs(root -> right, sum, accu);
+        --m[accu];
+        accu -= root -> val;
+        return res;
+    }
+    int pathSum(TreeNode* root, int sum) {
+        int accu = 0;
+        m[0] = 1;
+        return dfs(root,sum, accu);
+    }
+private:
+    std::unordered_map<int,int>m;
+    
+};
