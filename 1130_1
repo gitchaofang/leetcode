@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int dc(const std::vector<int>& v, const int& left, const int& right, int& res){
+        if(left == right) return v[left];
+        int pos = left;
+        for(int i = left; i <= right; ++i){
+            if(v[i] > v[pos]) pos = i;
+        }
+        if(left < pos && pos < right){
+            int mx_left = dc(v,left,pos - 1, res);
+            int mx_right = dc(v,pos + 1, right, res);
+            res += v[pos] * (mx_left + mx_right);
+        }
+        else if (left < pos) res += v[pos] * dc(v,left, pos - 1, res);
+        else res += v[pos] * dc(v,pos + 1, right, res);  
+        return v[pos];
+    }
+    int mctFromLeafValues(vector<int>& arr) {
+        int res = 0;
+        dc(arr,0,arr.size() - 1,res);
+        return res;
+    }
+};
