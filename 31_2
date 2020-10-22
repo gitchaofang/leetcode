@@ -1,0 +1,20 @@
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size();
+        if(n <= 1) return;
+        std::map<int,int>m;
+        for(int i = n - 1; i >= 0; --i){
+            if(i == n - 1 || nums[i] >= nums[i + 1]) m[nums[i]] = i;
+            else{
+                int pos = m.lower_bound(nums[i] + 1) -> second;
+                std::swap(nums[i],nums[pos]);
+                std::sort(nums.begin() + i + 1, nums.end());
+                return;
+            }
+        }
+        std::sort(nums.begin(),nums.end()); 
+        return;
+    }
+};
+
