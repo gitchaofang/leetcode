@@ -1,0 +1,26 @@
+class Solution {
+public:
+    TreeNode* dfs(TreeNode* root){
+        if(!root -> left && ! root -> right) return root;
+        if(root -> left && root -> right){
+            TreeNode* left_end = dfs(root -> left);
+            TreeNode* right_end = dfs(root -> right);
+            left_end -> right = root -> right;
+            root -> right = root -> left;
+            root -> left = nullptr;
+            return right_end;
+        }    
+        else if(root -> left){
+            root -> right = root -> left;
+            root -> left = nullptr;
+            return dfs(root -> right);
+        }
+        return dfs(root -> right);
+    }
+    void flatten(TreeNode* root) {
+        if(!root) return;
+        dfs(root);
+        return;
+    }
+};
+
