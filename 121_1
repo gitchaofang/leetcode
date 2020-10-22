@@ -1,0 +1,11 @@
+public:
+    int maxProfit(vector<int>& prices) {
+        int low = INT_MAX;
+        int res = 0;
+        for(const int& d: prices){
+            low = std::min(low, d);
+            res = std::max(res,d - low);
+        }
+        return res;
+    }
+};
