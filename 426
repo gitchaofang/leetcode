@@ -1,0 +1,29 @@
+class Solution {
+public:
+    std::pair<Node*,Node*> dc(Node* root){
+        if(!root) return {nullptr,nullptr};
+        std::pair<Node*,Node*> right = {root,root};
+        std::pair<Node*,Node*> left = {root,root};
+        std::pair<Node*,Node*> res = {root,root};
+        if(root -> left){ 
+            left = dc(root -> left);
+            res.first = left.first;
+            root -> left = left.second;
+            left.second -> right = root;
+        }
+        if(root -> right){
+            right = dc(root -> right);
+            res.second = right.second;
+            right.first -> left = root;
+            root -> right = right.first;
+        }
+        return res;
+    }
+    Node* treeToDoublyList(Node* root) {
+        if(!root) return nullptr;
+        std::pair<Node*,Node*> res = dc(root);
+        res.first -> left = res.second;
+        res.second -> right = res.first;
+        return res.first;
+    }
+};
