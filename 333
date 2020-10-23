@@ -1,0 +1,17 @@
+class Solution {
+public:
+    std::vector<int> dfs(TreeNode* root, int& res){
+        if(!root) return{0,INT_MAX,INT_MIN};
+        std::vector<int> left = dfs(root -> left, res);
+        std::vector<int> right = dfs(root -> right, res);
+        int d = root -> val;
+        if(left[0] < 0 || right[0] < 0 || d <= left[2] || d >= right[1]) return {-1,0,0};
+        res = std::max(left[0] + right[0] + 1, res);
+        return {left[0] + right[0] + 1, std::min(left[1],d), std::max(right[2],d)};
+    }
+    int largestBSTSubtree(TreeNode* root) {
+        int res = 0;
+        dfs(root,res);
+        return res;
+    }
+};
