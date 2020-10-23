@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        if(!root) return {};
+        std::vector<int> res;
+        std::stack<TreeNode*> st({root});
+        while(st.top() -> left) st.push(st.top() -> left);
+        while(!st.empty()){
+            TreeNode* node = st.top();
+            st.pop();
+            res.push_back(node -> val);
+            if(node -> right){
+                st.push(node -> right);
+                while(st.top() -> left) st.push(st.top() -> left);
+            }
+        }
+        return res;
+    }
+};
