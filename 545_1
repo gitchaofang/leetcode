@@ -1,0 +1,33 @@
+class Solution {
+public:
+    void left_node(TreeNode* root, std::vector<int>& res){
+        if(!root || (!root -> left && !root -> right)) return;
+        res.push_back(root -> val);
+        if(root -> left) left_node(root -> left,res);
+        else left_node(root -> right, res);
+        return;
+    }
+    void right_node(TreeNode* root, std::vector<int>& res){
+        if(!root || (!root -> left && !root -> right)) return;
+        if(root -> right) right_node(root -> right, res);
+        else right_node(root -> left, res);
+        res.push_back(root -> val);
+        return;
+    }
+    void leaf(TreeNode* root, std::vector<int>& res){
+        if(!root) return; 
+        if(!root -> left && !root -> right) res.push_back(root -> val);
+        if(root -> left) leaf(root -> left, res);
+        if(root -> right) leaf(root -> right,res);
+        return;
+    }
+    vector<int> boundaryOfBinaryTree(TreeNode* root) {
+        if(!root) return {};
+        std::vector<int> res;
+        if(root -> left || root -> right) res.push_back(root -> val);
+        left_node(root -> left, res);
+        leaf(root, res);
+        right_node(root -> right, res);
+        return res;         
+    }
+};
