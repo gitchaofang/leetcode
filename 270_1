@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int closestValue(TreeNode* root, double target) {
+        if(!root -> left && !root -> right) return root -> val;
+        if(root -> val == target || (target < root -> val && !root -> left) || (target > root -> val && !root -> right)) return root -> val;
+        int d = root -> val;
+        if(target < root -> val) d = closestValue(root -> left, target);
+        if(target > root -> val) d = closestValue(root -> right, target);
+        if(std::abs(root -> val - target) < std::abs(d - target)) return root -> val;
+        return d;
+    }
+};
