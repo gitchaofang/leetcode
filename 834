@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int dfs(const int& cur, std::vector<int>& res, std::vector<std::unordered_set<int>>& bond, std::vector<int>& nb){
+        if(bond[cur].empty()){
+            nb[cur] = 0;
+            res[cur] = 0;
+            return 1;
+        }
+        for(const int& d: bond[cur]){
+            bond[d].erase(cur);
+            nb[cur] +=  dfs(d, res, bond, nb);
+            res[cur] += res[d];
+        }
+        res[cur] += nb[cur];
+        return nb[cur] + 1;
+    }
+    void refresh(const int& cur, std::vector<int>& res, std::vector<std::unordered_set<int>>& bond, const std::vector<int>& nb, const int& N){
+        if(bond[cur].empty()) return;
+        for(const int& d: bond[cur]){
+            res[d] += res[cur] - res[d] - nb[d] - 1 + N - nb[d] - 1;
+            refresh(d,res,bond,nb,N);
+        }    
+        return;
+    }
+    vector<int> sumOfDistancesInTree(int N, vector<vector<int>>& edges) {
+        std::vector<bool> visited(N,false);
+        std::vector<int> res(N,0);
+        std::vector<int> nb(N,0);
+        std::vector<std::unordered_set<int>> bond(N);
+        for(const std::vector<int>& e: edges){ 
+            bond[e[0]].insert(e[1]);
+            bond[e[1]].insert(e[0]);
+        }
+        dfs(0, res, bond, nb);  
+        refresh(0, res, bond, nb, N);
+        return res;
+    }
+};
