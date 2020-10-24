@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int dfs(TreeNode* root , std::map<int,std::vector<int>>& m){                               if(!root) return 0;
+        int left_index = dfs(root -> left, m);
+        int right_index = dfs(root -> right, m);
+        left_index = std::max(left_index, right_index);
+        m[left_index].push_back(root -> val);
+        return left_index + 1;                                                             }
+    vector<vector<int>> findLeaves(TreeNode* root) {
+        std::map<int,std::vector<int>> m;
+        dfs(root, m);
+        std::vector<std::vector<int>> res;
+        for(auto it = m.begin(); it != m.end(); ++it) res.push_back(it -> second);
+        return res;
+    }
+};

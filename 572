@@ -1,0 +1,17 @@
+class Solution {
+public:
+    bool issame(TreeNode* s, TreeNode* t){
+        if(!s && !t) return true;
+        if(!s || !t || s -> val != t -> val) return false;
+        return issame(s -> left, t->left) && issame(s -> right, t->right);
+    }
+    bool isSubtree(TreeNode* s, TreeNode* t) {
+        if(!s && !t) return true;
+        if((!s && t) || (s && !t)) return false;
+        bool left = isSubtree(s -> left, t);
+        bool right = isSubtree(s -> right, t);
+        if(left || right) return true;
+        if(s -> val != t -> val) return false;
+        return issame(s,t);
+    }
+};
