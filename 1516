@@ -1,0 +1,53 @@
+class Solution {
+public:
+    bool dfs(Node* root, bool& rev, Node*& pre_q, Node*& pre_p, Node*& p, Node*& q){
+        if(!root) return false;
+        bool res = false;
+        if(root == q) res = true;
+        for(Node* node: root -> children){
+            if(node == p) pre_p = root;
+            else if(node == q) pre_q = root;
+            if(dfs(node, rev, pre_q ,pre_p, p, q)){
+                res = true;
+                if(root == p) rev = true;
+            }
+        }
+        return res;
+    }
+    int del(Node* root, Node* targ){
+        if((root -> children).empty()) return 0;
+        int pos = 0;
+        std::vector<Node*>& v = (root -> children);
+        for(int i = 0; i < v.size(); ++i){
+            if(v[i] == targ){
+                pos = i;
+                break;
+            }
+        }
+        v.erase(v.begin() + pos);
+        return pos;
+    }
+    Node* moveSubTree(Node* root, Node* p, Node* q) {
+        for(Node* node: q -> children){
+            if(node == p) return root;
+        }
+        Node* pre = new Node(0);
+        (pre -> children).push_back(root);
+        bool rev = false;
+        Node* pre_p(nullptr);
+        Node* pre_q(nullptr);
+        dfs(pre, rev, pre_q, pre_p, p, q);
+        if(rev){
+            int pos_p = del(pre_p,p);
+            int pos_q = del(pre_q,q);
+            (q -> children).push_back(p);
+            (pre_p -> children).insert((pre_p -> children).begin() + pos_p,q);
+            
+        }
+        else{
+            int pos = del(pre_p,p);
+            (q -> children).push_back(p);       
+        }
+        return (pre -> children)[0];
+    }
+};
