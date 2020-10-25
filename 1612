@@ -1,0 +1,19 @@
+class Solution {
+public:
+    void eval(Node* root, std::vector<int>& res){
+        if(!root -> left && !root -> right) ++res[root -> val - 'a'];
+        if(root -> left) eval(root -> left, res);
+        if(root -> right) eval(root -> right, res);
+        return ;
+    }
+    bool checkEquivalence(Node* root1, Node* root2) {
+        std::vector<int> res(26,0);
+        eval(root1,res);
+        for(int& d: res) d *= -1;
+        eval(root2,res);
+        for(const int& d: res){
+            if(d != 0) return false;
+        }
+        return true;
+    }
+};
