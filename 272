@@ -1,0 +1,35 @@
+class cmp{
+    public:
+        bool operator()(const std::pair<double,double>& p1, const std::pair<double,double>& p2){
+            return  p1.second < p2.second;
+        }
+};
+class Solution {
+public:
+    void dfs(const int& k, TreeNode* root, const double& target, std::priority_queue<std::pair<double,double>,std::vector<std::pair<double,double>>, cmp>& pq){
+        if (!root) return;
+        double d = root -> val;
+        double diff = std::abs(d - target);
+        if(root -> val >= target){
+            dfs(k,root -> left, target,pq);
+            if(pq.size() < k || pq.top().second > diff ) dfs(k,root -> right, target, pq);
+        }
+        else if(root -> val < target){
+            dfs(k,root -> right, target,pq);
+            if(pq.size() < k || pq.top().second > diff) dfs(k,root -> left, target, pq);
+        }
+        pq.push({d,diff});
+        if(pq.size() > k) pq.pop();
+        return;
+    }
+    vector<int> closestKValues(TreeNode* root, double target, int k) {
+        std::priority_queue<std::pair<double,double>,std::vector<std::pair<double,double>>, cmp>pq;
+        dfs(k,root,target,pq);
+        std::vector<int> res;
+        while(!pq.empty()){
+            res.push_back(pq.top().first);
+            pq.pop();
+        }
+        return res;
+    }
+};
