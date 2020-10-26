@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int binary_search(const std::vector<int>& v, const int& targ){
+        int left = 0;
+        int right = v.size() - 1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(v[mid] <= targ) left = mid + 1;
+            else right = mid;
+        }
+        if(v[left] <= targ) return ++left;
+        return left;
+    }
+    std::vector<int> dfs(TreeNode* root, const int& dis, int& res){
+        if(!root) return {};
+        if(!root -> left && !root -> right) return {0};
+        std::vector<int> left = dfs(root -> left, dis, res);
+        std::vector<int> right = dfs(root -> right, dis, res);
+        if(left.empty()){
+            for(int& d: right) ++d;
+            return right;
+        }
+        if(right.empty()){
+            for(int& d: left) ++d;
+            return left;
+        }
+        std::vector<int> v;
+        for(int i = 0; i < left.size(); ++i){
+            int pos = binary_search(right, dis - left[i] - 2);
+            res += pos;
+        }
+        int l_pos = 0;
+        int r_pos = 0;
+        while(l_pos != left.size() && r_pos != right.size()){
+            if(left[l_pos] < right[r_pos]) v.push_back(1 + left[l_pos++]);
+            else v.push_back(1 + right[r_pos++]);
+        }
+        if(l_pos != left.size()){
+            for(;l_pos < left.size(); ++l_pos){
+                v.push_back(left[l_pos] + 1);
+            }
+        }     
+        else if(r_pos != right.size()){ 
+            for(;r_pos < right.size(); ++r_pos){
+                v.push_back(right[r_pos] + 1);
+            }
+        }
+        return v;
+    }
+    int countPairs(TreeNode* root, int distance) {
+        int res = 0;
+        dfs(root, distance, res);   
+        return res;
+    }
+};
