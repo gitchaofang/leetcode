@@ -1,0 +1,38 @@
+class cmp{
+    public:
+        bool operator()(const int& d1, const int& d2){
+            return d1 > d2;
+        }
+};
+class Solution {
+public:
+    int dfs(const int& cur, std::vector<std::unordered_set<int>>& bond, int& res){
+        if(bond[cur].size() == 0) return 0;
+        std::priority_queue<int,std::vector<int>,cmp> pq;
+        for(const int& nb: bond[cur]){
+            bond[nb].erase(cur);
+            pq.push(dfs(nb,bond,res));
+            if(pq.size() > 2) pq.pop();
+        }
+        int l = pq.top();
+        int path = pq.top() + 1;
+        pq.pop();
+        if(!pq.empty()){ 
+            path += pq.top() + 1;
+            l = pq.top();
+        }
+        res = std::max(path ,res);
+        return l + 1;
+    }
+    int treeDiameter(vector<vector<int>>& edges) {
+        int n = edges.size();
+        std::vector<std::unordered_set<int>> bond(n + 1);;
+        for(const std::vector<int>& e: edges){
+            bond[e[0]].insert(e[1]);
+            bond[e[1]].insert(e[0]);
+        }
+        int res = 1;
+        dfs(0, bond,res);
+        return res;
+    }
+};
