@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int find_root(const std::vector<int>& root, const int& d){
+        return (root[d] == d) ? d : find_root(root, root[d]);
+    }
+    vector<int> findRedundantDirectedConnection(vector<vector<int>>& edges) {
+        int n = edges.size();
+        std::vector<int> root(n + 1, 0);
+        std::vector<int> first;
+        std::vector<int> second;
+        for(std::vector<int>& e: edges){
+            if(root[e[1]] != 0){
+                first = {root[e[1]], e[1]};
+                second = e;
+                e[1] = 0;
+            }
+            else root[e[1]] = e[0];
+        }
+        for(int i = 0; i <= n; ++i) root[i] = i;
+        for(const std::vector<int>& e: edges){
+            int p = find_root(root, e[0]);
+            int q = find_root(root, e[1]);
+            if(p == q){
+                return (first.empty()) ? e : first;
+            }
+            else root[q] = p;
+        }
+        return second;
+    }
+};
