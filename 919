@@ -1,0 +1,36 @@
+class CBTInserter {
+public:
+    CBTInserter(TreeNode* root): head(root){
+        std::queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty()){
+            for(int i = q.size(); i > 0; --i){
+                TreeNode* node = q.front();
+                q.pop();
+                if(!node -> left || ! node -> right) leaf.push(node); 
+                if(node -> left) q.push(node -> left);
+                if(node -> right) q.push(node -> right);
+            }
+        }
+        return;
+    }
+    
+    int insert(int v) {
+        int d = leaf.front() -> val;
+        TreeNode* node = new TreeNode(v);
+        leaf.push(node);
+        if(!leaf.front() -> left) leaf.front() -> left = node;
+        else{
+            leaf.front() -> right = node;
+            leaf.pop();
+        }
+        return d;
+    }
+    
+    TreeNode* get_root() {
+        return head;    
+    }
+private:
+    std::queue<TreeNode*> leaf;
+    TreeNode* head;
+};
