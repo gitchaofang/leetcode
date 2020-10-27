@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int binary_search(const std::vector<int64_t>& v, int left, int right, const int64_t& targ){
+        if(v[right] <= targ) return right + 1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(v[mid] <= targ) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+    int64_t  dc(std::vector<int64_t>& sm, const int& left,const int& right,const int64_t& low, const int64_t& high){
+        if(left == right) return 0;
+        int mid = left + (right - left) / 2;
+        int64_t res = dc(sm, left, mid, low, high);
+        res += dc(sm, mid + 1, right, low, high);
+        for(int i = left; i <= mid; ++i){
+            int lp = binary_search(sm, mid + 1, right, sm[i] + low - 1);
+            if(lp == right + 1) continue;
+            int rp = binary_search(sm, mid + 1, right, sm[i] + high);
+            res += std::max(0, rp - lp);
+        }
+        std::vector<int64_t> tv(right - left + 1);
+        int lp = left;
+        int rp = mid + 1;
+        for(int i = 0 ; i < tv.size(); ++i){
+            if(lp <= mid && rp <= right){
+                if(sm[lp] < sm[rp]) tv[i] = sm[lp++];
+                else tv[i] = sm[rp++];
+            }
+            else if(lp <= mid) tv[i] = sm[lp++];
+            else tv[i] = sm[rp++];
+        }
+        for(int i = 0; i < tv.size(); ++i) sm[left + i] = tv[i];
+        return res;
+    }
+    int countRangeSum(vector<int>& nums, int lower, int upper) {
+        int n = nums.size();
+        std::vector<int64_t> sm(n + 1,0);
+        for(int i = 1; i <= n; ++i) sm[i] = nums[i - 1] + sm[i - 1];
+        int64_t res = dc(sm,0, n,lower, upper);
+        return res;
+    }
+};
