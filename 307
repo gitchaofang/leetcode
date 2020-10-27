@@ -1,0 +1,31 @@
+class NumArray {
+public:
+    NumArray(vector<int>& nums): n(nums.size()){
+        data.resize(2 * n,0);
+        for(int i = n; i < 2 * n; ++i) data[i] = nums[i - n];
+        for(int i = n - 1; i >= 1; --i) data[i] += data[2 * i] + data[2 * i + 1];
+        return;
+    }
+    
+    void update(int i, int val) {
+        int pos = i + n;
+        int def = val - data[pos];
+        while(pos > 0){
+            data[pos] += def;
+            pos /= 2; 
+        }
+        return;
+    }
+    
+    int sumRange(int i, int j) {
+        int sum = 0;
+        for(i += n, j += n; i <= j; i /= 2, j /= 2){
+            if((i & 1) == 1) sum += data[i++];
+            if((j & 1) == 0) sum += data[j--]; 
+        }
+        return sum;
+    }
+private:
+    std::vector<int> data;
+    int n;
+};
