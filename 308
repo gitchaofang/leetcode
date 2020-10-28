@@ -1,0 +1,50 @@
+class NumMatrix {
+public:
+    void up_bit(std::vector<int>& v, const int& dif, int pos){
+        while(pos <= cl){
+            v[pos] += dif;
+            pos += (pos & -pos); 
+        }
+        return;
+    }
+    int accu(const std::vector<int>& v, int pos){
+        int sm = 0;
+        while(pos >=1){
+            sm += v[pos];
+            pos -= pos & (-pos);
+        }
+        return sm;
+    }
+    NumMatrix(vector<vector<int>>& matrix): rw(matrix.size()) {
+        if(rw == 0) return;
+        cl = matrix[0].size();
+        bit.resize(rw, std::vector<int>(cl + 1,0));
+        for(int i = 0; i < cl*rw; ++i) ori.push_back(matrix[i / cl][i % cl]);
+        for(int i = 0; i < rw; ++i){
+            for(int j = 1; j <= cl; ++j){
+                for(int l = 0; l < (j & (-j)); ++l) bit[i][j] += ori[i * cl + j - l - 1]; 
+            }
+        }
+        return;
+    }
+    
+    void update(int row, int col, int val) {
+        int dif = val - ori[row* cl + col];
+        ori[row*cl + col] = val;
+        up_bit(bit[row], dif, col + 1);
+        return;
+    }
+    
+    int sumRegion(int row1, int col1, int row2, int col2) {
+        int res = 0;
+        for(int i = row1; i <= row2; ++i) {
+            res += accu(bit[i], col2 + 1) - accu(bit[i], col1);
+        }
+        return res;
+    }
+private:
+    std::vector<int> ori;
+    std::vector<std::vector<int>> bit;
+    int rw;
+    int cl;
+};
