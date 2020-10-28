@@ -1,0 +1,39 @@
+class NumArray {
+public:
+    NumArray(vector<int>& nums): n(nums.size()), ori(nums){
+        data.resize(n + 1, 0);
+        for(int i = 1; i <= n; ++i){
+            for(int j = 0; j < (i & (-i)); ++j) data[i] += ori[i - j - 1];
+        }
+        return;
+    }
+    
+    void update(int i, int val) {
+        int dif = val - ori[i];
+        ori[i] = val;
+        ++i;
+        while(i <= n){
+            data[i] += dif;
+            i += i & (-i);
+        } 
+        return;   
+    }
+    
+    int sumRange(int i, int j){
+        ++j;
+        int s = 0;
+        while(j > 0){
+            s += data[j];
+            j -= j & (-j);
+        }
+        while(i > 0){
+            s -= data[i];
+            i -= i & (-i);
+        }
+        return s;
+    }
+private:
+    std::vector<int> ori;
+    std::vector<int> data;
+    int n;
+};
