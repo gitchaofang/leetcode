@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int dc(const std::vector<int>& nums, int left, int right, const int& min){
+        if(left > right) return 0;
+        if(left == right) return nums[left] - min;
+        int cur_min = INT_MAX;
+        std::stack<int> st
+        for(int i = left; i <= right; ++i) cur_min = std::min(cur_min,nums[i]);
+        int res = cur_min - min;
+        for(int i = left; i <= right; ++i){ 
+            if(nums[i] == cur_min){ 
+                res += dc(nums, left, i - 1, cur_min);
+                left = i + 1;
+            }
+        }
+        if(nums[right] != cur_min) res += dc(nums, left, right, cur_min);
+        return res;
+    }
+    int minNumberOperations(vector<int>& target) {
+        return dc(target, 0, target.size() - 1, 0);      
+    }
+};
