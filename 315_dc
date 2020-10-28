@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int binary_search(const std::vector<int>& v, int left, int right, const int& targ){
+        if(v[right] <= targ) return right + 1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(v[mid] <= targ) left  = mid + 1;
+            else right = mid;
+        }    
+        return left;
+    }
+    void dc(std::vector<int>& cnt, std::vector<int>& nums, const int& left, const int& right){
+        if(left == right) return;
+        int mid = left + (right - left) / 2;
+        dc(cnt, nums, left, mid);
+        dc(cnt, nums, mid + 1, right);
+        for(int i = left; i <= mid; ++i){
+            cnt[i] += binary_search(nums, mid + 1, right, ori[i] - 1) - mid - 1;
+        }
+        std::vector<int> tv(right - left + 1);
+        int pos_left = left;
+        int pos_right = mid + 1;
+        for(int i = 0; i <= right - left; ++i){
+            if(pos_left <= mid && pos_right <= right){
+                if(nums[pos_left] < nums[pos_right]) tv[i] = nums[pos_left++];
+                else tv[i] = nums[pos_right++];
+            }
+            else if(pos_left <= mid) tv[i] = nums[pos_left++];
+            else tv[i] = nums[pos_right++];
+        }
+        for(int i = 0; i <= right - left; ++i) nums[left + i] = tv[i];
+        return;
+    }
+    vector<int> countSmaller(vector<int>& nums) {
+        if(nums.size() == 0) return {};
+        ori = nums;
+        int n = nums.size();
+        std::vector<int> cnt(n,0);
+        dc(cnt, nums, 0, n - 1);
+        return cnt;
+    }
+private:
+    std::vector<int> ori;
+};
