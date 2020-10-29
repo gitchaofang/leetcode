@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int minDiffInBST(TreeNode* root) {
+        int res = INT_MAX;
+        std::stack<TreeNode*> st({root});  
+        while(st.top() -> left) st.push(st.top() -> left);
+        while(!st.empty()){
+            TreeNode * node = st.top();
+            st.pop();
+            if(node -> right){
+                st.push(node -> right);
+                while(st.top() -> left) st.push(st.top() -> left);
+            }
+            if(!st.empty()) res = std::min(res, st.top()->val - node -> val);
+        }
+        return res;
+    }
+;
