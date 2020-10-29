@@ -1,0 +1,50 @@
+class Solution {
+public:
+    string alienOrder(vector<string>& words) {
+        std::vector<int> in(26, -1);
+        std::vector<std::vector<int>> bond(26);
+        for(int i = 0; i < words.size(); ++i){
+            if(i == words.size() - 1){
+                for(const char&c : words[i]){
+                    if(in[c - 'a'] == -1) in[c - 'a'] = 0;
+                }
+                continue;
+            }
+            std::string str1 = words[i];
+            std::string str2 = words[i + 1];
+            int j = 0;
+            for(;j < str1.size(); ++j){
+                if(in[str1[j] - 'a'] == -1) in[str1[j] - 'a'] = 0;
+                if(j == str2.size()) return "";
+                if(in[str2[j] - 'a'] == -1) in[str2[j] - 'a'] = 0;
+                if(str1[j] == str2[j]) continue;
+                bond[str1[j] - 'a'].push_back(str2[j] - 'a'); 
+                ++in[str2[j] - 'a'];
+                break;
+            }
+            
+            for(;j < str1.size(); ++j){
+                if(in[str1[j] - 'a'] == -1) in[str1[j] - 'a'] = 0;
+            }
+        }
+        std::queue<int> q;
+        for(int i = 0; i < 26; ++i){
+            if(in[i] == 0) q.push(i);
+        }
+        std::string res("");
+        while(!q.empty()){
+            int cur = q.front();
+            q.pop();
+            res += 'a' + cur;
+            for(const int& d: bond[cur]){
+                --in[d];
+                if(in[d] == 0) q.push(d);
+            }
+        }
+        for(int i = 0; i < in.size(); ++i){
+            if(in[i] > 0) return "";
+        }
+        return res;
+        
+    }
+};
