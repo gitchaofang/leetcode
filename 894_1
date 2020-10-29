@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<TreeNode*> allPossibleFBT(int N) {
+        if(N % 2 == 0) return {};
+        std::vector<std::vector<TreeNode*>> tree(N + 1);
+        tree[1] = {new TreeNode(0)};
+        for(int i = 3; i<= N; i += 2){
+            std::vector<TreeNode*> v;
+            for(int j = 1; j < i; j += 2){
+                for(TreeNode* left: tree[j]){
+                    for(TreeNode* right: tree[i - j - 1]){
+                        TreeNode* node = new TreeNode(0);
+                        node -> left = left;
+                        node -> right = right;
+                        v.push_back(node);
+                    }
+                }
+            }    
+            tree[i] = v;
+        }    
+        return tree.back();
+    }
+};
