@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int binary_search(const std::vector<int>&v, const int& targ){
+        int left = 0;
+        int right = v.size() - 1;
+        if(v.back() <= targ) return v.size();
+        while(left < right){
+            int mid = left + (right - left) /2;
+            if(v[mid] <= targ) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int left = matrix[0][0];
+        int right = matrix.back().back();
+        int row = matrix.size();
+        int col = matrix[0].size();
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            int cnt = 0;
+            for(int i = 0; i < row; ++i){
+                cnt += binary_search(matrix[i], mid);   
+            }
+            if(cnt < k) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+};
