@@ -1,0 +1,31 @@
+struct cmp{
+    bool operator ()(const std::vector<int>& v1, const std::vector<int>& v2){
+        return v1[0] > v2[0];
+    }  
+};
+class Solution {
+public:
+    vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        int n1 = nums1.size();
+        int n2 = nums2.size();
+        if(nums1.empty() || nums2.empty()) return {};
+        std::priority_queue<std::vector<int>,std::vector<std::vector<int>>,cmp> q;     
+        q.push({nums1[0] + nums2[0], 0,0});
+        std::vector<std::vector<int>> res;
+        std::vector<std::vector<int>> visited(n1, std::vector<int>(n2,0));
+        for(int i = 0; i < std::min(k, n1*n2); ++i){
+            std::vector<int> v = q.top();
+            q.pop();
+            res.push_back({nums1[v[1]],nums2[v[2]]});
+            if(v[1] + 1 < n1 && visited[v[1] + 1][v[2]] == 0){ 
+                q.push({nums1[v[1] + 1] + nums2[v[2]],v[1] + 1, v[2]});
+                visited[v[1] + 1][v[2]] = 1;
+            }
+            if(v[2] + 1 < n2 && visited[v[1]][v[2] + 1] == 0){ 
+                q.push({nums1[v[1]] + nums2[v[2] + 1],v[1], v[2] + 1});
+                visited[v[1]][v[2] + 1] = 1;
+            }
+        }
+        return res;
+    }
+};
