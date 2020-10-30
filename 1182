@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int binary_search(const std::vector<int>& v, const int & target){
+        if(v.back() <= target) return v.size();
+        int left = 0;
+        int right = v.size() - 1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(v[mid] <= target) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+    vector<int> shortestDistanceColor(vector<int>& colors, vector<vector<int>>& queries) {
+        std::unordered_map<int,std::vector<int>>m;
+        for(int i = 0; i < colors.size(); ++i){
+            m[colors[i]].push_back(i);
+        }
+        std::vector<int> res;
+        for(const std::vector<int>& v: queries){
+            if(m.find(v[1]) == m.end()){
+                res.push_back(-1);
+                continue;
+            }
+            std::vector<int>& mv = m[v[1]];
+            int pos = binary_search(mv,v[0]);
+            if(pos == mv.size()) res.push_back(v[0] - mv[pos - 1] );
+            else if(pos == 0) res.push_back(mv[0] - v[0]);
+            else res.push_back(std::min(mv[pos] - v[0], v[0] - mv[pos - 1]));
+        }
+        return res;
+    }
+};
