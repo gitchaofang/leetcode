@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<vector<int>> findSolution(CustomFunction& customfunction, int z) {
+        int x = 1000;
+        int y = 1;
+        std::vector<std::vector<int>> res;
+        while(x >= 1 && y <= 1000){
+            int targ = customfunction.f(x,y);
+            if(targ == z){
+                res.push_back({x,y});
+                --x;
+                ++y;
+            }
+            else if(targ < z) ++y;
+            else --x;
+        }
+        return res;
+    }
+};
