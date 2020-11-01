@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
+        std::priority_queue<int, std::vector<int>,greater<int>>q;
+        for(int i = 1; i < heights.size(); ++i){
+            int d = heights[i] - heights[i - 1];
+            if(d > 0) q.push(d);
+            if(q.size() > ladders){
+                bricks -= q.top();
+                q.pop();
+            }
+            if(bricks < 0) return i - 1;
+        }
+        return heights.size() - 1;
+    }
+};
