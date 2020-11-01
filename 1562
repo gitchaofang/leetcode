@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int findLatestStep(vector<int>& arr, int m) {
+        if(arr.size() == m) return m;
+        std::set<int> st;
+        st.insert(0);
+        st.insert(arr.size() + 1);
+        for(int i = arr.size() - 1; i >=0; --i){
+            st.insert(arr[i]);
+            auto pos = st.find(arr[i]);
+            auto mv = pos;
+            int left = (arr[i] - *(--mv) - 1);
+            mv = pos;
+            int right = (*(++mv) - arr[i] - 1);
+            if(left == m || right == m) return i;
+        }
+        return -1;
+    }
+};
