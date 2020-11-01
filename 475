@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int binary_search(const std::vector<int>&v, const int& targ){
+        int left = 0;
+        int right = v.size() - 1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(v[mid] <= targ) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+    int findRadius(vector<int>& houses, vector<int>& heaters) {
+        std::sort(houses.begin(), houses.end());
+        std::sort(heaters.begin(), heaters.end());
+        int left = 0;
+        int right = std::max(0, std::max(houses.back() - heaters[0], heaters.back() - houses[0]));
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            int cnt = 0;
+            for(int i = 0; i < houses.size(); ++i){
+                int cur = houses[i];
+                int pos = binary_search(heaters,cur);
+                if(std::abs(heaters[pos] - cur) <= mid || (pos - 1 >= 0 && std::abs(cur - heaters[pos - 1]) <= mid)) ++cnt; 
+            }
+            if(cnt == houses.size()) right = mid;
+            else left = mid + 1;
+        }
+        return left;
+    }
+};
