@@ -1,0 +1,30 @@
+class Solution {
+public:
+    double findMaxAverage(vector<int>& nums, int k) {
+        int n = nums.size();
+        double left = nums[0];
+        double right = nums[0];
+        for(const int& d: nums){
+            if(d > right) right = d;
+            else if(d < left) left = d;
+        }
+
+        std::vector<double> sum(n + 1, 0);
+        while(right - left > 1e-5){
+            double mid = (right + left) / 2.0;
+            bool found = false;
+            double minnum = 0;
+            for(int i = 1; i <= n; ++i){
+                sum[i] = nums[i - 1] + sum[i - 1] - mid;
+                if(i >= k) minnum = std::min(sum[i - k], minnum);
+                if(i >= k && sum[i] >= minnum){
+                    found = true;
+                    break;
+                }
+            }
+            if(found == true) left = mid;
+            else right = mid;
+        }
+        return left;
+    }
+};
