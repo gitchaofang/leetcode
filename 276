@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int numWays(int n, int k) {
+        if(n == 0) return 0;
+        std::vector<std::vector<int>> dp(k, std::vector<int>(2,0));
+        int sum = 1;
+        for(int i = 1; i <= n; ++i){
+            int sm = 0;
+            for(int j = 0; j < k; ++j){
+                int pre = dp[j][1];
+                dp[j][1] = dp[j][0];
+                dp[j][0]  = sum - dp[j][0] - pre;
+                sm += dp[j][0] + dp[j][1];
+            }
+            sum = sm;
+        }
+        return sum;
+    }
+};
+
