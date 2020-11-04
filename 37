@@ -1,0 +1,42 @@
+class Solution {
+public: 
+    bool dfs(std::vector<std::vector<char>>& board, const int& i, const int& j, std::vector<std::unordered_set<char>>& col, std::vector<std::unordered_set<char>>& row, std::vector<std::unordered_set<char>>& cell){
+        int cell_nm = (i / 3) * 3 + (j / 3) ;
+        for(char c = '1'; c <= '9'; ++c){ 
+            if(col[j].find(c) != col[j].end() || row[i].find(c) != row[i].end() || cell[cell_nm].find(c) != cell[cell_nm].end()) continue;
+            board[i][j] = c;
+            col[j].insert(c);
+            row[i].insert(c);
+            cell[cell_nm].insert(c);
+            int d = i* 9 + j;
+            while(d < 81 && board[d / 9][d % 9] != '.') ++d;
+            if(d == 81) return true;
+            bool sucess = dfs(board, d / 9, d % 9, col, row, cell);
+            if(sucess) return true;
+            col[j].erase(c);
+            row[i].erase(c);
+            cell[cell_nm].erase(c);
+            board[i][j] = '.';
+        }
+        return false;
+           
+    }
+    void solveSudoku(vector<vector<char>>& board) {
+        std::vector<std::unordered_set<char>> row(9);
+        std::vector<std::unordered_set<char>> col(9);
+        std::vector<std::unordered_set<char>> cell(9);
+        for(int i=0; i<9; ++i){
+            for(int j = 0; j<9; ++j){
+                if(board[i][j] == '.') continue;
+                row[i].insert(board[i][j]);
+                col[j].insert(board[i][j]);
+                cell[i/3 * 3 + j/3].insert(board[i][j]);
+            }
+        }
+        int d = 0;
+        while(d < 81 && board[d / 9][d % 9] != '.') ++d;
+        if(d == 81) return;
+        dfs(board, d / 9, d % 9, col, row, cell);
+        return;
+    }
+};
