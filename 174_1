@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        int row = dungeon.size();
+        int col = dungeon[0].size();
+        std::vector<std::vector<int>> dp(row,std::vector<int>(col, INT_MAX));
+        dp.back().back() = std::max(1,1 - dungeon[row - 1][col - 1]);
+        std::queue<std::pair<int,int>> q({{row - 1, col - 1}});
+        std::vector<pair<int,int>> dire({{-1,0},{0,-1}});
+        while(!q.empty()){
+            std::pair<int,int> p = q.front();
+            q.pop();
+            for(const std::pair<int,int>& dir: dire){
+                int x = dir.first + p.first;
+                int y = dir.second + p.second;
+                if(x < 0 || x >= row || y < 0 || y >= col) continue;
+                int blood = std::max(1, dp[p.first][p.second] - dungeon[x][y]);
+                if(blood >= dp[x][y]) continue;
+                dp[x][y] = blood;
+                q.push({x,y});
+            }
+        }
+        return dp[0][0];
+    }
+};
