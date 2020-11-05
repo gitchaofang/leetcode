@@ -1,0 +1,26 @@
+class Solution {
+public:
+    void dc(std::vector<int>& nums, const int& left, const int& right){
+        if(left == right) return;
+        int mid = left + (right - left) / 2;
+        dc(nums,left, mid);
+        dc(nums, mid + 1, right);
+        std::vector<int> v;
+        int lp = left;
+        int rp = mid + 1;
+        for(int i = left; i <= right; ++i){
+            if(lp <= mid && rp <= right){
+                if(nums[lp] > nums[rp]) v.push_back(nums[lp++]);
+                else v.push_back(nums[rp++]);
+            }
+            else if(lp <= mid) v.push_back(nums[lp++]);
+            else v.push_back(nums[rp++]);
+        }
+        for(int i = left; i <= right; ++i) nums[i] = v[i - left];
+        return;
+    }
+    int findKthLargest(vector<int>& nums, int k) {
+        dc(nums,0,nums.size() - 1);
+        return nums[k - 1];
+    }
+};
