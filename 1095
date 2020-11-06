@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int binary_search(MountainArray& mountainArr, int left, int right, const int& targ, bool lt){
+        while(left <= right){
+            int mid = left + (right - left) / 2;
+            int d = mountainArr.get(mid); 
+            if(d == targ) return mid;
+            if(d < targ == lt) left = mid + 1;
+            else right = mid - 1;
+        }
+        return -1;
+    }
+    int findInMountainArray(int target, MountainArray &mountainArr) {
+        int n = mountainArr.length();
+        int head = mountainArr.get(0);
+        int tail = mountainArr.get(n - 1);
+        int left = 0;
+        int peak = n - 1;
+        while(left < peak){
+            int mid = left + (peak - left) / 2;
+            int d = mountainArr.get(mid);
+            int next = mountainArr.get(mid + 1);
+            if(d < next) left = mid + 1;
+            else peak = mid;
+        }
+        int pos = binary_search(mountainArr, 0, peak, target, true);
+        if(pos != -1) return pos;
+        return binary_search(mountainArr, peak + 1, n - 1, target, false);
+    }
+};
