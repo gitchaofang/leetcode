@@ -1,0 +1,20 @@
+lass Solution {
+public:
+    string smallestGoodBase(string n) {
+        int64_t num = std::stol(n);
+        for(int64_t p = std::log(num + 1) / std::log(2); p >= 2; --p){
+            int64_t left = 1;
+            int64_t right = std::pow(num, 1.0 / (p - 1)) + 1;
+            while(left < right){
+                int64_t mid = left + (right - left) / 2;
+                int64_t sm = 0;
+                for(int i = 0; i < p; ++i) sm = sm * mid + 1;
+                if(sm == num) return std::to_string(mid);
+                if(sm < num) left = mid + 1;
+                else right = mid - 1;
+            }
+        }
+        return std::to_string(num - 1);
+        
+    }
+};
