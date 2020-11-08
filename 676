@@ -1,0 +1,51 @@
+class MagicDictionary {
+public:
+    /** Initialize your data structure here. */
+    MagicDictionary(): head(new Trie()){
+        
+    }
+    
+    void buildDict(vector<string> dictionary) {
+        for(const std::string& str: dictionary){
+            Trie* root = head;
+            for(const char& c: str){
+                if((root -> next).find(c) == (root -> next).end()){
+                    Trie* node = new Trie;
+                    (root -> next).insert({c,node});
+                    root = node;
+                }
+                else root = (root -> next)[c];
+            }
+            root -> isWord = true;
+        }
+    }
+    
+    bool search(string searchWord) {
+        Trie* root = head;
+        std::queue<std::pair<Trie*,int>> q({{head, 0}});
+        int n = searchWord.size();
+        for(int i = 0; i < n; ++i){
+            for(int j = q.size(); j > 0; --j){
+                std::pair<Trie*, int> p = q.front();
+                q.pop();
+                for(const pair<char, Trie*>& v : p.first -> next){
+                    if(v.first == searchWord[i]) q.push({v.second, p.second});
+                    else if(p.second == 0) q.push({v.second, p.second + 1});
+                }
+            }
+        }
+        while(!q.empty()){
+            std::pair<Trie*,int> p = q.front();
+            q.pop();
+            if(p.first -> isWord == true && p.second == 1) return true;
+        }
+        return false;
+    }
+private:
+    struct Trie{
+        std::unordered_map<char,Trie*> next;
+        bool isWord;
+        Trie(): isWord(false){}
+    };
+    Trie* head;
+};
