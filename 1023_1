@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<bool> camelMatch(vector<string>& queries, string pattern) {
+        std::vector<bool> res;
+        int up_cnt = 0;
+        int n = pattern.size();
+        for(const char& c: pattern){
+            if(std::isupper(c)) ++up_cnt;
+        }
+        for(const std::string& str: queries){
+            int pos = 0;
+            int cnt = 0;
+            int sm = 0;
+            for(const char& c: str){
+                if(pos < n && c == pattern[pos]){ 
+                    ++pos;
+                    ++sm;
+                }
+                if(std::isupper(c)) ++cnt;
+            }
+            if(sm == n && cnt == up_cnt) res.push_back(true);
+            else res.push_back(false);
+        }
+        return res;
+    }
+};
