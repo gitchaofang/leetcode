@@ -1,0 +1,32 @@
+struct cmp{
+    bool operator()(const std::vector<int>& v1, const std::vector<int>& v2){
+        return v1[2] > v2[2];
+    }
+};
+class Solution {
+public:
+    int get_root(const std::vector<int>& root, const int& d){
+        return (root[d] == d) ? d : get_root(root,root[d]);
+    }
+    int minCostToSupplyWater(int n, vector<int>& wells, vector<vector<int>>& pipes) {
+        std::priority_queue<std::vector<int>, std::vector<std::vector<int>>,cmp>pq;
+        for(const vector<int>& v: pipes) pq.push(v);
+        for(int i = 0; i < wells.size(); ++i) pq.push({0, i + 1, wells[i]});
+        std::vector<int> root(n + 1);
+        for(int i = 0; i <=n; ++i) root[i] = i;
+        int res = 0;
+        for(int i = 0; i < n; ++i){
+            std::vector<int> v = pq.top();
+            pq.pop();
+            int p = get_root(root, v[0]);
+            int q = get_root(root, v[1]);
+            if(p == q){ 
+                --i;
+                continue;
+            }
+            root[p] = q;
+            res += v[2];
+        }
+        return res;
+    }
+};
