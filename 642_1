@@ -1,0 +1,75 @@
+class cmp{
+    public:
+        bool operator()(const std::pair<std::string,int>& p1, const std::pair<std::string, int>& p2){
+            return (p1.second == p2.second) ? p1.first > p2.first : p1.second < p2.second;
+        }
+};
+struct Trie{
+        std::unordered_map<char, Trie*> next;
+        int cnt;
+        Trie(): cnt(0){}
+    };
+class AutocompleteSystem {
+public:
+    AutocompleteSystem(vector<string>& sentences, vector<int>& times): head(new Trie()), cache("") {
+        for(int i = 0; i < times.size(); ++i) build_trie(sentences[i], times[i]);   
+        
+    }
+    
+    void build_trie(const std::string& str, const int& rep){
+        Trie* root = head;
+        for(const char& c: str){
+            if((root -> next).find(c) == (root -> next).end()){
+                Trie* node = new Trie();
+                (root -> next).insert({c, node});
+                root = node;
+            }
+            else root = (root -> next)[c];
+        }
+        root -> cnt += rep;
+        return;
+    }
+    
+    void dfs(std::unordered_map<std::string,int>& m, std::string& str, Trie* root){
+        if(root -> cnt != 0) m[str] += root -> cnt;
+        for(const pair<char, Trie*> p: root -> next){
+            str += p.first;
+            dfs(m, str, p.second);
+            str.pop_back();
+        }
+        return;
+    }
+    
+    vector<string> input(char c) {
+        if(c == '#'){
+            build_trie(cache, 1);
+            cache = "";
+            return {};
+        }
+        cache += c;
+        Trie* root = head;
+        bool found = true;
+        for(const char& c: cache){
+            if((root -> next).find(c) == (root -> next).end()){ 
+                found = false;
+                break;
+            }
+            root = (root -> next)[c];
+        }
+        if(found == false) return {};
+        std::unordered_map<std::string, int>m;
+        dfs(m,cache, root);
+        std::priority_queue<std::pair<std::string,int>,std::vector<std::pair<std::string, int>>, cmp> pq;
+        for(const std::pair<std::string,int>& p: m) pq.push(p);
+        std::vector<std::string> res;
+        for(int i = 0; i < 3; ++i){
+            if(pq.empty()) break;
+            res.push_back(pq.top().first);
+            pq.pop();
+        }
+        return res;
+    }
+private:
+    Trie* head;
+    std::string cache;
+};
