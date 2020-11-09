@@ -1,0 +1,22 @@
+lass Solution {
+public:
+    bool dfs(const std::vector<int>& stones, std::unordered_map<int,bool>& m, const int& pos, const int& jump){
+        int n = stones.size();
+        if(pos == n - 1) return true;
+        for(int i = pos + 1; i < n; ++i){
+            int d = stones[i] - stones[pos];
+            if(d > jump + 1) break;
+            if(d == jump - 1 || d == jump || d == jump + 1){
+                if(m.find(i * n + d) == m.end()) m[pos * n + jump] = dfs(stones, m, i, d);
+                else m[pos * n + jump] = m[i * n + d];
+                if(m[pos * n + jump]) return true;
+            }
+        }
+        m[pos * n + jump] = false;
+        return false;
+    }
+    bool canCross(vector<int>& stones) {
+        std::unordered_map<int,bool> m;
+        return dfs(stones, m, 0, 0);    
+    }
+};
