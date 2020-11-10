@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int shortestPathLength(vector<vector<int>>& graph) {
+        int n = graph.size();
+        int end = 0;
+        std::queue<std::pair<int,int>> q;
+        std::unordered_set<std::string> visited;
+        for(int i = 0; i < n; ++i){
+            int mask = 1 << i;
+            end |= mask;
+            q.push({i,mask});
+            visited.insert(std::to_string(i) + '-' + std::to_string(mask));
+        }
+        std::vector<vector<int>> bond(n);
+        for(int i = 0; i < n; ++i){
+            for(const int& d: graph[i]) bond[i].push_back(d);
+        }
+        
+        int cnt = 0;
+        while(!q.empty()){
+            ++cnt;
+            for(int i = q.size(); i > 0 ; --i){
+                std::pair<int,int> p = q.front();
+                q.pop();
+                for(int nb: bond[p.first]){
+                    int mask = p.second | (1 << nb);
+                    if(mask == end) return cnt;
+                    std::string str = std::to_string(nb) + '-' + std::to_string(mask);
+                    if(visited.find(str) != visited.end()) continue;
+                    visited.insert(str);
+                    q.push({nb, mask});
+                }
+            }
+        }
+        return 0;
+    }
+};
