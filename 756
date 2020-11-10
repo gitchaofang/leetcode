@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool dfs(const std::string& bottom, const std::string& above,  std::unordered_map<std::string, std::vector<char>>& m){
+        if(bottom.size() == 2 && above.size() == 1) return true;
+        if(bottom.size() == above.size() + 1) return dfs(above,"",m);
+        int pos = above.size();
+        std::string head = bottom.substr(pos,2);
+        for(const char& c: m[head]){
+            if(dfs(bottom, above + c, m)) return true;
+        }
+        return false;
+    }
+    bool pyramidTransition(string bottom, vector<string>& allowed) {
+        std::unordered_map<std::string, std::vector<char>> m;
+        for(const std::string& str: allowed){
+            m[str.substr(0,2)].push_back(str.back());
+        }
+        return dfs(bottom, "",m);   
+    }
+};
