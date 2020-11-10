@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool hasPath(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination) {
+        int row = maze.size();
+        int col = maze[0].size();
+        std::queue<std::pair<int,int>>q({{start[0],start[1]}});
+        maze[start[0]][start[1]] = -1;
+        std::vector<std::pair<int,int>> dire({{0,-1},{-1,0},{0,1},{1,0}});
+        while(!q.empty()){
+            
+            std::pair<int,int> p = q.front();
+            q.pop();
+            for(const std::pair<int,int>& dir: dire){
+                int x = p.first;
+                int y = p.second;
+                while(x < row && x >=0 && y < col && y >=0 && maze[x][y] != 1){
+                    x += dir.first;
+                    y += dir.second;
+                }
+                x -= dir.first;
+                y -= dir.second;
+                if(x == destination[0] && y == destination[1]) return true;
+                if(maze[x][y] == -1) continue;
+                q.push({x,y});
+                maze[x][y] = -1;
+            }
+        }
+        return false;
+    }
+};
