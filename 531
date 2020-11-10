@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int findLonelyPixel(vector<vector<char>>& picture) {
+        std::vector<int> row(picture.size(),0);
+        std::vector<int> col(picture[0].size(), 0);
+        for(int i = 0; i < picture.size(); ++i){
+            for(int j = 0; j < picture[i].size(); ++j){
+                if(picture[i][j] == 'B'){
+                    ++row[i];
+                    ++col[j];
+                }
+            }
+        }
+        int res = 0;
+        for(int i = 0; i < picture.size(); ++i){
+            for(int j = 0; j < picture[i].size(); ++j){
+                if(picture[i][j] == 'B' && row[i] == 1 && col[j] == 1) ++res;
+            }
+        }
+        return res;
+    }
+};
