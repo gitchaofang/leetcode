@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int shortestDistance(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination) {
+        int row = maze.size();
+        int col = maze[0].size();
+        std::vector<std::vector<int>> dp(row, std::vector<int>(col,INT_MAX));
+        std::vector<std::pair<int,int>> dire({{0,-1},{-1,0},{0,1},{1,0}});
+        std::queue<std::pair<int,int>> q({{start[0],start[1]}});
+        dp[start[0]][start[1]] = 0;
+        while(!q.empty()){
+            std::pair<int,int> p = q.front();
+            q.pop();
+            for(const std::pair<int,int>& dir: dire){
+                int cnt = dp[p.first][p.second] - 1;
+                int x = p.first;
+                int y = p.second;
+                while(x >= 0 && x < row && y >= 0 && y < col && maze[x][y] == 0){
+                    ++cnt;
+                    x += dir.first;
+                    y += dir.second;
+                }
+                x -= dir.first;
+                y -= dir.second;
+                if(dp[x][y] <= cnt) continue;
+                q.push({x,y});
+                dp[x][y] = cnt;
+            }
+        }
+        return dp[destination[0]][destination[1]] == INT_MAX ? -1 : dp[destination[0]][destination[1]];
+    }
+};
