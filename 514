@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int dfs(const std::string& ring, const std::string& key, const int& ring_pos, const int& key_pos, std::vector<std::vector<int>>& dp){
+        if(key_pos == key.size()) return 0;
+        if(dp[ring_pos][key_pos] != -1) return dp[ring_pos][key_pos];
+        int n = ring.size();
+        int res = INT_MAX;
+        for(int i = 0; i < n; ++i){
+            if(ring[i] != key[key_pos]) continue;
+            int dis = std::abs(i - ring_pos);
+            res = std::min(res, std::min(dis, n - dis) + dfs(ring, key, i, key_pos + 1,dp));
+        }
+        dp[ring_pos][key_pos] = res;
+        return res;
+    }
+    int findRotateSteps(string ring, string key) {
+        std::vector<std::vector<int>> dp(ring.size(), std::vector<int>(key.size(),-1));
+        return dfs(ring, key, 0,0,dp) + key.size();
+    }
+};
