@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int shoppingOffers(vector<int>& price, vector<vector<int>>& special, vector<int>& needs) {
+        int res = 0;
+        for(int i = 0; i < needs.size(); ++i) res += price[i] * needs[i];
+        for(int i = 0; i < special.size(); ++i){
+            bool valid = true;
+            for(int j = 0; j < needs.size(); ++j){
+                if(special[i][j] > needs[j]) valid = false;
+                needs[j] -= special[i][j];
+            }
+            if(valid) res = std::min(res, shoppingOffers(price, special, needs) + special[i].back());
+            for(int j = 0; j < needs.size(); ++j) needs[j] += special[i][j];
+        }
+        return res;
+    }
+};
