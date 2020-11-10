@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<vector<int>> verticalOrder(TreeNode* root) {
+        if(!root) return {};
+        std::queue<std::pair<TreeNode*,int>> q({{root, 0}});
+        std::map<int,std::vector<int>> m;
+        while(!q.empty()){
+            std::pair<TreeNode*, int> p = q.front();
+            q.pop();
+            m[p.second].push_back(p.first -> val);
+            if(p.first -> left) q.push({p.first -> left, p.second - 1});
+            if(p.first -> right) q.push({p.first -> right, p.second + 1});
+        }
+        std::vector<std::vector<int>> res;
+        for(auto it = m.begin(); it != m.end(); ++it) res.push_back(it -> second);
+        return res;
+    }
+};
