@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool dfs(const std::vector<std::vector<int>>& graph, const int& cur, std::vector<int>& dp){
+        if(graph[cur].size() == 0){ 
+            dp[cur] = 1;
+            return true;
+        }
+        dp[cur] = -1;
+        for(const int& nb: graph[cur]){
+            if(dp[nb] == 1) continue;
+            if(dp[nb] == -1 || !dfs(graph,nb,dp)){
+                dp[cur] = -1;
+                return false;
+            }
+        }
+        dp[cur] = 1;
+        return true;
+    }
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();
+        std::vector<int> dp(n, 0);
+        std::vector<int> res;
+        for(int i=0; i<n; ++i){
+            if(dp[i] == 0) dfs(graph,i,dp);
+            if(dp[i] == 1) res.push_back(i);
+        }
+        return res;
+    }
+};
