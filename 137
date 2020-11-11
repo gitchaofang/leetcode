@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int n = nums.size();
+        int a = 0;
+        int b = 0;
+        for(const int& d: nums){
+            a = (a ^ d) & ~b;
+            b = (b ^ d) & ~a;
+        }
+        return a;
+    }
+};
