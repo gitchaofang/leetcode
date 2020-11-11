@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<string> findMissingRanges(vector<int>& nums, int lower, int upper) {
+        std::vector<std::string> res;
+        int left = lower;
+        for(const int& d: nums){
+            if(d > left) {
+                if(d - 1 == left) res.push_back(std::to_string(left));
+                else res.push_back(std::to_string(left) + "->" + std::to_string(d - 1));
+            }
+            left = d + 1;
+        }   
+        if(upper > left) res.push_back(std::to_string(left) + "->" + std::to_string(upper));
+        else if(upper == left) res.push_back(std::to_string(left));
+        return res;
+    }
+};
