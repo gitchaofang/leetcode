@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool dfs(std::vector<std::vector<int>>& grid, const int& cur){
+        std::vector<std::pair<int,int>> dire({{0,-1},{-1,0},{0,1},{1,0}});
+        int row = grid.size();
+        int col = grid[0].size();
+        grid[cur / col][cur % col] = 1;
+        bool res = (cur / col == 0 || cur % col == 0 || cur / col == row - 1 || cur % col == col - 1) ? true : false;
+        for(const std::pair<int,int>& dir: dire){
+            int x = cur / col + dir.first;
+            int y = cur % col + dir.second;
+            if(x < 0 || x >= row || y < 0 || y >= col || grid[x][y] == 1) continue;
+            if(dfs(grid, x * col + y)) res = true;
+        }
+        return res;
+    }
+    int closedIsland(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        int cnt = 0;
+        for(int i = 0; i < row; ++i){
+            for(int j = 0; j < col; ++j){
+                if(grid[i][j] == 1) continue;
+                if(!dfs(grid,i * col + j)) ++cnt;
+            }
+        }
+        return cnt;
+    }
+};
