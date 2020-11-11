@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool dfs(const std::vector<std::vector<int>>& bond, const int& cur, std::vector<int>& dp, const int& des){
+        if(bond[cur].size() == 0){
+            if(cur == des){
+                dp[cur] = 1;
+                return true;
+            }
+            else {
+                dp[cur] = -1;
+                return false;
+            }
+        }
+        
+        dp[cur] = -1;
+        for(const int& d: bond[cur]){
+            if(dp[d] == 1) continue;
+            if(dp[d] == -1  || !dfs(bond, d, dp, des)) return false;
+        }
+        dp[cur] = 1;
+        return true;
+    }
+    bool leadsToDestination(int n, vector<vector<int>>& edges, int source, int destination) {
+        std::vector<std::vector<int>> bond(n);
+        for(const std::vector<int>& v: edges) bond[v[0]].push_back(v[1]);
+        std::vector<int> dp(n, 0);
+        return dfs(bond, source, dp, destination);
+        
+    }
+};
