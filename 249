@@ -1,0 +1,15 @@
+class Solution {
+public:
+    vector<vector<string>> groupStrings(vector<string>& strings) {
+        std::unordered_map<std::string, std::vector<std::string>>m;
+        for(const std::string& str: strings){
+            std::string d = "";
+            int s = str.size();
+            for(int i = 1; i < str.size(); ++i) d += std::to_string((str[i] - str[i - 1] + 26) % 26);
+            m[d].push_back(str);
+        }
+        std::vector<std::vector<std::string>> res;
+        for(auto it = m.begin(); it != m.end(); ++it) res.push_back(it -> second);
+        return res;
+    }
+};
