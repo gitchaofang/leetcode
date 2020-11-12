@@ -1,0 +1,25 @@
+class Solution {
+public:
+    string smallestSubsequence(string s) {
+        std::unordered_map<char,int> m;
+        for(const char& c: s) ++m[c];
+        std::vector<bool> visited(26, false);
+        std::stack<char> st;
+        for(const char& c: s){
+            --m[c];
+            if(visited[c - 'a'] == true) continue;
+            while(!st.empty() && st.top() > c && m[st.top()] != 0){
+                visited[st.top() - 'a'] = false;
+                st.pop();
+            }
+            st.push(c);
+            visited[c - 'a'] = true;
+        }
+        std::string res("");
+        while(!st.empty()){
+            res = st.top() + res;
+            st.pop();
+        }
+        return res;
+    }
+};
