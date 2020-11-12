@@ -1,0 +1,24 @@
+lass Solution {
+public:
+    void dfs(const std::string& input, int& pos, std::string& pre_str, int& res, const int& prefix){
+        while(pos < input.size() && (input[pos + prefix] == '\t' || input[pos + prefix] == '\n')){
+            pos += prefix + 1;
+            int begin = pos;
+            while(pos < input.size() && input[pos] != '\n') ++pos;
+            std::string str = '\\' + input.substr(begin, pos - begin);
+            pre_str +=  str;
+            if(str.find('.') != std::string::npos) res = std::max(res, int(pre_str.size()));
+            else dfs(input, pos, pre_str, res, prefix + 1);
+            for(int i = 0; i < str.size(); ++i) pre_str.pop_back();
+        }
+        return;
+    }
+    int lengthLongestPath(string input) {
+        int res = 0;
+        int pos = 0;
+        std::string pre_str("");
+        input = '\n' + input;
+        dfs(input, pos, pre_str, res, 0);
+        return (res == 0) ? 0 : res - 1;       
+    }
+};
