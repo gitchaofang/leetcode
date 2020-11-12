@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int threeSumSmaller(vector<int>& nums, int target) {
+        std::sort(nums.begin(), nums.end());
+        int cnt = 0;
+        for(int i = 0; i < nums.size(); ++i){
+            int targ = target - nums[i];
+            int left = i + 1;
+            int right = nums.size() - 1;
+            while(left < right){
+                if(nums[left] + nums[right] >= targ) --right;
+                else{
+                    cnt += right - left;
+                    ++left;
+                }
+            }
+        }
+        return cnt;
+    }
+};
