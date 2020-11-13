@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int maxDepth(Node* root) {
+        if(!root) return 0;
+        std::queue<Node*> q({root});
+        int cnt = 0;
+        while(!q.empty()){
+            ++cnt;
+            for(int i = q.size(); i > 0; --i){
+                Node* node = q.front();
+                q.pop();
+                for(Node* nb: node -> children){
+                    if(nb != nullptr) q.push(nb);
+                }
+            }
+        }
+        return cnt;
+    }
+};
