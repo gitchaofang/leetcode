@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        std::stack<int>st;
+        for(const int& d: asteroids){
+            if(d > 0){ 
+                st.push(d);
+                continue;
+            }
+            while(!st.empty() && st.top() > 0 && st.top() + d < 0) st.pop();
+            if(!st.empty() && st.top() + d == 0) st.pop(); 
+            else if(st.empty() || st.top() < 0) st.push(d);
+        }
+        std::vector<int> res;
+        while(!st.empty()){
+            res.insert(res.begin(),st.top());
+            st.pop();
+        }
+        return res;
+    }
+};
