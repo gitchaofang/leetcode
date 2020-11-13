@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> exclusiveTime(int n, vector<string>& logs) {
+        std::stack<std::pair<int,int>> st;
+        std::vector<int> res(n,0);
+        for(const std::string& str: logs){
+            int pos = 0;
+            int id = std::stoi(str.substr(0, str.find(':',pos) - pos));
+            pos = str.find(':',pos) + 1;
+            std::string status = str.substr(pos, str.find(':',pos) - pos);
+            pos = str.find(':', pos) + 1;
+            int time = std::stoi(str.substr(pos));
+            if(status == "start"){
+                if(!st.empty()) res[st.top().first] += time - st.top().second;
+                st.push({id,time});
+            }
+            else{
+                res[id] += time - st.top().second + 1;
+                st.pop();
+                if(!st.empty()) st.top().second = time + 1;
+            }
+        }
+        return res;
+    }
+};
