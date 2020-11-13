@@ -1,0 +1,11 @@
+class Solution {
+public:
+    string convertToTitle(int n) {
+        std::string res("");
+        while(n > 0){
+            res.insert(res.begin(), 'A' + (n % 26 + 25) % 26);
+            n = (n - 1) / 26; 
+        }  
+        return res;
+    }
+};
