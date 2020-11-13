@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool dfs(const std::vector<std::vector<int>>& dis, const int& cur, std::vector<int>& color){
+        for(const int& nb: dis[cur]){
+            if(color[nb] == color[cur]) return false;
+            if(color[nb] != -1) continue;
+            color[nb] = (color[cur] + 1) % 2;
+            if(!dfs(dis, nb, color)) return false;
+        }  
+        return true;
+    }
+    bool possibleBipartition(int N, vector<vector<int>>& dislikes) {
+        std::vector<std::vector<int>> dis(N + 1);
+        for(const std::vector<int>&v: dislikes){
+            dis[v[0]].push_back(v[1]);
+            dis[v[1]].push_back(v[0]);
+        }
+        std::vector<int> color(N + 1, -1);
+        for(int i = 1; i <= N; ++i){
+            if(color[i] != -1) continue;
+            color[i] = 0;
+            if(!dfs(dis,i,color)) return false;
+        }
+        return true;
+    }
+};
