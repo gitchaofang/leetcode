@@ -1,0 +1,17 @@
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        if(s.size() != t.size()) return false;
+        std::unordered_map<int,std::vector<int>>m;
+        for(int i = 0; i < s.size(); ++i) m[s[i]].push_back(i);
+        std::unordered_set<int> visited;
+        for(auto it = m.begin(); it != m.end(); ++it){
+            int c = t[it -> second[0]];
+            for(const int& index: it -> second){
+                if(t[index] != c || visited.find(c) != visited.end()) return false;
+            }
+            visited.insert(c);
+        }
+        return true;
+    }
+};
