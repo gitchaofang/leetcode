@@ -1,0 +1,15 @@
+class KthLargest {
+public:
+    KthLargest(int k, vector<int>& nums): pos(k) {
+        for(const int& d: nums) add(d);   
+    }
+    
+    int add(int val) {
+        st.insert(val);
+        if(st.size() > pos) st.erase(st.begin());
+        return *st.begin();
+    }
+private:
+    std::multiset<int> st;
+    int pos;
+};
