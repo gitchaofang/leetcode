@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int calPoints(vector<string>& ops) {
+        std::stack<int> st;
+        for(const std::string& str: ops){
+            if(str == "+"){
+                int d = st.top();
+                st.pop();
+                int new_score = d + st.top();
+                st.push(d);
+                st.push(new_score);
+            }
+            else if(str == "D"){ 
+                int d = st.top();
+                st.push(2 * d);
+            }
+            else if(str == "C") st.pop();
+            else st.push(std::stoi(str));
+        }
+        int res = 0;
+        while(!st.empty()){
+            res += st.top();
+            st.pop();
+        }
+        return res;
+        
+    }
+};
