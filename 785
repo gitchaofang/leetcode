@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n = graph.size();
+        std::vector<int> color(n, -1);
+        for(int i = 0; i < n; ++i){
+            if(color[i] != -1) continue;
+            std::queue<int> q({i});
+            color[i] = 0;
+            while(!q.empty()){
+                int cur = q.front();
+                q.pop();
+                for(const int& nb: graph[cur]){
+                    if(color[nb] == -1){
+                        color[nb] = (color[cur] + 1) % 2;
+                        q.push(nb);
+                    }
+                    else if(color[nb] == color[cur]) return false;
+                }
+            }
+        }
+        return true;
+    }
+};
