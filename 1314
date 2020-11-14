@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<vector<int>> matrixBlockSum(vector<vector<int>>& mat, int K) {
+        int row = mat.size();
+        int col = mat[0].size();
+        std::vector<std::vector<int>> sm(row, std::vector<int>(col + 1, 0));
+        for(int i = 0; i < row; ++i){
+            for(int j = 1; j <= col; ++j) sm[i][j] = sm[i][j - 1] + mat[i][j - 1];
+        }
+        for(int i = 0; i < row; ++i){
+            for(int j = 0; j < col; ++j){
+                int cnt = 0;
+                int left =  std::max(0, j - K);
+                int right = std::min(col, j + K + 1);
+                for(int l = std::max(0, i - K); l <= std::min(row - 1, i + K); ++l) cnt += (sm[l][right] - sm[l][left]);
+                mat[i][j] = cnt;
+            }
+        }
+        return mat;
+    }
+};
