@@ -1,0 +1,17 @@
+class Solution {
+public:
+    bool isRobotBounded(string instructions) {
+        std::vector<int> cur({{0,0,1}});
+        std::vector<std::pair<int,int>> dire({{0,-1},{-1,0},{0,1},{1,0}});
+        for(const char& c: instructions){
+            if(c == 'L') cur[2] = (cur[2] + 3) % 4;
+            else if(c == 'R') cur[2] = (cur[2] + 1) % 4;
+            else{
+                cur[0] += dire[cur[2]].first;
+                cur[1] += dire[cur[2]].second;
+            }
+        }
+        
+        return ((cur[0] == 0 && cur[1] == 0) || (cur[2] != 1));
+    }
+};
