@@ -1,0 +1,13 @@
+class Solution {
+public:
+    vector<int> minAvailableDuration(vector<vector<int>>& slots1, vector<vector<int>>& slots2, int duration) {
+        std::vector<std::vector<int>> time(slots1.begin(), slots1.end());
+        time.insert(time.end(), slots2.begin(), slots2.end());
+        std::sort(time.begin(), time.end());
+        for(int i = 1; i < time.size(); ++i){
+            if(time[i][0] > time[i - 1][1]) continue;
+            if(time[i - 1][1] - time[i][0] >= duration && time[i][1] - time[i][0] >= duration) return {time[i][0], time[i][0] + duration};
+        }
+        return {};
+    }
+};
