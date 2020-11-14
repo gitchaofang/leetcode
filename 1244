@@ -1,0 +1,49 @@
+class cmp{
+    public:
+        bool operator()(const int & d1, const int& d2){
+            return d1 > d2;
+        }
+};
+class Leaderboard {
+public:
+    Leaderboard(){
+        
+    }
+    
+    void addScore(int playerId, int score) {
+        int d = m[playerId];
+        m[playerId] += score;
+        mm[d].erase(playerId);
+        mm[m[playerId]].insert(playerId);
+        return;
+    }
+    
+    int top(int K) {
+        int res = 0;
+        auto it = mm.rbegin();
+        int cnt = 0;
+        for(int i = 0; i < K; i += cnt){
+            cnt = (it -> second).size();
+            res += std::min(cnt, K - i) * it -> first;
+            ++it;
+        }
+        return res;
+    }
+    
+    void reset(int playerId) {
+        mm[m[playerId]].erase(playerId);
+        m.erase(playerId);
+        return;
+    }
+private:
+    std::unordered_map<int,int>m;
+    std::map<int,std::unordered_set<int>>mm;
+};
+
+/**
+ * Your Leaderboard object will be instantiated and called as such:
+ * Leaderboard* obj = new Leaderboard();
+ * obj->addScore(playerId,score);
+ * int param_2 = obj->top(K);
+ * obj->reset(playerId);
+ */
