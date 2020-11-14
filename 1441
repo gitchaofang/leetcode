@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<string> buildArray(vector<int>& target, int n) {
+        int num = 1;
+        std::vector<std::string> res;
+        for(const int& d: target){
+            while(num != d){
+                ++num;
+                res.push_back("Push");
+                res.push_back("Pop");
+            }    
+            res.push_back("Push");
+            ++num;
+        }
+        return res;
+    }
+};
