@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<int> addToArrayForm(vector<int>& A, int K) {
+        std::vector<int> B;
+        while(K){
+            B.insert(B.begin(), K % 10);
+            K /= 10;
+        }
+        int pos_a = A.size() -1;
+        int pos_b = B.size() - 1;
+        int extra = 0;
+        std::vector<int> res;
+        while(pos_a >= 0 && pos_b >= 0){
+            int d = A[pos_a--] + B[pos_b--] + extra;
+            res.insert(res.begin(), d % 10);
+            extra = d / 10;
+        }
+        for(;pos_a >= 0; --pos_a){ 
+            int d = A[pos_a] + extra;
+            res.insert(res.begin(), d % 10);
+            extra =  d / 10;
+        }
+        for(;pos_b >= 0; --pos_b){ 
+            int d = B[pos_b] + extra;
+            res.insert(res.begin(), d % 10);
+            extra = d / 10;
+        }
+        if(extra != 0) res.insert(res.begin(), extra);
+        return res;
+        
+    }
+};
