@@ -1,0 +1,24 @@
+class Solution {
+public:
+    string largestTimeFromDigits(vector<int>& arr) {
+        for(int h = 23; h >=0; --h){
+            for(int m = 59; m >=0; --m){
+                bool valid = true;
+                std::vector<int> cnt(10,0);
+                ++cnt[h >= 10 ? h / 10 : 0];
+                ++cnt[h % 10];
+                ++cnt[m >= 10 ? m /10 : 0];
+                ++cnt[m % 10];
+                for(const int&d :arr){
+                    if(--cnt[d] < 0) {
+                        valid = false;
+                        break;
+                    }
+                }
+                if(!valid) continue;
+                return (h < 10 ? '0' + std::to_string(h): std::to_string(h)) + ':' + (m < 10 ? '0' + std::to_string(m): std::to_string(m));
+            }
+        }
+        return "";
+    }
+};
