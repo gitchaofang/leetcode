@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        std::queue<std::pair<std::string,int>> q({{"", 0}});
+        for(int i = 0; i < 2 * n; ++i){
+            for(int j = q.size(); j > 0; --j){
+                std::pair<std::string, int> p = q.front();
+                q.pop();
+                if(p.second < n){
+                    std::string str = p.first + '(';
+                    q.push({str, p.second + 1});
+                }
+                if(2 * p.second > i){
+                    std::string str = p.first + ')';
+                    q.push({str, p.second});
+                }
+            }
+        }
+        std::vector<std::string> res;
+        while(!q.empty()){
+            res.push_back(q.front().first);
+            q.pop();
+        }
+        return res;
+    }
+};
