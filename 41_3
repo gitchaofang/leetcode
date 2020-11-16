@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {
+        int n = nums.size();
+        std::vector<bool> store(n + 1, false);
+        for(const int& d: nums){
+            if(d <= 0 || d > n) continue;
+            store[d] = true;
+        }
+        for(int i = 1; i <= n; ++i){
+            if(store[i] == false) return i;
+        }
+        return n + 1;
+    }
+};
