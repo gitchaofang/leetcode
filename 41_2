@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {
+        int mn = INT_MAX;
+        std::unordered_set<int> st;
+        for(const int& d: nums){
+            if(d <= 0) continue;
+            mn = std::min(mn, d);
+            st.insert(d);
+        }
+        if(mn > 1) return 1;
+        for(int i = 1; i < INT_MAX; ++i){
+            if(st.find(i) == st.end()) return i;
+        }
+        return 0;
+    }
+};
