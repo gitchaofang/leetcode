@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int pre = 0;
+        int maxpos = 0;
+        int cnt = 0;
+        while(maxpos < nums.size() - 1){
+            ++cnt;
+            int d = maxpos;
+            for(;pre <= d; ++pre) maxpos  = std::max(maxpos, pre + nums[pre]);
+            if(maxpos == d) return -1;
+        }
+        return cnt;
+    }
+};
