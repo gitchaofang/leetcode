@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool dfs(std::vector<std::vector<char>>& board, std::vector<std::vector<bool>>& row, std::vector<std::vector<bool>>& col, std::vector<std::vector<bool>>& cluster, const int& cur){
+        int x = cur / 9;
+        int y = cur % 9;
+        int pos = x / 3 * 3 + y / 3;
+        for(int i = 1; i <= 9; ++i){
+            if(row[x][i] == true || col[y][i] == true || cluster[pos][i] == true) continue;
+            row[x][i] = true;
+            col[y][i] = true;
+            cluster[pos][i] = true;
+            board[cur / 9][cur % 9] = '0' + i;
+            int next = cur;
+            while(next < 81 && board[next / 9][next % 9] != '.') ++next;
+            if(next == 81 || dfs(board,row, col, cluster, next)) return true;  
+            board[cur / 9][cur % 9] = '.';
+            row[x][i] = false;
+            col[y][i] = false;
+            cluster[pos][i] = false;
+        }
+        return false;
+    }
+    void solveSudoku(vector<vector<char>>& board) {
+        std::vector<std::vector<bool>> row(9, std::vector<bool>(10,false)); 
+        std::vector<std::vector<bool>> col(9, std::vector<bool>(10,false));
+        std::vector<std::vector<bool>> cluster(9, std::vector<bool>(10,false));
+        for(int i = 0; i< 9; ++i){
+            for(int j = 0; j < 9; ++j){
+                if(board[i][j] == '.') continue;
+                int d = board[i][j] - '0';
+                row[i][d] = true;
+                col[j][d] = true;
+                cluster[i / 3 * 3 + j / 3][d] = true;
+            }
+        }
+        int d = 0;
+        while(d < 81 && board[d / 9][d % 9] != '.') ++d;
+        if(d == 81) return;
+        dfs(board, row, col, cluster, d);
+        return;
+    }
+};
