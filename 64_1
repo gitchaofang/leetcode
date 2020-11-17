@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        std::vector<int> dp(row * col, INT_MAX);
+        dp.back() = grid[row - 1][col - 1];
+        std::vector<std::pair<int,int>> dire({{0,1},{1,0}});
+        for(int i = row * col - 1; i >= 0; --i){
+            for(const std::pair<int,int>& dir: dire){
+                int x = i / col + dir.first;
+                int y = i % col + dir.second;
+                if(x >= row || y >= col) continue;
+                dp[i] = std::min(dp[i], dp[x * col + y] + grid[i / col][i % col]);
+            }
+        }
+        return dp[0];
+    }
+};
