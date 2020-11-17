@@ -1,0 +1,18 @@
+class Solution {
+public:
+    double myPow(double x, int n) {
+        if(n == 0) return 1;
+        if(n == 1) return x;
+        int64_t power = 1;
+        bool neg = false;
+        if(n < 0) neg = true;
+        n = std::abs(n);
+        double res = x;
+        while(power * 2 <= n){
+            power *= 2;
+            res *= res;
+        }
+        res *= myPow(x, n - power);
+        return (neg == true) ? 1.0 / res: res; 
+    }
+};
