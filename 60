@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool dfs(std::string& str, int& visited, const int& filled, int& num, const int& k){
+        if(filled == str.size()){
+            ++num;
+            if(num == k) return true;
+            return false;
+        }
+        for(int i = 1; i <= str.size(); ++i){
+            if(visited & (1 << i)) continue;
+            str[filled] = '0' + i;
+            visited |= (1 << i);
+            if(dfs(str, visited, filled + 1, num, k)) return true;
+            visited ^= (1 << i);
+        }
+        return false;
+    }
+    string getPermutation(int n, int k) {
+        std::string str(n,' ');
+        int num = 0;
+        int visited = 0;
+        dfs(str, visited, 0, num, k);
+        return str;
+    }
+};
