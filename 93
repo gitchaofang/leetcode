@@ -1,0 +1,30 @@
+class Solution {
+public:
+    void dfs(const std::string& str, std::string pre, const int& pos, const int& k, std::vector<std::string>& res){
+        if(k == 4){
+            if(pos == str.size()){
+                pre.erase(pre.begin());
+                res.push_back(pre);
+            }
+            return;
+        }
+        if(str[pos] == '0'){
+            dfs(str, pre + '.'+ '0', pos + 1, k + 1, res);
+            return;
+        }
+        for(int i = pos; i < str.size(); ++i){
+            std::string num = str.substr(pos, i - pos + 1);
+            int d = std::stoi(num);
+            if(d > 255) return;
+            std::string s = pre + '.' + num;
+            dfs(str, s, i + 1, k + 1, res);
+        }
+        return;
+            
+    }
+    vector<string> restoreIpAddresses(string s) {
+        std::vector<std::string> res;
+        dfs(s,"",0, 0, res);
+        return res;
+    }
+};
