@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void dfs(const std::vector<int>& nums, const int& pos, std::vector<int>& cur, std::vector<std::vector<int>>& res){
+        if(nums.size() == cur.size()){
+            res.push_back(cur);
+            return;
+        }
+        res.push_back(cur);
+        cur.push_back(0);
+        for(int i = pos; i < nums.size(); ++i){
+            cur.back() = nums[i];
+            dfs(nums,i + 1, cur, res);
+        }
+        cur.pop_back();
+        return;
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        std::vector<std::vector<int>> res;
+        std::vector<int> cur;
+        dfs(nums, 0, cur, res);
+        return res;
+    }
+};
