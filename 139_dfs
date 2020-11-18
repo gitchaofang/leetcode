@@ -1,0 +1,18 @@
+class Solution {
+public:
+    bool dfs(const string & s, const int& pos, std::vector<bool>& visited, const std::vector<std::string>& dic){
+        if(pos == s.size()) return true;
+        if(visited[pos] == true) return false;
+        for(const std::string& str: dic){
+            std::string ss = s.substr(pos, str.size());
+            if(ss != str) continue;
+            if(dfs(s, pos + str.size(), visited, dic)) return true;
+        }
+        visited[pos] = true;
+        return false;
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        std::vector<bool> visited(s.size(), false);
+        return dfs(s, 0, visited, wordDict);
+    }
+};
