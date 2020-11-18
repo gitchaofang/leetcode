@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        std::unordered_set<int> st(nums.begin(), nums.end());
+        int cnt = 0;
+        for(const int& d: nums){
+            if(st.find(d) == st.end()) continue;
+            st.erase(d);
+            int left = d;
+            while(st.find(left - 1)!=st.end()) st.erase(--left);
+            int right = d;
+            while(st.find(right + 1) != st.end()) st.erase(++right);
+            cnt = std::max(right - left + 1, cnt);
+        }
+        return cnt;
+    }
+};
