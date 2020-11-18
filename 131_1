@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool ispalin(const std::string& str){
+        for(int i = 0 ; i <= (str.size() - 1) / 2; ++i){
+            if(str[i] != str[str.size() - 1 - i]) return false;
+        }
+        return true;
+    }
+    void dfs(const std::string& str, const int& pos, std::string pre, std::vector<std::string>&v, std::vector<std::vector<std::string>>& res){
+        if(pos == str.size()){
+            if(pre == "" && !v.empty()) res.push_back(v);
+            return;
+        } 
+        pre += str[pos];
+        if(ispalin(pre)){ 
+            v.push_back(pre);
+            dfs(str,pos + 1, "", v, res);
+            v.pop_back();
+        }
+        dfs(str, pos + 1, pre, v, res);
+        return;
+    }
+    vector<vector<string>> partition(string s) {
+        std::vector<std::vector<std::string>> res;
+        std::vector<std::string> v;
+        dfs(s, 0, "", v, res);
+        return res;
+    }
+};
