@@ -1,0 +1,15 @@
+class Solution {
+public:
+    Node* cloneGraph(Node* node) {
+        if(!node) return nullptr;
+        Node* root = new Node(node -> val);
+        visited[node] = root;
+        for(Node* nb: node -> neighbors){
+            if(visited.find(nb) != visited.end()) (root -> neighbors).push_back(visited[nb]);
+            else (root -> neighbors).push_back(cloneGraph(nb));
+        }
+        return root;
+    }
+private:
+    std::unordered_map<Node*, Node*> visited;
+};
