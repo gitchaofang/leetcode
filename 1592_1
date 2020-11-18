@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string reorderSpaces(string text) {
+        std::string res("");
+        int num = 0;
+        int space = 0;
+        std::queue<std::string> q;
+        for(int i = 0; i < text.size(); ++i){
+            if(text[i] ==' '){ 
+                ++space;
+                continue;
+            }
+            int j = i; 
+            ++num;
+            while(j < text.size() && text[j] != ' ') ++j;
+            q.push(text.substr(i, j - i));
+            i = j - 1;
+        }
+        
+        int extra = space;
+        if(num < 2) space = 0;
+        else{
+            extra = space % (num - 1);
+            space /= (num - 1);
+        }
+        if(!q.empty()) res += q.front();
+        q.pop();
+        while(!q.empty()){
+            res.insert(res.end(), space, ' ');
+            res += q.front();
+            q.pop();
+        }
+        res.insert(res.end() ,extra, ' ');
+        return res;
+    }
+};
