@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int minSumOfLengths(vector<int>& arr, int target) {
+        int n = arr.size();
+        std::unordered_map<int,int> m_left({{0,-1}});
+        std::unordered_map<int,int> m_right({{0, n}});
+        std::vector<int> left(n, INT_MAX);
+        std::vector<int> right(n, INT_MAX);
+        int sm_left = 0;
+        int sm_right = 0;
+        for(int i = 0; i < n; ++i){
+            /*left*/
+            sm_left += arr[i];
+            if(i > 0) left[i] = left[i - 1];
+            if(m_left.find(sm_left - target) != m_left.end()) left[i] = std::min(left[i], i - m_left[sm_left - target]);
+            m_left[sm_left] = i;
+        
+            /*right*/
+            sm_right += arr[n - 1 - i];
+            if(i > 0) right[n - 1 - i] = right[n - i];
+            if(m_right.find(sm_right - target) != m_right.end()) right[n - 1 - i] = std::min(right[n - 1 - i], m_right[sm_right - target] - (n - 1 - i));
+            m_right[sm_right] = n - 1 - i; 
+           
+        }
+        int res = INT_MAX;
+        for(int i = 0; i< n - 1; ++i){
+            if(left[i] == INT_MAX || right[i + 1] == INT_MAX)continue;
+            res = std::min(res, left[i] + right[i + 1]);
+        }
+        return res == (INT_MAX) ? -1 : res;
+    }
+};
