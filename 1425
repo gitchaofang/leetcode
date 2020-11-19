@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int constrainedSubsetSum(vector<int>& nums, int k) {
+        int n = nums.size();
+        std::vector<int> dp(n + 1, INT_MIN);
+        dp[0] = 0;
+        int res = INT_MIN;
+        std::multiset<int> st({0});
+        for(int i = 1; i <= n; ++i){
+            dp[i] = nums[i - 1] + std::max(0, *st.rbegin());     
+            st.insert(dp[i]);
+            if(st.size() > k) st.erase(st.find(dp[i - k]));
+            res = std::max(res, dp[i]);
+        }
+        return res;
+    }
+};
