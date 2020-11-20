@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int sum(const std::vector<int>& nums, const int& div){
+        int res = 0;
+        for(const int& d: nums) res += d / div + (d % div != 0);
+        return res;
+    }
+    int smallestDivisor(vector<int>& nums, int threshold) {
+        int left = 1;
+        int right = 1;
+        for(const int& d: nums) right = std::max(right, d);
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(sum(nums, mid) > threshold) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+};
