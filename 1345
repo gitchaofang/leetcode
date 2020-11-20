@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int minJumps(vector<int>& arr) {
+        int n = arr.size();
+       // if(n == 1) return 0;
+        std::vector<bool> visited(n, false);
+        visited[0] = true;
+        std::unordered_map<int,std::vector<int>>m;
+        for(int i = 0; i < arr.size(); ++i) m[arr[i]].push_back(i);
+        int cnt = 0;
+        std::queue<int> q({0});
+        while(!q.empty()){
+            ++cnt;
+            for(int i = q.size(); i > 0; --i){
+                int cur = q.front();
+                q.pop();
+                for(int i = m[arr[cur]].size() - 1; i >= 0; --i){
+                    int nb = m[arr[cur]][i];
+                    if(nb == cur || nb == cur - 1 || nb == cur + 1 || visited[nb] == true) continue;
+                    if(nb == n - 1) return cnt;
+                    visited[nb] = true;
+                    q.push(nb);
+                }
+                if(cur - 1 >= 0 && visited[cur - 1] == false){
+                    if(cur - 1 == n - 1) return cnt;
+                    visited[cur - 1] = true;
+                    q.push(cur -1);
+                }
+                if(cur + 1 < n && visited[cur + 1] == false){
+                    if(cur + 1 == n - 1) return cnt;
+                    visited[cur + 1] = true;
+                    q.push(cur + 1);
+                }
+                
+            }
+        }
+        return 0;
+    }
+};
