@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int minKnightMoves(int x, int y) {
+        if(x == 0 && y == 0) return 0;
+        x = std::abs(x);
+        y = std::abs(y);
+        int row = x + 5;
+        int col = y + 5;
+        x += 3;
+        y += 3;
+        std::vector<bool> visited(row * col, false);
+        std::queue<int> q({3 * col + 3});
+        visited[3 * col + 3] = true;
+        int cnt = 0;
+        std::vector<std::pair<int,int>> dire({{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2},{-1,-2},{-2,-1}});
+        while(!q.empty()){
+            ++cnt;
+            for(int s = q.size(); s > 0; --s){
+                int cur = q.front();
+                q.pop();
+                for(const std::pair<int,int>& dir: dire){
+                    int i = dir.first + cur / col;
+                    int j = dir.second + cur % col;
+                    if(i < 0 || i >= row || j < 0 || j >= col || visited[i * col + j] == true) continue;
+                    if(i * col + j ==  x * col + y) return cnt;
+                    q.push(i * col + j);
+                    visited[i * col + j] = true;
+                }
+            }
+        }
+        return -1;
+    }
+};
