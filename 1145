@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int dfs(TreeNode* root, const int& x, int& red_cnt,int& red_left){
+        if(!root) return 0;
+        int left = dfs(root->left, x, red_cnt, red_left);
+        int right = dfs(root -> right, x, red_cnt, red_left);
+        if(root -> val == x){ 
+            red_cnt = left + right + 1;
+            red_left = left;
+        }
+        return left + right + 1;
+    }
+    bool btreeGameWinningMove(TreeNode* root, int n, int x) {
+        int red_cnt = 0;
+        int red_left = 0;
+        dfs(root, x, red_cnt, red_left);
+        return n - red_cnt > n / 2 || red_left > n / 2 || red_cnt - red_left - 1 > n / 2;
+    }
+};
