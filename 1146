@@ -1,0 +1,38 @@
+class SnapshotArray {
+public:
+    SnapshotArray(int length): snap_cnt(0) {
+        v.resize(length,0);
+        for(int i = 0; i < length; ++i){
+            data.push_back({{0,0}});
+        }
+    }  
+    void set(int index, int val) {
+        v[index] = val;
+        if(data[index].empty() || data[index].back().first != snap_cnt) data[index].push_back({snap_cnt, val});
+        else if(!data[index].empty() && data[index].back().first == snap_cnt) data[index].back().second = val;
+    }
+    
+    int snap() {
+        ++snap_cnt;
+        return snap_cnt - 1;
+    }
+    
+    int get(int index, int snap_id) {
+        const std::vector<std::pair<int,int>>& v = data[index];
+        int left = 0;
+        int right = v.size() - 1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(v[mid].first <= snap_id){
+                left = mid + 1;
+            }
+            else right = mid;
+        }
+        if(v[left].first <= snap_id) return v[left].second; 
+        return v[left - 1].second;
+    }
+private:
+    std::vector<std::vector<std::pair<int,int>>> data;
+    std::vector<int> v;
+    int snap_cnt;
+};
