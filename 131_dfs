@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool is_palin(const std::string& str){
+        for(int i = 0; i <= (str.size() - 1) / 2; ++i){
+            if(str[i] != str[str.size() - 1 - i]) return false;
+        }
+        return true;
+    }
+    std::vector<std::vector<std::string>> dfs(const std::string& s, const int& pos){
+        if(pos == s.size()) return {{}};
+        if(m.find(pos) != m.end()) return m[pos];
+        std::vector<std::vector<std::string>> res;
+        for(int i = pos; i < s.size(); ++i){
+            std::string str = s.substr(pos, i - pos + 1);
+            if(!is_palin(str)) continue;
+            std::vector<std::vector<std::string>> v = dfs(s, i + 1);
+            if(!v.empty()){
+                for(std::vector<std::string>& sv: v){
+                    sv.insert(sv.begin(), str);
+                    res.push_back(sv);
+                }
+            }
+        }
+        m[pos] = res;
+        return res;
+    }
+    vector<vector<string>> partition(string s) {
+        return dfs(s,0);
+    }
+private:
+    std::unordered_map<int,std::vector<std::vector<std::string>>> m;
+};
