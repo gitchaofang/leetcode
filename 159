@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int lengthOfLongestSubstringTwoDistinct(string s) {
+        std::unordered_map<char,int>m;
+        int res = 0;
+        int left = 0;
+        for(int i = 0; i < s.size(); ++i){
+            m[s[i]] = i;
+            if(m.size() < 3) res = std::max(res, i - left + 1);
+            while(m.size() > 2){
+                if(left == m[s[left]]) m.erase(s[left]);
+                ++left;
+            }
+        }
+        return res;
+    }
+};
