@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool is_palin(const std::string& str){
+        for(int i = 0; i <= (str.size() - 1) / 2; ++i){
+            if(str[i] != str[str.size() - 1 - i]) return false;
+        }
+        return true;
+    }
+    int minCut(string s) {
+        int n = s.size();
+        std::vector<int> dp(n + 1, INT_MAX);
+        dp[0] = 0;
+        for(int i = 1; i <= n; ++i){
+            for(int j = 1; j <= i; ++j){
+                std::string str = s.substr(j - 1, i - j + 1);
+                if(!is_palin(str)) continue;
+                dp[i] = std::min(dp[i], dp[j - 1] + 1);
+            }
+        }
+        return dp.back() - 1;
+    }
+};
