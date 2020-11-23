@@ -1,0 +1,27 @@
+class BSTIterator {
+public:
+    BSTIterator(TreeNode* root) {
+        if(root){
+            st.push(root); 
+            while(st.top() -> left) st.push(st.top() -> left);
+        }
+    }
+    
+    /** @return the next smallest number */
+    int next() {
+        TreeNode* node = st.top();
+        st.pop();
+        if(node -> right){ 
+            st.push(node -> right);
+            while(st.top() -> left) st.push(st.top() -> left);
+        }
+        return node -> val;
+    }
+    
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !st.empty();
+    }
+private:
+    std::stack<TreeNode*> st;
+};
