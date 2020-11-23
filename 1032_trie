@@ -1,0 +1,51 @@
+struct Trie{
+    std::unordered_map<char, Trie*> nb;
+    bool is_word;
+    Trie(): is_word(false){};
+};
+class StreamChecker {
+public:
+    StreamChecker(vector<string>& words): root(new Trie), cur_str(""), cap(0) {
+        for(std::string& str: words){
+            cap = std::max(cap, int(str.size()));
+            std::reverse(str.begin(), str.end());
+            Trie* head = root;
+            for(const char& c: str){
+                if((head -> nb).find(c) != (head -> nb).end()) head = (head -> nb)[c];
+                else{
+                    Trie* node = new Trie();
+                    (head -> nb)[c] =  node;
+                    head = node;
+                }
+            }
+            head -> is_word = true;
+        }
+    }
+    
+    bool query(char letter) {
+        cur_str.insert(cur_str.begin(), letter);
+        Trie* head = root;
+        bool res = false;
+        for(int i = 0; i < cur_str.size(); ++i){
+            char c = cur_str[i];
+            if((head -> nb).find(c) == (head -> nb).end()) break;
+            head = (head -> nb)[c];
+            if(head -> is_word){ 
+                res = true;
+                break;
+            }
+        }
+        if(cur_str.size() > cap) cur_str.erase(cur_str.begin() + cap);
+        return res;
+    }
+private:
+    Trie* root;
+    std::string cur_str;
+    int cap;
+};
+
+/**
+ * Your StreamChecker object will be instantiated and called as such:
+ * StreamChecker* obj = new StreamChecker(words);
+ * bool param_1 = obj->query(letter);
+ */
