@@ -22,6 +22,6 @@ public:
             far = pq.top();
             pq.pop();
         }
-        return res == 0 ? - 1 : res;
+        return res;
     }
 };
