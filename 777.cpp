@@ -1,25 +1,16 @@
 class Solution {
 public:
     bool canTransform(string start, string end) {
-        int n = start.size();
-        if(end.size() != n) return false;
-        int i = 0; 
-        int j = 0;
-        while(i < n && j < n){
-            while(i < n && start[i] == 'X') ++i;
-            while(j < n && end[j] == 'X') ++j;
-            if(i == n && j == n) return true;
-            if((i == n && j != n) || (j ==n && i != n) || start[i] != end[j]) return false;
-            
-            if((start[i] == 'L' && i < j) || (start[i] == 'R' && i > j)) return false;
-            ++i;
-            ++j;
+        if(start.size() != end.size()) return false;
+        std::vector<std::pair<char,int>>s;
+        std::vector<std::pair<char,int>>e;
+        for(int i = 0; i < start.size(); ++i){
+            if(start[i] != 'X') s.push_back({start[i],i});
+            if(end[i] != 'X') e.push_back({end[i], i});
         }
-        while(i < n){
-            if(start[i++] != 'X') return false;
-        }
-        while(j < n){
-            if(end[j++] != 'X') return false;
+        if(s.size() != e.size()) return false;
+        for(int i = 0; i < s.size(); ++i){
+            if(s[i].first != e[i].first || (s[i].first == 'R' && s[i].second > e[i].second) || (s[i].first == 'L' && s[i].second  < e[i].second)) return false;
         }
         return true;
     }
