@@ -1,19 +1,20 @@
-class Solution {
+iclass Solution {
 public:
     vector<int> dailyTemperatures(vector<int>& T) {
-        std::stack<int> st;
-        std::stack<int> res;
-        for(int i = T.size() - 1; i >= 0; --i){
-            while(!st.empty() && T[st.top()] <= T[i]) st.pop();
-            if(st.empty()) res.push(0);
-            else res.push(st.top() - i);
+        int n = T.size();
+        std::vector<int> res(n);
+        std::stack<int>st;
+        for(int i = 0; i < T.size(); ++i){
+            while(!st.empty() && T[st.top()] < T[i]){
+                res[st.top()] = i - st.top();
+                st.pop();
+            }
             st.push(i);
         }
-        std::vector<int> v;
-        while(!res.empty()){
-            v.push_back(res.top());
-            res.pop();
+        while(!st.empty()){
+            res[st.top()] = 0;
+            st.pop();
         }
-        return v;
+        return res;
     }
 };
