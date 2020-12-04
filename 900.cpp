@@ -1,25 +1,25 @@
 class RLEIterator {
 public:
-    RLEIterator(vector<int>& A) {
-        for(int i = 0; i < A.size(); i += 2){
-            if(A[i] == 0) continue;
-            v.push_back(A[i]);
-            v.push_back(A[i + 1]);
-        }  
-        pos = 1;
-        cnt = 0;   
+    RLEIterator(vector<int>& A): v(A), cur({0,0}) {
+        
     }
     
     int next(int n) {
-        cnt += n;
-        while(pos < v.size() && cnt > v[pos - 1]){
-            cnt -= v[pos - 1];
-            pos += 2;
+        while(cur.first < v.size() && n != 0){
+            if(cur.second + n > v[cur.first]){
+                n -= (v[cur.first] - cur.second);
+                cur.first += 2;
+                cur.second = 0;
+            }
+            else{
+                cur.second += n; 
+                n = 0;
+            }
         }
-        return pos >= v.size() ? -1 : v[pos];
+        if(cur.first < v.size()) return v[cur.first + 1];
+        return -1;
     }
 private:
-    std::vector<int> v;
-    int cnt;
-    int pos;
+    std::vector<int>v;
+    std::pair<int,int> cur;
 };
