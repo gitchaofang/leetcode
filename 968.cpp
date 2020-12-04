@@ -1,20 +1,28 @@
 class Solution {
 public:
-    int dfs(TreeNode* root, int& cnt){
+    int dfs(TreeNode* root, int& res){
         if(!root) return 0;
-        int l = dfs(root -> left, cnt);
-        int r = dfs(root -> right, cnt);
-        if(l == 2 || r == 2){
-            if(l == r) --cnt;
+        int left = dfs(root -> left, res);
+        int right = dfs(root -> right, res);
+        /*no cover*/
+        if(left == 0 && right == 0){ 
+            ++res;
+            return 2;
+        }
+        /* cover but no cam*/
+        if((left == 1 && right != 2) || (right == 1 && left != 2)) return 0;
+        /*cover with 1 cam*/
+        if((left == 2 && right != 2) || (right == 2 && left != 2)) return 1;
+        /*cover with two cams*/
+        if(right == 2 && left == 2){
+            --res;
             return 1;
         }
-        else if(l == 1 || r == 1) return 0;
-        ++cnt;
-        return 2;
+        return 0;
     }
     int minCameraCover(TreeNode* root) {
-        int cnt = 0;
-        dfs(root, cnt);
-        return cnt;
+        int res = 0;
+        dfs(root, res);
+        return res;
     }
 };
