@@ -5,22 +5,21 @@ public:
     }
     
     void push(int x) {
-        ++m[x];
-        freq[m[x]].push(x);
-        if(m[x] > maxfreq) maxfreq = m[x];
+        ++cnt[x];
+        freq[cnt[x]].push(x);
+        maxfreq = std::max(maxfreq,cnt[x]);
         return;
     }
     
     int pop() {
         int top = freq[maxfreq].top();
         freq[maxfreq].pop();
-        if(freq[maxfreq].empty()) --maxfreq;
-        --m[top];
+        if(freq[maxfreq].empty())freq.erase(maxfreq--);
+        if(--cnt[top] == 0) cnt.erase(top);
         return top;
     }
 private:
-    std::unordered_map<int,int> m;
+    std::unordered_map<int,int> cnt;
     std::unordered_map<int,std::stack<int>> freq;
     int maxfreq;
-
 };
