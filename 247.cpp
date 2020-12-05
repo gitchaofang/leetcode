@@ -1,27 +1,19 @@
 class Solution {
 public:
     vector<string> findStrobogrammatic(int n) {
-        std::queue<std::string> q;
-        std::vector<pair<char,char>> dig({{'0','0'},{'1','1'},{'8','8'},{'9','6'},{'6','9'}});
-        if(n % 2 == 0) q.push("");
-        else{
-            for(int i = 0; i < 3; ++i) q.push(std::string(1,dig[i].first));
-        }
-        for(int i = 1; i <= n/2; ++i){
-            for(int j = q.size(); j > 0; --j){
-                std::string str = q.front();
-                q.pop();
-                for(int l = (i == n/2) ? 1 : 0; l < 5; ++l) q.push(dig[l].first + str + dig[l].second);
-                
-            }
-        }
+        if(n == 1) return {"0","1","8"};
+        std::vector<std::pair<char,char>> digit({{'0','0'},{'1','1'},{'6','9'},{'8','8'},{'9','6'}}); 
+        std::queue<std::string> q({"","0", "1","8"});
         std::vector<std::string> res;
         while(!q.empty()){
-            res.push_back(q.front());
+            std::string str = q.front();
             q.pop();
+            if(str.size() == n && str[0] != '0') res.push_back(str);
+            for(const std::pair<char,char>& dig: digit){
+                std::string next = dig.first + str + dig.second;
+                if(next.size() <= n) q.push(next);
+            }
         }
         return res;
-        
     }
 };
-
