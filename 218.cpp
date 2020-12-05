@@ -17,7 +17,7 @@ public:
             if(high.empty()){
                 if(pre != 0){ 
                     res.push_back({it -> first,0});
-                    pre = 0;
+                    pre =0;
                 }
             }
             else{
