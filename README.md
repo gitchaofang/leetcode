@@ -1,1 +1,1 @@
-Personal solutions to the algorithm challenges on website "leetcode". They are written in C++.
+Personal solutions to the algorithm challenges on website "leetcode" in C++.
