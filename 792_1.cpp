@@ -1,17 +1,19 @@
 class Solution {
 public:
     int numMatchingSubseq(string S, vector<string>& words) {
-        std::unordered_map<char, std::queue<std::string>>m;
-        for(const std::string& word: words) m[word[0]].push(word);
+        std::unordered_map<char, std::vector<std::string>>m;
+        for(const std::string& str: words) m[str[0]].push_back(str);
         int res = 0;
         for(const char& c: S){
             if(m.find(c) == m.end()) continue;
-            for(int s = m[c].size(); s > 0; --s){
-                std::string str = m[c].front();
-                m[c].pop();
+            std::vector<std::string>tv;
+            for(const std::string& str: m[c]){
                 if(str.size() == 1) ++res;
-                else m[str[1]].push(str.substr(1));
+                if(str[1] != c) m[str[1]].push_back(str.substr(1));
+                else tv.push_back(str.substr(1));
             }
+            m[c] = tv;
+            
         }
         return res;
     }
